@@ -5,32 +5,11 @@ const LOCALES = ['en', 'zh', 'ja'] as const
 const LAST_MODIFIED = new Date('2026-06-27T00:00:00.000Z')
 
 /**
- * Static core pages (excluding /articles/* which are seeded from D1).
- * Article URLs will be appended after D1 re-seeding in a follow-up task.
+ * Sitemap entries — only includes routes that are actually generated.
+ * Additional routes (games, articles, brain-age, etc.) will be appended
+ * here as their page.tsx files are implemented.
  */
-const CORE_PATHS = [
-  '',
-  '/games',
-  '/games/visual-search',
-  '/games/digit-span',
-  '/games/reaction-training',
-  '/games/stroop-challenge',
-  '/games/spatial-memory',
-  '/games/breathing-flow',
-  '/brain-age-assessment',
-  '/dashboard',
-  '/profile',
-  '/articles',
-  '/articles/brain-age',
-  '/articles/memory',
-  '/articles/attention',
-  '/articles/focus',
-  '/articles/relaxation',
-  '/about',
-  '/contact',
-  '/leaderboard',
-  '/achievements',
-] as const
+const CORE_PATHS = [''] as const
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = []
@@ -45,8 +24,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       entries.push({
         url,
         lastModified: LAST_MODIFIED,
-        changeFrequency: path === '' ? 'daily' : 'weekly',
-        priority: path === '' ? 1.0 : path.startsWith('/games/') ? 0.9 : 0.7,
+        changeFrequency: 'daily',
+        priority: 1.0,
         alternates: {
           languages: alternates,
         },
