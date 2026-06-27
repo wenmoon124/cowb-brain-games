@@ -135,7 +135,7 @@ export const GAMES: readonly GameMeta[] = [
     durationSec: 180,
     icon: 'Columns2',
   },
-  // ============ Reaction (3) ============
+  // ============ Reaction (2) ============
   {
     slug: 'reaction-training',
     dimension: 'reaction',

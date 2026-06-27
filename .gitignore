@@ -25,6 +25,8 @@ AGENTS.md
 
 # ---- 临时与分析文件 ----
 *.txt
+# ads.txt 例外 (AdSense 需要，必须部署)
+!apps/web/public/ads.txt
 *.cjs
 analyze-*.cjs
 analyze-*.ts
