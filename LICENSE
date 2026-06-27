@@ -1,0 +1,41 @@
+BrainVerse — Non-Commercial License Agreement
+
+Copyright (c) 2026 wenmoon124 (https://github.com/wenmoon124). All rights reserved.
+
+This repository contains two categories of material, each governed by
+a separate license:
+
+1. SOURCE CODE (apps/, workers/, packages/, configuration files)
+   Licensed under the PolyForm Noncommercial License, Version 1.0.0
+   (https://polyformproject.org/licenses/noncommercial/1.0.0).
+
+   Summary of key terms:
+   - You MAY use, copy, modify, and distribute the source code for
+     personal, academic, research, and other non-commercial purposes.
+   - You MAY NOT use the source code, in whole or in part, for any
+     commercial purpose. This includes, but is not limited to, selling
+     the software, offering paid services built on it, or using it
+     internally to support a commercial business.
+   - You MUST retain this copyright notice and license text in all
+     copies or substantial portions of the software.
+   - Modified works must be distributed under the same PolyForm
+     Noncommercial License.
+
+2. CONTENT (articles, documentation, design assets, translations,
+   marketing copy, images)
+   Licensed under Creative Commons Attribution-NonCommercial-ShareAlike
+   4.0 International (CC BY-NC-SA 4.0)
+   (https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+   Summary of key terms:
+   - You MAY share and adapt the content for non-commercial purposes.
+   - You MUST give appropriate credit and indicate if changes were made.
+   - You MUST distribute derivative works under the same license.
+   - You MAY NOT use the content for commercial purposes.
+
+NO WARRANTY. The software and content are provided "as is", without
+warranty of any kind, express or implied. In no event shall the authors
+or copyright holders be liable for any claim, damages, or other
+liability arising from the use of the software or content.
+
+For commercial licensing inquiries, contact: wenmoon124@gmail.com

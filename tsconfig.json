@@ -13,26 +13,9 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "baseUrl": ".",
-    "paths": {
-      "@brainverse/shared": ["packages/shared/src"],
-      "@brainverse/core": ["packages/core/src"],
-      "@brainverse/brain-engine": ["packages/brain-engine/src"],
-      "@brainverse/game-engine": ["packages/game-engine/src"],
-      "@brainverse/growth-engine": ["packages/growth-engine/src"],
-      "@brainverse/content-engine": ["packages/content-engine/src"],
-      "@brainverse/ui": ["packages/ui/src"]
-    }
+    "baseUrl": "."
   },
   "references": [
-    { "path": "apps/web" },
-    { "path": "workers/api" },
-    { "path": "packages/shared" },
-    { "path": "packages/core" },
-    { "path": "packages/brain-engine" },
-    { "path": "packages/game-engine" },
-    { "path": "packages/growth-engine" },
-    { "path": "packages/content-engine" },
-    { "path": "packages/ui" }
+    { "path": "apps/web" }
   ]
 }

@@ -3,28 +3,30 @@
 @tailwind utilities;
 
 /* ============================================================
-   BrainVerse 2.0 — Design Token CSS Variables
+   BrainVerse 2.0 — Design Token CSS Variables (暖色调改造版)
+   全部使用高饱和度暖色系，移除所有蓝色/绿色/紫色/青色
+   保持背景色不变 (用户硬约束: keep existing background color)
    ============================================================ */
 
 /* ---- Light Mode (default) ---- */
 :root {
-  /* Brand / Primary Colors */
-  --primary: #4a7cff;
-  --primary-hover: #3a6cee;
-  --primary-light: #4a7cff20;
-  --primary-bg: #4a7cff08;
+  /* Brand / Primary Colors — 活力橙红 (替代蓝色) */
+  --primary: #ff6b35;
+  --primary-hover: #e55a2b;
+  --primary-light: #ff6b3520;
+  --primary-bg: #ff6b3508;
 
-  /* Secondary Colors */
-  --secondary: #50c8a8;
-  --secondary-hover: #3fb898;
-  --secondary-light: #50c8a820;
+  /* Secondary Colors — 温暖橙金 (替代绿色) */
+  --secondary: #ffb14a;
+  --secondary-hover: #ffa030;
+  --secondary-light: #ffb14a20;
 
-  /* Accent Colors */
-  --accent: #ffb14a;
-  --accent-hover: #ffa030;
-  --accent-light: #ffb14a20;
+  /* Accent Colors — 明亮金 */
+  --accent: #ffd700;
+  --accent-hover: #ffc700;
+  --accent-light: #ffd70020;
 
-  /* Background & Surface */
+  /* Background & Surface — 保持不变 */
   --bg-primary: #f7f9fc;
   --bg-secondary: #eef1f6;
   --card: #ffffff;
@@ -39,25 +41,25 @@
   --border: #e2e8f0;
   --border-light: #f1f5f9;
 
-  /* Semantic Colors */
-  --success: #50c8a8;
-  --warning: #ffb14a;
+  /* Semantic Colors — 全部暖色化 */
+  --success: #ffb14a;
+  --warning: #ffd700;
   --error: #ef4444;
-  --info: #4a7cff;
+  --info: #ff6b35;
 
-  /* Dimension Colors */
-  --dim-memory: #8b5cf6;
-  --dim-attention: #06b6d4;
-  --dim-reaction: #ffb14a;
-  --dim-executive: #10b981;
-  --dim-relaxation: #4a7cff;
+  /* Dimension Colors — 全部暖色化 (移除蓝/绿/紫/青) */
+  --dim-memory: #ec4899;       /* 热情粉 (替代紫色) */
+  --dim-attention: #f97316;    /* 暖橙 (替代青色) */
+  --dim-reaction: #fbbf24;     /* 暖黄 */
+  --dim-executive: #f472b6;    /* 玫粉 (替代绿色) */
+  --dim-relaxation: #fb7185;   /* 珊瑚红 (替代蓝色) */
 
   /* Dimension Alpha Backgrounds */
-  --dim-memory-light: #8b5cf620;
-  --dim-attention-light: #06b6d420;
-  --dim-reaction-light: #ffb14a20;
-  --dim-executive-light: #10b98120;
-  --dim-relaxation-light: #4a7cff20;
+  --dim-memory-light: #ec489920;
+  --dim-attention-light: #f9731620;
+  --dim-reaction-light: #fbbf2420;
+  --dim-executive-light: #f472b620;
+  --dim-relaxation-light: #fb718520;
 
   /* Spacing Scale (4px base) */
   --spacing-xs: 4px;
@@ -75,19 +77,19 @@
   --radius-xl: 24px;
   --radius-full: 9999px;
 
-  /* Shadows */
+  /* Shadows — glow 全部暖色化 */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
   --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.16);
-  --shadow-glow-primary: 0 0 20px #4a7cff40;
-  --shadow-glow-secondary: 0 0 20px #50c8a840;
-  --shadow-glow-accent: 0 0 20px #ffb14a40;
-  --shadow-glow-memory: 0 0 20px #8b5cf640;
-  --shadow-glow-attention: 0 0 20px #06b6d440;
-  --shadow-glow-reaction: 0 0 20px #ffb14a40;
-  --shadow-glow-executive: 0 0 20px #10b98140;
-  --shadow-glow-relaxation: 0 0 20px #4a7cff40;
+  --shadow-glow-primary: 0 0 20px #ff6b3540;
+  --shadow-glow-secondary: 0 0 20px #ffb14a40;
+  --shadow-glow-accent: 0 0 20px #ffd70040;
+  --shadow-glow-memory: 0 0 20px #ec489940;
+  --shadow-glow-attention: 0 0 20px #f9731640;
+  --shadow-glow-reaction: 0 0 20px #fbbf2440;
+  --shadow-glow-executive: 0 0 20px #f472b640;
+  --shadow-glow-relaxation: 0 0 20px #fb718540;
 
   /* Glass Effect */
   --glass-bg: rgba(255, 255, 255, 0.72);
@@ -95,47 +97,47 @@
   --glass-blur: 16px;
 }
 
-/* ---- Dark Mode (.dark class override) ---- */
+/* ---- Dark Mode (.dark class override) — 暖色调暗色模式 ---- */
 .dark {
-  --bg-primary: #0f172a;
-  --bg-secondary: #162032;
-  --card: #1e293b;
-  --card-hover: #253347;
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border: #334155;
-  --border-light: #1e293b;
+  --bg-primary: #1a0f0a;
+  --bg-secondary: #2a1810;
+  --card: #2d1b14;
+  --card-hover: #3d2519;
+  --text-primary: #fde8d8;
+  --text-secondary: #d4a574;
+  --text-muted: #a07850;
+  --border: #4a2d1f;
+  --border-light: #2d1b14;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
 
-  --glass-bg: rgba(30, 41, 59, 0.72);
-  --glass-border: rgba(51, 65, 85, 0.5);
+  --glass-bg: rgba(45, 27, 20, 0.72);
+  --glass-border: rgba(74, 45, 31, 0.5);
 }
 
-/* ---- Auto Dark Mode (prefers-color-scheme: dark) ---- */
+/* ---- Auto Dark Mode (prefers-color-scheme: dark) — 暖色调 ---- */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --bg-primary: #0f172a;
-    --bg-secondary: #162032;
-    --card: #1e293b;
-    --card-hover: #253347;
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --border: #334155;
-    --border-light: #1e293b;
+    --bg-primary: #1a0f0a;
+    --bg-secondary: #2a1810;
+    --card: #2d1b14;
+    --card-hover: #3d2519;
+    --text-primary: #fde8d8;
+    --text-secondary: #d4a574;
+    --text-muted: #a07850;
+    --border: #4a2d1f;
+    --border-light: #2d1b14;
 
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
-    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
 
-    --glass-bg: rgba(30, 41, 59, 0.72);
-    --glass-border: rgba(51, 65, 85, 0.5);
+    --glass-bg: rgba(45, 27, 20, 0.72);
+    --glass-border: rgba(74, 45, 31, 0.5);
   }
 }
 
@@ -161,10 +163,19 @@
     background: var(--primary-light);
     color: var(--text-primary);
   }
+
+  a {
+    color: var(--primary);
+    transition: color 150ms ease;
+  }
+
+  a:hover {
+    color: var(--primary-hover);
+  }
 }
 
 /* ============================================================
-   Global Scrollbar Styles
+   Global Scrollbar Styles — 暖色化
    ============================================================ */
 ::-webkit-scrollbar {
   width: 6px;
@@ -176,18 +187,17 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--primary);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: var(--primary-hover);
 }
 
-/* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--border) var(--bg-primary);
+  scrollbar-color: var(--primary) var(--bg-primary);
 }
 
 /* ============================================================

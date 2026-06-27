@@ -22,27 +22,6 @@
       ],
       "@/i18n/*": [
         "./src/i18n/*"
-      ],
-      "@brainverse/shared": [
-        "../../packages/shared/src"
-      ],
-      "@brainverse/core": [
-        "../../packages/core/src"
-      ],
-      "@brainverse/brain-engine": [
-        "../../packages/brain-engine/src"
-      ],
-      "@brainverse/game-engine": [
-        "../../packages/game-engine/src"
-      ],
-      "@brainverse/growth-engine": [
-        "../../packages/growth-engine/src"
-      ],
-      "@brainverse/content-engine": [
-        "../../packages/content-engine/src"
-      ],
-      "@brainverse/ui": [
-        "../../packages/ui/src"
       ]
     },
     "lib": [

@@ -7,21 +7,16 @@
     "pnpm": ">=9"
   },
   "scripts": {
-    "dev": "concurrently \"pnpm --filter @brainverse/web dev\" \"pnpm --filter @brainverse/api dev\"",
-    "build": "pnpm -r build",
-    "test": "pnpm -r test",
-    "typecheck": "pnpm -r typecheck",
-    "lint": "pnpm -r lint",
+    "dev": "pnpm --filter @brainverse/web dev",
+    "build": "pnpm --filter @brainverse/web build",
+    "typecheck": "pnpm --filter @brainverse/web typecheck",
+    "lint": "pnpm --filter @brainverse/web lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "db:migrate": "pnpm --filter @brainverse/api db:migrate",
-    "db:generate": "pnpm --filter @brainverse/api db:generate",
-    "deploy:web": "pnpm --filter @brainverse/web deploy",
-    "deploy:api": "pnpm --filter @brainverse/api deploy"
+    "deploy:web": "pnpm --filter @brainverse/web deploy"
   },
   "devDependencies": {
     "typescript": "^5.4.0",
     "eslint": "^8.57.0",
-    "prettier": "^3.2.0",
-    "concurrently": "^8.2.0"
+    "prettier": "^3.2.0"
   }
 }

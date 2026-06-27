@@ -14,22 +14,26 @@ const config: Config = {
     },
     extend: {
       colors: {
+        // 暖色调改造: primary 蓝色 → 活力橙红
         primary: {
-          DEFAULT: '#4A7CFF',
-          hover: '#3A6CEE',
-          light: '#4A7CFF20',
-          bg: '#4A7CFF08',
+          DEFAULT: '#FF6B35',
+          hover: '#E55A2B',
+          light: '#FF6B3520',
+          bg: '#FF6B3508',
         },
+        // secondary 绿色 → 温暖橙金
         secondary: {
-          DEFAULT: '#50C8A8',
-          hover: '#3FB898',
-          light: '#50C8A820',
-        },
-        accent: {
           DEFAULT: '#FFB14A',
           hover: '#FFA030',
           light: '#FFB14A20',
         },
+        // accent 橙色 → 明亮金
+        accent: {
+          DEFAULT: '#FFD700',
+          hover: '#FFC700',
+          light: '#FFD70020',
+        },
+        // 背景保持不变 (用户硬约束: keep existing background color)
         background: {
           DEFAULT: '#F7F9FC',
           secondary: '#EEF1F6',
@@ -44,16 +48,18 @@ const config: Config = {
           DEFAULT: '#E2E8F0',
           light: '#F1F5F9',
         },
-        success: '#50C8A8',
-        warning: '#FFB14A',
+        // 语义色: success 绿色 → 暖橙
+        success: '#FFB14A',
+        warning: '#FFD700',
         error: '#EF4444',
-        info: '#4A7CFF',
+        info: '#FF6B35',
+        // 维度色全部暖色化 (移除所有蓝/绿/紫/青)
         dim: {
-          memory: '#8B5CF6',
-          attention: '#06B6D4',
-          reaction: '#FFB14A',
-          executive: '#10B981',
-          relaxation: '#4A7CFF',
+          memory: '#EC4899',       // 热情粉 (替代紫色)
+          attention: '#F97316',    // 暖橙 (替代青色)
+          reaction: '#FBBF24',     // 暖黄 (保持暖色)
+          executive: '#F472B6',    // 玫粉 (替代绿色)
+          relaxation: '#FB7185',   // 珊瑚红 (替代蓝色)
         },
       },
       borderRadius: {
@@ -88,19 +94,20 @@ const config: Config = {
         md: '0 4px 12px rgba(0,0,0,0.08)',
         lg: '0 8px 24px rgba(0,0,0,0.12)',
         xl: '0 16px 48px rgba(0,0,0,0.16)',
-        'glow-primary': '0 0 20px #4A7CFF40',
-        'glow-secondary': '0 0 20px #50C8A840',
-        'glow-accent': '0 0 20px #FFB14A40',
-        'glow-memory': '0 0 20px #8B5CF640',
-        'glow-attention': '0 0 20px #06B6D440',
-        'glow-reaction': '0 0 20px #FFB14A40',
-        'glow-executive': '0 0 20px #10B98140',
-        'glow-relaxation': '0 0 20px #4A7CFF40',
+        'glow-primary': '0 0 20px #FF6B3540',
+        'glow-secondary': '0 0 20px #FFB14A40',
+        'glow-accent': '0 0 20px #FFD70040',
+        'glow-memory': '0 0 20px #EC489940',
+        'glow-attention': '0 0 20px #F9731640',
+        'glow-reaction': '0 0 20px #FBBF2440',
+        'glow-executive': '0 0 20px #F472B640',
+        'glow-relaxation': '0 0 20px #FB718540',
       },
       backgroundImage: {
-        'gradient-primary': 'linear-gradient(135deg, #4A7CFF, #8B5CF6)',
-        'gradient-secondary': 'linear-gradient(135deg, #50C8A8, #10B981)',
-        'gradient-accent': 'linear-gradient(135deg, #FFB14A, #FF8C00)',
+        // 渐变全部暖色化
+        'gradient-primary': 'linear-gradient(135deg, #FF6B35, #EC4899)',
+        'gradient-secondary': 'linear-gradient(135deg, #FFB14A, #F472B6)',
+        'gradient-accent': 'linear-gradient(135deg, #FFD700, #FF8C00)',
         'gradient-hero': 'linear-gradient(180deg, #F7F9FC 0%, #EEF1F6 100%)',
       },
       transitionDuration: {
@@ -186,8 +193,8 @@ const config: Config = {
           '20%, 40%, 60%, 80%': { transform: 'translateX(4px)' },
         },
         glow: {
-          '0%, 100%': { boxShadow: '0 0 5px #4A7CFF20' },
-          '50%': { boxShadow: '0 0 20px #4A7CFF40, 0 0 40px #4A7CFF20' },
+          '0%, 100%': { boxShadow: '0 0 5px #FF6B3520' },
+          '50%': { boxShadow: '0 0 20px #FF6B3540, 0 0 40px #FF6B3520' },
         },
         spin: {
           from: { transform: 'rotate(0deg)' },

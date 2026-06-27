@@ -1,40 +1,87 @@
-# Node.js
+# ============================================================
+# BrainVerse — .gitignore (Pages 部署专用仓库)
+# 仅保留 Cloudflare Pages 部署所需内容,排除所有敏感信息
+# ============================================================
+
+# ---- 敏感目录完全排除 (含数据库/IP/agent信息) ----
+# workers/ 包含 wrangler.toml (database_id/kv_id/r2_bucket) 与后端 API 代码
+workers/
+# .trae/ 包含 AI agent 规格与任务清单
+.trae/
+# context/ 包含内部架构文档
+context/
+# decisions/ 包含架构决策记录
+decisions/
+# docs/ 内部开发文档(部署/数据库/测试等)
+docs/
+# BrainVerse-Design/ 设计源文件(仅本地参考)
+BrainVerse-Design/
+# packages/ 共享包(前端应用不依赖,自包含)
+packages/
+
+# ---- 敏感文档排除 (agent 工作流文档) ----
+PROJECT.md
+AGENTS.md
+
+# ---- 临时与分析文件 ----
+*.txt
+*.cjs
+analyze-*.cjs
+analyze-*.ts
+check-*.cjs
+check-*.ts
+check-*.js
+debug-*.js
+fix-*.ps1
+fix-*.cjs
+run-*.cjs
+verify-*.cjs
+verify-*.txt
+quality-*.txt
+shared-*.txt
+analysis-*.txt
+.git-commit-msg.txt
+
+# ---- Node.js ----
 node_modules
 dist
 build
 .turbo
+*.tsbuildinfo
 
-# Environment
+# ---- Next.js ----
+.next
+out
+
+# ---- 环境变量与密钥 ----
 .env
 .env.local
 .env.production
 .env.development
 .dev.vars
+*.pem
+*.key
 
-# Cloudflare
+# ---- Cloudflare 本地状态 ----
 .wrangler
 .mf
 
-# Next.js
-.next
-out
-
-# IDE
+# ---- IDE ----
 .vscode/settings.json
 .idea
 
-# OS
+# ---- OS ----
 .DS_Store
 Thumbs.db
 
-# Logs
+# ---- 日志 ----
 *.log
 npm-debug.log
 pnpm-debug.log
 
-# Testing
+# ---- 测试覆盖率 ----
 coverage
 .nyc_output
 
-# Misc
-*.tsbuildinfo
+# ---- SQL 文件 (数据库结构敏感) ----
+*.sql
