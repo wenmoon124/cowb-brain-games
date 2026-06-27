@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { GAMES } from '@/lib/games'
+import { ARTICLES } from '@/data/articles'
 
 const BASE_URL = 'https://cowb.cc'
 const LOCALES = ['en', 'zh', 'ja'] as const
@@ -57,6 +58,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
         lastModified: LAST_MODIFIED,
         changeFrequency: 'weekly',
         priority: 0.8,
+        alternates: {
+          languages: alternates,
+        },
+      })
+    }
+
+    // 动态文章详情路由
+    for (const article of ARTICLES) {
+      const path = `/articles/${article.slug}`
+      const url = `${BASE_URL}/${locale}${path}`
+      const alternates: Record<string, string> = {}
+      for (const altLocale of LOCALES) {
+        alternates[altLocale] = `${BASE_URL}/${altLocale}${path}`
+      }
+      entries.push({
+        url,
+        lastModified: LAST_MODIFIED,
+        changeFrequency: 'monthly',
+        priority: 0.6,
         alternates: {
           languages: alternates,
         },
