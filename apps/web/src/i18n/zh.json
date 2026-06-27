@@ -63,6 +63,106 @@
       "easy": "简单",
       "medium": "中等",
       "hard": "困难"
+    },
+    "visualSearch": {
+      "title": "视觉搜索",
+      "description": "在干扰项中找到目标"
+    },
+    "digitSpan": {
+      "title": "数字广度",
+      "description": "记忆并复述数字序列"
+    },
+    "reactionTraining": {
+      "title": "反应训练",
+      "description": "测试你的反应速度"
+    },
+    "stroopChallenge": {
+      "title": "Stroop 挑战",
+      "description": "解决颜色与文字的冲突"
+    },
+    "spatialMemory": {
+      "title": "空间记忆",
+      "description": "记住空间图案"
+    },
+    "breathingFlow": {
+      "title": "呼吸律动",
+      "description": "引导式呼吸放松"
+    },
+    "comingSoon": "即将推出",
+    "backToGames": "返回游戏"
+  },
+  "pages": {
+    "about": {
+      "title": "关于 BrainVerse",
+      "mission": "我们的使命",
+      "missionDescription": "BrainVerse 致力于让基于科学的脑力训练惠及每个人。我们相信认知健康是一段终生的旅程，我们的使命是帮助你理解和提升大脑的真正潜力。",
+      "technology": "技术",
+      "technologyDescription": "基于现代 Web 技术与 Cloudflare 全球边缘网络的 Serverless 架构构建。我们采用经过验证的认知范式提供高效的训练。",
+      "science": "科学基础",
+      "scienceDescription": "我们的游戏灵感来自成熟的认知范式，包括 Stroop 测试、数字广度记忆任务、视觉搜索实验和空间记忆研究。",
+      "story": "我们的故事",
+      "storyDescription": "BrainVerse 诞生于将实验室级认知评估带入浏览器的愿景。我们融合严谨科学与愉悦设计，让脑力训练成为每日习惯。"
+    },
+    "contact": {
+      "title": "联系我们",
+      "description": "有问题、建议，或只是想说声你好？我们很乐意收到你的来信。",
+      "email": "邮箱",
+      "emailDescription": "请通过下方邮箱地址联系我们。",
+      "responseTime": "我们通常在 1-2 个工作日内回复。"
+    },
+    "dashboard": {
+      "loginRequired": "请登录后查看你的仪表盘",
+      "loginRequiredDescription": "你的仪表盘显示脑力年龄、得分、连续打卡与最近活动。",
+      "signInButton": "登录"
+    },
+    "profile": {
+      "loginRequired": "请登录后查看你的个人中心",
+      "loginRequiredDescription": "你的个人中心包含个人信息、偏好设置与训练历史。"
+    },
+    "achievements": {
+      "loginRequired": "请登录后查看你的成就",
+      "loginRequiredDescription": "追踪你的里程碑、徽章与长期进步。"
+    },
+    "privacy": {
+      "title": "隐私政策",
+      "lastUpdated": "最后更新：2026 年 6 月",
+      "intro": "本隐私政策描述了 BrainVerse（以下简称\u201c我们\u201d）在你使用我们的网站与服务时，如何收集、使用和保护你的信息。",
+      "dataWeCollect": "我们收集的信息",
+      "dataWeCollectDescription": "我们收集你创建账户时提供的信息，例如邮箱地址和昵称，以及用于计算脑力年龄和进步的游戏数据。",
+      "howWeUse": "我们如何使用你的信息",
+      "howWeUseDescription": "你的信息用于提供和改进我们的服务、个性化你的体验、分析使用模式，以及与你沟通账户相关事宜。",
+      "dataSharing": "数据共享",
+      "dataSharingDescription": "我们不会出售或出租你的个人信息。我们可能与分析服务提供商共享汇总的、不可识别的数据，以了解服务的使用情况。",
+      "dataSecurity": "数据安全",
+      "dataSecurityDescription": "我们采取合理的技术和组织措施保护你的信息，包括传输中和静态加密。",
+      "yourRights": "你的权利",
+      "yourRightsDescription": "你可以随时联系我们请求访问、更正或删除你的个人数据。",
+      "cookies": "Cookie",
+      "cookiesDescription": "我们使用 Cookie 及类似技术来运营网站和分析流量。你可以随时通过同意横幅管理 Cookie 偏好。"
+    },
+    "terms": {
+      "title": "服务条款",
+      "lastUpdated": "最后更新：2026 年 6 月",
+      "intro": "本服务条款约束你对 BrainVerse 网站和服务的使用。使用我们的服务即表示你同意这些条款。",
+      "acceptance": "条款接受",
+      "acceptanceDescription": "访问或使用 BrainVerse 即表示你同意受本条款约束。如果你不同意，请不要使用我们的服务。",
+      "useOfService": "服务使用",
+      "useOfServiceDescription": "你同意仅出于合法目的使用 BrainVerse，且不得侵犯他人权利或限制他人使用本服务。",
+      "accounts": "账户",
+      "accountsDescription": "你有责任保管好账户凭证的机密性，并对账户下发生的所有活动负责。",
+      "intellectualProperty": "知识产权",
+      "intellectualPropertyDescription": "BrainVerse 上的所有内容，包括文本、图形、标识和软件，均为 BrainVerse 或其许可方的财产，受知识产权法保护。",
+      "disclaimer": "免责声明",
+      "disclaimerDescription": "BrainVerse 提供的脑力训练游戏仅用于娱乐和教育目的。我们的服务不能替代专业的医疗建议、诊断或治疗。",
+      "liability": "责任限制",
+      "liabilityDescription": "对于因你使用本服务而产生的任何间接、附带或后果性损害，BrainVerse 概不负责。",
+      "changes": "条款变更",
+      "changesDescription": "我们可能会不时更新本条款。如有重大变更，我们将通过在此页面发布新条款的方式通知你。"
+    },
+    "notFound": {
+      "title": "页面未找到",
+      "description": "你要查找的页面不存在或已被移动。",
+      "backHome": "返回首页"
     }
   },
   "dashboard": {

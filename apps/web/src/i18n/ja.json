@@ -63,6 +63,106 @@
       "easy": "簡単",
       "medium": "普通",
       "hard": "難しい"
+    },
+    "visualSearch": {
+      "title": "ビジュアルサーチ",
+      "description": "妨害刺激の中から標的を見つける"
+    },
+    "digitSpan": {
+      "title": "数字スペン",
+      "description": "数字の並びを記憶して再生する"
+    },
+    "reactionTraining": {
+      "title": "反応トレーニング",
+      "description": "反射神経を試す"
+    },
+    "stroopChallenge": {
+      "title": "ストループチャレンジ",
+      "description": "色と文字の干渉を解決する"
+    },
+    "spatialMemory": {
+      "title": "空間記憶",
+      "description": "空間パターンを記憶する"
+    },
+    "breathingFlow": {
+      "title": "ブレージングフロー",
+      "description": "誘導呼吸によるリラクゼーション"
+    },
+    "comingSoon": "近日公開",
+    "backToGames": "ゲーム一覧へ戻る"
+  },
+  "pages": {
+    "about": {
+      "title": "BrainVerse について",
+      "mission": "私たちの使命",
+      "missionDescription": "BrainVerse は科学に基づいた脳トレをすべての人に提供することに尽力しています。認知の健康は生涯にわたる旅であり、私たちの使命はあなたの脳の真の潜在力を理解し、向上させるサポートをすることです。",
+      "technology": "テクノロジー",
+      "technologyDescription": "Cloudflare のグローバルエッジネットワーク上のサーバーレスアーキテクチャと、モダンな Web 技術で構築されています。証拠に基づく認知パラダイムを採用し、効果的なトレーニングを提供します。",
+      "science": "科学的基盤",
+      "scienceDescription": "私たちのゲームは、ストループテスト、数字スペン記憶課題、視覚探索実験、空間記憶研究など、確立された認知パラダイムにインスピレーションを受けています。",
+      "story": "私たちの物語",
+      "storyDescription": "BrainVerse は、実験室レベルの認知評価をブラウザにもたらすという想いから生まれました。厳密な科学と楽しいデザインを融合し、脳トレを毎日の習慣にします。"
+    },
+    "contact": {
+      "title": "お問い合わせ",
+      "description": "ご質問、ご提案、またはただ挨拶したいだけでも構いません。お便りをお待ちしております。",
+      "email": "メール",
+      "emailDescription": "お問い合わせは下記のメールアドレスまでお願いします。",
+      "responseTime": "通常 1〜2 営業日以内に返信いたします。"
+    },
+    "dashboard": {
+      "loginRequired": "ダッシュボードを表示するにはログインしてください",
+      "loginRequiredDescription": "ダッシュボードには脳年齢、スコア、連続日数、最近のアクティビティが表示されます。",
+      "signInButton": "ログイン"
+    },
+    "profile": {
+      "loginRequired": "プロフィールを表示するにはログインしてください",
+      "loginRequiredDescription": "プロフィールには個人情報、設定、トレーニング履歴が含まれます。"
+    },
+    "achievements": {
+      "loginRequired": "実績を表示するにはログインしてください",
+      "loginRequiredDescription": "マイルストーン、バッジ、長期的な進捗を追跡できます。"
+    },
+    "privacy": {
+      "title": "プライバシーポリシー",
+      "lastUpdated": "最終更新：2026 年 6 月",
+      "intro": "本プライバシーポリシーは、BrainVerse（以下「私たち」）が当社のウェブサイトおよびサービスの提供にあたり、お客様の情報をどのように収集、使用、保護するかを説明します。",
+      "dataWeCollect": "収集する情報",
+      "dataWeCollectDescription": "アカウント作成時にお客様が入力した情報（メールアドレスやニックネームなど）と、脳年齢や進捗を計算するためのプレイデータを収集します。",
+      "howWeUse": "情報の利用方法",
+      "howWeUseDescription": "お客様の情報は、サービスの提供と改善、体験のパーソナライズ、利用パターンの分析、アカウントに関するご連絡に使用されます。",
+      "dataSharing": "データの共有",
+      "dataSharingDescription": "個人情報を販売または貸与することはありません。サービスの利用状況を把握するため、集計された非識別データを分析プロバイダーと共有する場合があります。",
+      "dataSecurity": "データセキュリティ",
+      "dataSecurityDescription": "転送中および保存時の暗号化を含む、合理的な技術的・組織的措置を講じて情報を保護します。",
+      "yourRights": "お客様の権利",
+      "yourRightsDescription": "お客様はいつでも当社に連絡することで、個人データへのアクセス、修正、削除を請求できます。",
+      "cookies": "Cookie",
+      "cookiesDescription": "サイトの運営とトラフィック分析のために Cookie および類似技術を使用します。同意バナーからいつでも Cookie 設定を管理できます。"
+    },
+    "terms": {
+      "title": "利用規約",
+      "lastUpdated": "最終更新：2026 年 6 月",
+      "intro": "本利用規約は、BrainVerse のウェブサイトおよびサービスのご利用に適用されます。サービスをご利用になることで、本規約に同意したものとみなされます。",
+      "acceptance": "規約への同意",
+      "acceptanceDescription": "BrainVerse にアクセスまたは使用することで、本規約に拘束されることに同意したものとみなされます。同意されない場合は、サービスを使用しないでください。",
+      "useOfService": "サービスの利用",
+      "useOfServiceDescription": "BrainVerse を合法的な目的のみに使用し、他人の権利を侵害したり、他人のサービス利用を制限しないことに同意します。",
+      "accounts": "アカウント",
+      "accountsDescription": "アカウント認証情報の機密性を維持し、アカウント下で行われるすべての活動に対して責任を負います。",
+      "intellectualProperty": "知的財産",
+      "intellectualPropertyDescription": "BrainVerse 上のテキスト、グラフィック、ロゴ、ソフトウェアを含むすべてのコンテンツは、BrainVerse またはそのライセンサーの財産であり、知的財産法によって保護されています。",
+      "disclaimer": "免責事項",
+      "disclaimerDescription": "BrainVerse が提供する脳トレゲームは、娯楽および教育目的のみです。当社のサービスは専門的な医療アドバイス、診断、治療の代わりとなるものではありません。",
+      "liability": "責任の制限",
+      "liabilityDescription": "BrainVerse は、サービスのご利用から生じる間接的、付随的、または結果的損害について責任を負いません。",
+      "changes": "規約の変更",
+      "changesDescription": "本規約は随時更新される場合があります。重要な変更がある場合は、このページに新しい規約を掲載することでお知らせします。"
+    },
+    "notFound": {
+      "title": "ページが見つかりません",
+      "description": "お探しのページは存在しないか、移動されました。",
+      "backHome": "ホームに戻る"
     }
   },
   "dashboard": {

@@ -63,6 +63,106 @@
       "easy": "Easy",
       "medium": "Medium",
       "hard": "Hard"
+    },
+    "visualSearch": {
+      "title": "Visual Search",
+      "description": "Find targets among distractors"
+    },
+    "digitSpan": {
+      "title": "Digit Span",
+      "description": "Remember and recall number sequences"
+    },
+    "reactionTraining": {
+      "title": "Reaction Training",
+      "description": "Test your reflexes"
+    },
+    "stroopChallenge": {
+      "title": "Stroop Challenge",
+      "description": "Resolve color-word conflicts"
+    },
+    "spatialMemory": {
+      "title": "Spatial Memory",
+      "description": "Remember spatial patterns"
+    },
+    "breathingFlow": {
+      "title": "Breathing Flow",
+      "description": "Guided breathing relaxation"
+    },
+    "comingSoon": "Coming Soon",
+    "backToGames": "Back to Games"
+  },
+  "pages": {
+    "about": {
+      "title": "About BrainVerse",
+      "mission": "Our Mission",
+      "missionDescription": "BrainVerse is dedicated to making science-based brain training accessible to everyone. We believe that cognitive health is a lifelong journey, and our mission is to help you understand and improve your brain's true potential.",
+      "technology": "Technology",
+      "technologyDescription": "Built on modern web technology with a serverless architecture on Cloudflare's global edge network. We use evidence-based cognitive paradigms to deliver effective training.",
+      "science": "Science Foundation",
+      "scienceDescription": "Our games are inspired by well-established cognitive paradigms including the Stroop test, digit span memory tasks, visual search experiments, and spatial memory research.",
+      "story": "Our Story",
+      "storyDescription": "BrainVerse was created to bring lab-grade cognitive assessment to the browser. We combine rigorous science with delightful design to make brain training a daily habit."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "Have a question, suggestion, or just want to say hello? We'd love to hear from you.",
+      "email": "Email",
+      "emailDescription": "Reach us at the address below for any inquiries.",
+      "responseTime": "We typically respond within 1-2 business days."
+    },
+    "dashboard": {
+      "loginRequired": "Please sign in to view your dashboard",
+      "loginRequiredDescription": "Your dashboard shows your brain age, scores, streaks, and recent activity.",
+      "signInButton": "Sign In"
+    },
+    "profile": {
+      "loginRequired": "Please sign in to view your profile",
+      "loginRequiredDescription": "Your profile contains your personal information, preferences, and training history."
+    },
+    "achievements": {
+      "loginRequired": "Please sign in to view your achievements",
+      "loginRequiredDescription": "Track your milestones, badges, and progress over time."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: June 2026",
+      "intro": "This Privacy Policy describes how BrainVerse (\u201cwe\u201d, \u201cus\u201d, or \u201cour\u201d) collects, uses, and protects your information when you use our website and services.",
+      "dataWeCollect": "Information We Collect",
+      "dataWeCollectDescription": "We collect the information you provide when creating an account, such as your email address and nickname, as well as gameplay data used to compute your brain age and progress.",
+      "howWeUse": "How We Use Your Information",
+      "howWeUseDescription": "Your information is used to provide and improve our services, personalize your experience, analyze usage patterns, and communicate with you about your account.",
+      "dataSharing": "Data Sharing",
+      "dataSharingDescription": "We do not sell or rent your personal information. We may share aggregated, non-identifiable data with analytics providers to understand how the service is used.",
+      "dataSecurity": "Data Security",
+      "dataSecurityDescription": "We implement reasonable technical and organizational measures to protect your information, including encryption in transit and at rest.",
+      "yourRights": "Your Rights",
+      "yourRightsDescription": "You may request access to, correction of, or deletion of your personal data at any time by contacting us.",
+      "cookies": "Cookies",
+      "cookiesDescription": "We use cookies and similar technologies to operate the site and analyze traffic. You can manage your cookie preferences at any time via the consent banner."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "lastUpdated": "Last updated: June 2026",
+      "intro": "These Terms of Service govern your use of the BrainVerse website and services. By using our services, you agree to these terms.",
+      "acceptance": "Acceptance of Terms",
+      "acceptanceDescription": "By accessing or using BrainVerse, you agree to be bound by these Terms. If you do not agree, please do not use our services.",
+      "useOfService": "Use of Service",
+      "useOfServiceDescription": "You agree to use BrainVerse only for lawful purposes and in a manner that does not infringe the rights of others or restrict their use of the service.",
+      "accounts": "Accounts",
+      "accountsDescription": "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.",
+      "intellectualProperty": "Intellectual Property",
+      "intellectualPropertyDescription": "All content on BrainVerse, including text, graphics, logos, and software, is the property of BrainVerse or its licensors and is protected by intellectual property laws.",
+      "disclaimer": "Disclaimer",
+      "disclaimerDescription": "BrainVerse provides brain training games for entertainment and educational purposes only. Our services are not a substitute for professional medical advice, diagnosis, or treatment.",
+      "liability": "Limitation of Liability",
+      "liabilityDescription": "BrainVerse shall not be liable for any indirect, incidental, or consequential damages arising from your use of the service.",
+      "changes": "Changes to Terms",
+      "changesDescription": "We may update these Terms from time to time. We will notify you of significant changes by posting the new Terms on this page."
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The page you are looking for does not exist or has been moved.",
+      "backHome": "Back to Home"
     }
   },
   "dashboard": {

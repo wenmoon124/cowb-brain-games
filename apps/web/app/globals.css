@@ -32,10 +32,10 @@
   --card: #ffffff;
   --card-hover: #f8fafd;
 
-  /* Text */
-  --text-primary: #1a202c;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
+  /* Text — 提高对比度确保可读性 (WCAG AA ≥ 4.5:1) */
+  --text-primary: #1a1108;
+  --text-secondary: #4a3528;
+  --text-muted: #7a6458;
 
   /* Border */
   --border: #e2e8f0;

@@ -40,9 +40,9 @@ const config: Config = {
         },
         card: '#FFFFFF',
         text: {
-          primary: '#1A202C',
-          secondary: '#64748B',
-          muted: '#94A3B8',
+          primary: '#1A1108',
+          secondary: '#4A3528',
+          muted: '#7A6458',
         },
         border: {
           DEFAULT: '#E2E8F0',
