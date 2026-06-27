@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { isValidLocale, LOCALES, DEFAULT_LOCALE, type Locale } from '@/i18n/config'
+import { isValidLocale, LOCALES, DEFAULT_LOCALE, LOCALE_HTML_LANG, type Locale } from '@/i18n/config'
 
 /**
  * Merge Tailwind CSS classes with proper precedence.

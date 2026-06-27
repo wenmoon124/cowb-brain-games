@@ -2,23 +2,65 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "preserve",
-    "plugins": [{ "name": "next" }],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "noEmit": true,
     "incremental": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/lib/*": ["./src/lib/*"],
-      "@/i18n/*": ["./src/i18n/*"],
-      "@brainverse/shared": ["../../packages/shared/src"],
-      "@brainverse/core": ["../../packages/core/src"],
-      "@brainverse/brain-engine": ["../../packages/brain-engine/src"],
-      "@brainverse/game-engine": ["../../packages/game-engine/src"],
-      "@brainverse/growth-engine": ["../../packages/growth-engine/src"],
-      "@brainverse/content-engine": ["../../packages/content-engine/src"],
-      "@brainverse/ui": ["../../packages/ui/src"]
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*"
+      ],
+      "@/i18n/*": [
+        "./src/i18n/*"
+      ],
+      "@brainverse/shared": [
+        "../../packages/shared/src"
+      ],
+      "@brainverse/core": [
+        "../../packages/core/src"
+      ],
+      "@brainverse/brain-engine": [
+        "../../packages/brain-engine/src"
+      ],
+      "@brainverse/game-engine": [
+        "../../packages/game-engine/src"
+      ],
+      "@brainverse/growth-engine": [
+        "../../packages/growth-engine/src"
+      ],
+      "@brainverse/content-engine": [
+        "../../packages/content-engine/src"
+      ],
+      "@brainverse/ui": [
+        "../../packages/ui/src"
+      ]
+    },
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", ".next", "out"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out"
+  ]
 }
