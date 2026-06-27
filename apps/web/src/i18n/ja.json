@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "BrainVerse",
-    "tagline": "脳のオペレーティングシステム",
+    "tagline": "脳を鍛え、脳年齢を下げよう",
     "buttons": {
       "start": "開始",
       "continue": "続ける",
@@ -18,6 +18,7 @@
   "nav": {
     "home": "ホーム",
     "games": "ゲーム",
+    "brainAge": "脳年齢",
     "dashboard": "ダッシュボード",
     "profile": "プロフィール",
     "achievements": "実績",
@@ -87,6 +88,66 @@
     "breathingFlow": {
       "title": "ブレージングフロー",
       "description": "誘導呼吸によるリラクゼーション"
+    },
+    "memoryMatrix": {
+      "title": "メモリーマトリックス",
+      "description": "点滅タイルを記憶して再現"
+    },
+    "backwardDigitSpan": {
+      "title": "逆順数字スペン",
+      "description": "数字を逆順で入力"
+    },
+    "spatialSequence": {
+      "title": "空間シーケンス",
+      "description": "点灯タイルを順番に再現"
+    },
+    "patternMatch": {
+      "title": "パターンマッチ",
+      "description": "パターンの変化を見つける"
+    },
+    "attentionSpan": {
+      "title": "アテンションスパン",
+      "description": "目標が出た時だけタップ"
+    },
+    "eagleEye": {
+      "title": "イーグルアイ",
+      "description": "妨害の中で移動目標を追跡"
+    },
+    "distractionFilter": {
+      "title": "ディストラクションフィルター",
+      "description": "邪魔を無視し、中央に集中"
+    },
+    "splitFocus": {
+      "title": "スプリットフォーカス",
+      "description": "二つの領域を同時に監視"
+    },
+    "clickHorizon": {
+      "title": "クリックホライズン",
+      "description": "消える前にターゲットをタップ"
+    },
+    "towerOfLogic": {
+      "title": "ロジックタワー",
+      "description": "最少手数でディスク塔を解く"
+    },
+    "changeFlex": {
+      "title": "チェンジフレックス",
+      "description": "タスク間を素早く切り替え"
+    },
+    "pathFinder": {
+      "title": "パスファインダー",
+      "description": "複雑さが増す迷路を攻略"
+    },
+    "matrixReasoning": {
+      "title": "マトリックス推論",
+      "description": "視覚論理パターンを完成"
+    },
+    "audioAlphaDiver": {
+      "title": "オーディオアルファダイバー",
+      "description": "没入型サウンドリラクゼーション"
+    },
+    "stressSandbox": {
+      "title": "ストレスサンドボックス",
+      "description": "触覚プレイでストレス解放"
     },
     "comingSoon": "近日公開",
     "backToGames": "ゲーム一覧へ戻る"

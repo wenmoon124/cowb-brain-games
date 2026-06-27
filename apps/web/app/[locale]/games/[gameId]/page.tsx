@@ -13,12 +13,32 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { GAMES, GAME_SLUGS, getGameBySlug, type GameDimension } from '@/lib/games'
 import { ArrowLeft } from 'lucide-react'
-import { VisualSearchGame } from '@/components/games/VisualSearchGame'
+// Memory games
 import { DigitSpanGame } from '@/components/games/DigitSpanGame'
-import { ReactionTrainingGame } from '@/components/games/ReactionTrainingGame'
-import { StroopChallengeGame } from '@/components/games/StroopChallengeGame'
 import { SpatialMemoryGame } from '@/components/games/SpatialMemoryGame'
+import { MemoryMatrixGame } from '@/components/games/MemoryMatrixGame'
+import { BackwardDigitSpanGame } from '@/components/games/BackwardDigitSpanGame'
+import { SpatialSequenceGame } from '@/components/games/SpatialSequenceGame'
+import { PatternMatchGame } from '@/components/games/PatternMatchGame'
+// Attention games
+import { VisualSearchGame } from '@/components/games/VisualSearchGame'
+import { AttentionSpanGame } from '@/components/games/AttentionSpanGame'
+import { EagleEyeGame } from '@/components/games/EagleEyeGame'
+import { DistractionFilterGame } from '@/components/games/DistractionFilterGame'
+import { SplitFocusGame } from '@/components/games/SplitFocusGame'
+// Reaction games
+import { ReactionTrainingGame } from '@/components/games/ReactionTrainingGame'
+import { ClickHorizonGame } from '@/components/games/ClickHorizonGame'
+// Executive games
+import { StroopChallengeGame } from '@/components/games/StroopChallengeGame'
+import { TowerOfLogicGame } from '@/components/games/TowerOfLogicGame'
+import { ChangeFlexGame } from '@/components/games/ChangeFlexGame'
+import { PathFinderGame } from '@/components/games/PathFinderGame'
+import { MatrixReasoningGame } from '@/components/games/MatrixReasoningGame'
+// Relaxation games
 import { BreathingFlowGame } from '@/components/games/BreathingFlowGame'
+import { AudioAlphaDiverGame } from '@/components/games/AudioAlphaDiverGame'
+import { StressSandboxGame } from '@/components/games/StressSandboxGame'
 
 type BadgeVariant = GameDimension
 
@@ -27,12 +47,32 @@ interface GameComponentProps {
 }
 
 const GAME_COMPONENTS: Record<string, ComponentType<GameComponentProps>> = {
-  'visual-search': VisualSearchGame,
+  // Memory
   'digit-span': DigitSpanGame,
-  'reaction-training': ReactionTrainingGame,
-  'stroop-challenge': StroopChallengeGame,
   'spatial-memory': SpatialMemoryGame,
+  'memory-matrix': MemoryMatrixGame,
+  'backward-digit-span': BackwardDigitSpanGame,
+  'spatial-sequence': SpatialSequenceGame,
+  'pattern-match': PatternMatchGame,
+  // Attention
+  'visual-search': VisualSearchGame,
+  'attention-span': AttentionSpanGame,
+  'eagle-eye': EagleEyeGame,
+  'distraction-filter': DistractionFilterGame,
+  'split-focus': SplitFocusGame,
+  // Reaction
+  'reaction-training': ReactionTrainingGame,
+  'click-horizon': ClickHorizonGame,
+  // Executive
+  'stroop-challenge': StroopChallengeGame,
+  'tower-of-logic': TowerOfLogicGame,
+  'change-flex': ChangeFlexGame,
+  'path-finder': PathFinderGame,
+  'matrix-reasoning': MatrixReasoningGame,
+  // Relaxation
   'breathing-flow': BreathingFlowGame,
+  'audio-alpha-diver': AudioAlphaDiverGame,
+  'stress-sandbox': StressSandboxGame,
 }
 
 export function generateStaticParams() {

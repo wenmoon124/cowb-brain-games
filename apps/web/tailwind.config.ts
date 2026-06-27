@@ -55,11 +55,17 @@ const config: Config = {
         info: '#FF6B35',
         // 维度色全部暖色化 (移除所有蓝/绿/紫/青)
         dim: {
-          memory: '#EC4899',       // 热情粉 (替代紫色)
-          attention: '#F97316',    // 暖橙 (替代青色)
-          reaction: '#FBBF24',     // 暖黄 (保持暖色)
-          executive: '#F472B6',    // 玫粉 (替代绿色)
-          relaxation: '#FB7185',   // 珊瑚红 (替代蓝色)
+          memory: '#EC4899',       // 热情粉 (背景/边框用)
+          attention: '#F97316',    // 暖橙 (背景/边框用)
+          reaction: '#FBBF24',     // 暖黄 (背景/边框用)
+          executive: '#F472B6',    // 玫粉 (背景/边框用)
+          relaxation: '#FB7185',   // 珊瑚红 (背景/边框用)
+          // 文字专用色：加深至 WCAG AA ≥ 4.5:1
+          memoryText: '#9D174D',
+          attentionText: '#9A3412',
+          reactionText: '#92400E',
+          executiveText: '#831843',
+          relaxationText: '#9F1239',
         },
       },
       borderRadius: {

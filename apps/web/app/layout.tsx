@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
+import { OrganizationJsonLd, WebSiteJsonLd } from '@/components/seo/JsonLd'
 import './globals.css'
 
 const inter = Inter({
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
     alternateLocale: ['zh_CN', 'ja_JP'],
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-image.svg',
         width: 1200,
         height: 630,
         alt: 'BrainVerse — Train Your Brain, Lower Your Brain Age',
@@ -62,11 +63,11 @@ export const metadata: Metadata = {
     title: 'BrainVerse',
     description:
       'Science-based brain training to sharpen memory, focus, and cognition.',
-    images: ['/og-image.png'],
+    images: ['/og-image.svg'],
   },
   icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    icon: '/favicon.svg',
+    apple: '/apple-touch-icon.svg',
   },
   manifest: '/manifest.json',
   verification: {
@@ -91,11 +92,20 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="font-sans antialiased">
+        <OrganizationJsonLd />
+        <WebSiteJsonLd />
         {children}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4734481133057523"
           crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+        {/* Cloudflare Web Analytics beacon — replace YOUR_TOKEN with real token from Cloudflare Dashboard */}
+        <Script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "YOUR_CLOUDFLARE_ANALYTICS_TOKEN"}'
           strategy="afterInteractive"
         />
       </body>

@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "BrainVerse",
-    "tagline": "脑力操作系统",
+    "tagline": "训练大脑，降低脑龄",
     "buttons": {
       "start": "开始",
       "continue": "继续",
@@ -18,6 +18,7 @@
   "nav": {
     "home": "首页",
     "games": "游戏",
+    "brainAge": "脑龄评估",
     "dashboard": "仪表盘",
     "profile": "个人中心",
     "achievements": "成就",
@@ -87,6 +88,66 @@
     "breathingFlow": {
       "title": "呼吸律动",
       "description": "引导式呼吸放松"
+    },
+    "memoryMatrix": {
+      "title": "记忆矩阵",
+      "description": "记住闪亮的格子后还原"
+    },
+    "backwardDigitSpan": {
+      "title": "倒序数字广度",
+      "description": "将数字倒序输入"
+    },
+    "spatialSequence": {
+      "title": "空间序列",
+      "description": "按顺序重复亮起的格子"
+    },
+    "patternMatch": {
+      "title": "图案匹配",
+      "description": "找出图案中的变化"
+    },
+    "attentionSpan": {
+      "title": "持续注意",
+      "description": "仅在看到目标时点击"
+    },
+    "eagleEye": {
+      "title": "鹰眼",
+      "description": "在干扰中追踪移动目标"
+    },
+    "distractionFilter": {
+      "title": "干扰过滤",
+      "description": "忽略干扰，专注中心目标"
+    },
+    "splitFocus": {
+      "title": "分散专注",
+      "description": "同时监控两个区域"
+    },
+    "clickHorizon": {
+      "title": "点击地平线",
+      "description": "在目标消失前点击它们"
+    },
+    "towerOfLogic": {
+      "title": "逻辑之塔",
+      "description": "用最少步数解决圆盘塔谜题"
+    },
+    "changeFlex": {
+      "title": "灵活切换",
+      "description": "在任务间快速切换"
+    },
+    "pathFinder": {
+      "title": "路径探索",
+      "description": "穿越复杂度递增的迷宫"
+    },
+    "matrixReasoning": {
+      "title": "矩阵推理",
+      "description": "补全视觉逻辑图案"
+    },
+    "audioAlphaDiver": {
+      "title": "声波潜行",
+      "description": "沉浸式声音放松体验"
+    },
+    "stressSandbox": {
+      "title": "减压沙盒",
+      "description": "触觉互动释放压力"
     },
     "comingSoon": "即将推出",
     "backToGames": "返回游戏"

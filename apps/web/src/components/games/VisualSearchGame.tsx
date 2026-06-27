@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Play, RotateCcw, Star, Target } from 'lucide-react'
+import { Play, Target } from 'lucide-react'
+import { GameTimer } from '@/components/games/GameTimer'
+import { GameResult } from '@/components/games/GameResult'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 
@@ -16,13 +17,12 @@ interface Texts {
   start: string
   score: string
   round: string
-  lives: string
+  misses: string
   findTarget: string
   gameover: string
   playAgain: string
   accuracy: string
   avgReaction: string
-  finalScore: string
 }
 
 const TEXTS: Record<Locale, Texts> = {
@@ -32,13 +32,12 @@ const TEXTS: Record<Locale, Texts> = {
     start: 'Start',
     score: 'Score',
     round: 'Round',
-    lives: 'Misses',
+    misses: 'Misses',
     findTarget: 'Tap the ★',
     gameover: 'Game Over',
     playAgain: 'Play Again',
     accuracy: 'Accuracy',
     avgReaction: 'Avg. Reaction',
-    finalScore: 'Final Score',
   },
   zh: {
     title: '视觉搜索',
@@ -46,13 +45,12 @@ const TEXTS: Record<Locale, Texts> = {
     start: '开始',
     score: '得分',
     round: '轮次',
-    lives: '错过',
+    misses: '错过',
     findTarget: '点击 ★',
     gameover: '游戏结束',
     playAgain: '再来一局',
     accuracy: '准确率',
     avgReaction: '平均反应',
-    finalScore: '最终得分',
   },
   ja: {
     title: 'ビジュアルサーチ',
@@ -60,13 +58,12 @@ const TEXTS: Record<Locale, Texts> = {
     start: '開始',
     score: 'スコア',
     round: 'ラウンド',
-    lives: 'ミス',
+    misses: 'ミス',
     findTarget: '★ をタップ',
     gameover: 'ゲームオーバー',
     playAgain: 'もう一度',
     accuracy: '正確率',
     avgReaction: '平均反応',
-    finalScore: '最終スコア',
   },
 }
 
@@ -91,6 +88,16 @@ function pick<T>(arr: readonly T[]): T {
     return arr[0] as T
   }
   return item
+}
+
+/** Difficulty coefficient: 1.0 + floor((round-1)/5) * 0.5, capped at 3.0 */
+function difficultyCoefficient(round: number): number {
+  return Math.min(3.0, 1.0 + Math.floor((round - 1) / 5) * 0.5)
+}
+
+/** Speed coefficient: clamp(1.5 - reactionTime/limit, 0.5, 1.5) */
+function speedCoefficient(reactionTimeMs: number, limitMs: number): number {
+  return Math.max(0.5, Math.min(1.5, 1.5 - reactionTimeMs / limitMs))
 }
 
 interface RoundData {
@@ -213,11 +220,16 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
     if (index === roundData.targetIndex) {
       const rt = Date.now() - roundStartRef.current
       setReactionTimes((prev) => [...prev, rt])
-      setScore((s) => s + 100)
+      // Per-round score = 100 × speedCoef × difficultyCoef
+      const roundScore = Math.round(
+        100 *
+          speedCoefficient(rt, ROUND_LIMIT_MS) *
+          difficultyCoefficient(round)
+      )
+      setScore((s) => s + roundScore)
       setHits((h) => h + 1)
       setFeedback('correct')
     } else {
-      setScore((s) => Math.max(0, s - 50))
       setMisses((m) => m + 1)
       setFeedback('wrong')
     }
@@ -242,14 +254,8 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
             reactionTimes.length
         )
       : 0
-  const reactionBonus =
-    reactionTimes.length > 0
-      ? Math.max(0, Math.round((500 - avgReaction) * (hits / TOTAL_ROUNDS)))
-      : 0
-  const accuracyBonus = Math.round((hits / TOTAL_ROUNDS) * 500)
-  const finalScore = score + accuracyBonus + reactionBonus
-  const progressPercent =
-    status === 'playing' ? ((round - 1) / TOTAL_ROUNDS) * 100 : 0
+  // Final = max(0, Σ round scores − misses × 50)
+  const finalScore = Math.max(0, score - misses * 50)
 
   if (status === 'idle') {
     return (
@@ -278,43 +284,20 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
 
   if (status === 'finished') {
     return (
-      <Card className="border-primary-light bg-primary-bg">
-        <CardContent className="flex flex-col items-center gap-lg p-3xl text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-dim-attention/15">
-            <Star className="h-8 w-8 text-dim-attention" />
-          </div>
-          <h2 className="text-2xl font-bold text-text-primary">{t.gameover}</h2>
-          <div className="grid grid-cols-3 gap-md w-full max-w-md">
-            <div className="rounded-md bg-card p-md">
-              <div className="text-xs text-text-muted">{t.finalScore}</div>
-              <div className="text-xl font-bold text-primary">
-                {finalScore}
-              </div>
-            </div>
-            <div className="rounded-md bg-card p-md">
-              <div className="text-xs text-text-muted">{t.accuracy}</div>
-              <div className="text-xl font-bold text-text-primary">
-                {accuracy}%
-              </div>
-            </div>
-            <div className="rounded-md bg-card p-md">
-              <div className="text-xs text-text-muted">{t.avgReaction}</div>
-              <div className="text-xl font-bold text-text-primary">
-                {avgReaction}ms
-              </div>
-            </div>
-          </div>
-          <Button variant="primary" size="lg" onClick={startGame}>
-            <RotateCcw className="mr-xs h-5 w-5" />
-            {t.playAgain}
-          </Button>
-        </CardContent>
-      </Card>
+      <GameResult
+        score={finalScore}
+        accuracy={accuracy}
+        dimension="attention"
+        onRetry={startGame}
+        stats={[
+          { label: t.avgReaction, value: `${avgReaction}ms` },
+          { label: t.misses, value: misses },
+        ]}
+      />
     )
   }
 
   const size = gridSizeForRound(round)
-  const timePercent = (timeLeft / ROUND_LIMIT_MS) * 100
 
   return (
     <Card className="border-primary-light">
@@ -331,26 +314,24 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
             <span className="text-md font-bold text-primary">{score}</span>
           </div>
           <div className="flex items-center gap-sm">
-            <span className="text-xs text-text-muted">{t.lives}</span>
+            <span className="text-xs text-text-muted">{t.misses}</span>
             <span className="text-md font-bold text-error">{misses}</span>
           </div>
         </div>
 
-        <Progress
-          value={progressPercent}
-          dimension="default"
-          className="h-1.5"
-        />
-
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-dim-attention">
+          <span className="text-sm font-semibold text-dim-attention-text">
             {t.findTarget}
           </span>
-          <span className="text-xs text-text-muted">
-            {Math.ceil(timeLeft / 1000)}s
-          </span>
         </div>
-        <Progress value={timePercent} dimension="default" className="h-1.5" />
+
+        <GameTimer
+          timeLeft={timeLeft}
+          totalTime={ROUND_LIMIT_MS}
+          dimension="attention"
+          showNumber
+          roundLabel={`${t.round} ${round}/${TOTAL_ROUNDS}`}
+        />
 
         <div
           className="grid gap-1.5 mx-auto"

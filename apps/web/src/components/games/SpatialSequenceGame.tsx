@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { Grid3x3, Play } from 'lucide-react'
+import { ListOrdered, Play } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
@@ -30,14 +30,14 @@ interface Texts {
 
 const TEXTS: Record<Locale, Texts> = {
   en: {
-    title: 'Spatial Memory',
+    title: 'Spatial Sequence',
     description:
-      'Memorize the highlighted cells, then tap them back. Grid grows each level. 3 fails ends the game.',
+      'Watch the sequence of lit tiles, then repeat it in order. Sequence grows each level.',
     start: 'Start',
     level: 'Level',
     fails: 'Fails',
-    watch: 'Memorize',
-    repeat: 'Repeat the pattern',
+    watch: 'Watch the sequence',
+    repeat: 'Repeat the sequence',
     correct: 'Correct!',
     wrong: 'Wrong!',
     gameover: 'Game Over',
@@ -46,13 +46,13 @@ const TEXTS: Record<Locale, Texts> = {
     correctRounds: 'Correct Rounds',
   },
   zh: {
-    title: '空间记忆',
-    description: '记住高亮的格子，然后按顺序点击。每关网格变大，3次失败结束。',
+    title: '空间序列',
+    description: '观察亮起的格子顺序，然后按顺序重复。每关序列变长。',
     start: '开始',
     level: '关卡',
     fails: '失败',
-    watch: '记忆中',
-    repeat: '重复图案',
+    watch: '观察序列',
+    repeat: '重复序列',
     correct: '正确！',
     wrong: '错误！',
     gameover: '游戏结束',
@@ -61,13 +61,13 @@ const TEXTS: Record<Locale, Texts> = {
     correctRounds: '正确轮数',
   },
   ja: {
-    title: '空間記憶',
-    description: 'ハイライトされたセルを記憶し、再現しよう。レベル毎にグリッド拡大、3回失敗で終了。',
+    title: '空間シーケンス',
+    description: '点灯したタイルの順序を観察し、順番に再現しよう。レベル毎に延長。',
     start: '開始',
     level: 'レベル',
     fails: '失敗',
-    watch: '記憶中',
-    repeat: 'パターンを再現',
+    watch: 'シーケンスを観察',
+    repeat: 'シーケンスを再現',
     correct: '正解！',
     wrong: '不正解！',
     gameover: 'ゲームオーバー',
@@ -78,95 +78,101 @@ const TEXTS: Record<Locale, Texts> = {
 }
 
 const MAX_FAILS = 3
-const SHOW_MS = 2000
+const STEP_SHOW_MS = 600
+const STEP_GAP_MS = 200
 
 function getLocale(locale: string): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
 function gridSizeForLevel(level: number): number {
-  return Math.min(2 + level, 7)
+  if (level >= 7) return 5
+  if (level >= 4) return 4
+  return 3
 }
 
-function highlightCountForLevel(level: number): number {
-  return level + 2
+function sequenceLengthForLevel(level: number): number {
+  return 2 + level
 }
 
-/** Level score = gridSize² × highlightCount × 50 × (1 + (level-1)×0.1) */
+/** levelScore = sequenceLength × 150 × gridSize × (1 + (level-1) × 0.1) */
 function levelScore(level: number): number {
-  const size = gridSizeForLevel(level)
-  const count = highlightCountForLevel(level)
+  const seqLen = sequenceLengthForLevel(level)
+  const gridSize = gridSizeForLevel(level)
   const multiplier = 1 + (level - 1) * 0.1
-  return Math.round(size * size * count * 50 * multiplier)
+  return Math.round(seqLen * 150 * gridSize * multiplier)
 }
 
-function buildHighlighted(total: number, count: number): number[] {
-  const indices = Array.from({ length: total }, (_, i) => i)
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    const tmp = indices[i]
-    if (tmp !== undefined) {
-      indices[i] = indices[j] as number
-      indices[j] = tmp
-    }
+function buildSequence(total: number, length: number): number[] {
+  const seq: number[] = []
+  for (let i = 0; i < length; i++) {
+    seq.push(Math.floor(Math.random() * total))
   }
-  return indices.slice(0, count).sort((a, b) => a - b)
+  return seq
 }
 
-export interface SpatialMemoryGameProps {
+export interface SpatialSequenceGameProps {
   locale: string
 }
 
-export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
+export function SpatialSequenceGame({ locale }: SpatialSequenceGameProps) {
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
   const [phase, setPhase] = useState<Phase>('showing')
   const [level, setLevel] = useState(1)
-  const [highlighted, setHighlighted] = useState<number[]>([])
-  const [clicked, setClicked] = useState<number[]>([])
+  const [sequence, setSequence] = useState<number[]>([])
+  const [showStep, setShowStep] = useState(-1)
+  const [input, setInput] = useState<number[]>([])
   const [fails, setFails] = useState(0)
   const [maxLevel, setMaxLevel] = useState(0)
   const [correctRounds, setCorrectRounds] = useState(0)
   const [score, setScore] = useState(0)
   const [feedback, setFeedback] = useState<'none' | 'correct' | 'wrong'>('none')
 
-  const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const finishedRef = useRef(false)
 
-  const clearTimers = useCallback(() => {
-    if (showTimerRef.current !== null) {
-      clearTimeout(showTimerRef.current)
-      showTimerRef.current = null
-    }
-    if (feedbackTimerRef.current !== null) {
-      clearTimeout(feedbackTimerRef.current)
-      feedbackTimerRef.current = null
+  const clearTimer = useCallback(() => {
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
     }
   }, [])
 
   const finishGame = useCallback(() => {
     if (finishedRef.current) return
     finishedRef.current = true
-    clearTimers()
+    clearTimer()
     setStatus('finished')
-  }, [clearTimers])
+  }, [clearTimer])
+
+  // Drive the showing sequence: -1 = initial gap, 0..n-1 = show tile, n = done
+  useEffect(() => {
+    if (status !== 'playing' || phase !== 'showing') return
+    if (showStep >= sequence.length) {
+      setPhase('input')
+      return
+    }
+    const isShowStep = showStep >= 0
+    const delay = isShowStep ? STEP_SHOW_MS : STEP_GAP_MS
+    timerRef.current = setTimeout(() => {
+      setShowStep((s) => s + 1)
+    }, delay)
+    return () => clearTimer()
+  }, [status, phase, showStep, sequence, clearTimer])
 
   const startLevel = useCallback((nextLevel: number) => {
     const size = gridSizeForLevel(nextLevel)
     const total = size * size
-    const count = highlightCountForLevel(nextLevel)
-    const cells = buildHighlighted(total, count)
+    const seqLen = sequenceLengthForLevel(nextLevel)
+    const seq = buildSequence(total, seqLen)
     setLevel(nextLevel)
-    setHighlighted(cells)
-    setClicked([])
+    setSequence(seq)
+    setShowStep(-1)
+    setInput([])
     setFeedback('none')
     setPhase('showing')
-    showTimerRef.current = setTimeout(() => {
-      setPhase('input')
-      showTimerRef.current = null
-    }, SHOW_MS)
   }, [])
 
   const startGame = useCallback(() => {
@@ -182,28 +188,29 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
 
   const handleCellClick = (index: number) => {
     if (phase !== 'input' || feedback !== 'none') return
-    if (clicked.includes(index)) return
+    const expectedIndex = input.length
+    const expected = sequence[expectedIndex]
+    if (expected === undefined) return
 
-    const isCorrect = highlighted.includes(index)
-    if (!isCorrect) {
+    const nextInput = [...input, index]
+    setInput(nextInput)
+
+    if (index !== expected) {
       const newFails = fails + 1
       setFails(newFails)
       setFeedback('wrong')
       setPhase('feedback')
       if (newFails >= MAX_FAILS) {
-        feedbackTimerRef.current = setTimeout(() => finishGame(), 1000)
+        timerRef.current = setTimeout(() => finishGame(), 1000)
       } else {
-        feedbackTimerRef.current = setTimeout(() => {
+        timerRef.current = setTimeout(() => {
           startLevel(level)
         }, 1000)
       }
       return
     }
 
-    const nextClicked = [...clicked, index]
-    setClicked(nextClicked)
-
-    if (nextClicked.length === highlighted.length) {
+    if (nextInput.length === sequence.length) {
       // Level completed — add level score
       const earned = levelScore(level)
       setScore((s) => s + earned)
@@ -211,17 +218,17 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
       setMaxLevel((m) => Math.max(m, level))
       setFeedback('correct')
       setPhase('feedback')
-      feedbackTimerRef.current = setTimeout(() => {
+      timerRef.current = setTimeout(() => {
         startLevel(level + 1)
       }, 800)
     }
   }
 
   useEffect(() => {
-    return () => clearTimers()
-  }, [clearTimers])
+    return () => clearTimer()
+  }, [clearTimer])
 
-  // Final = max(0, Σ level scores − fails × 100)
+  // finalScore = max(0, Σ levelScores − fails × 100)
   const finalScore = Math.max(0, score - fails * 100)
 
   if (status === 'idle') {
@@ -229,7 +236,7 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
       <Card className="border-primary-light bg-primary-bg">
         <CardContent className="flex flex-col items-center gap-lg p-3xl text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-dim-memory/15">
-            <Grid3x3 className="h-8 w-8 text-dim-memory" />
+            <ListOrdered className="h-8 w-8 text-dim-memory" />
           </div>
           <h2 className="text-2xl font-bold text-text-primary">{t.title}</h2>
           <p className="text-sm text-text-secondary max-w-md">
@@ -265,6 +272,11 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
 
   const size = gridSizeForLevel(level)
   const failsPercent = (fails / MAX_FAILS) * 100
+  const activeTile = phase === 'showing' ? sequence[showStep] : undefined
+  const wrongIdx =
+    phase === 'feedback' && feedback === 'wrong'
+      ? (input[input.length - 1] ?? -1)
+      : -1
 
   return (
     <Card className="border-primary-light">
@@ -307,12 +319,12 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
           }}
         >
           {Array.from({ length: size * size }).map((_, idx) => {
-            const isHighlighted = highlighted.includes(idx)
-            const isClicked = clicked.includes(idx)
-            const showHighlight = phase === 'showing' && isHighlighted
-            const showClicked = phase === 'input' && isClicked
-            const showReveal =
-              (phase === 'feedback' || phase === 'input') && isHighlighted
+            const isActive = activeTile === idx
+            const isInput =
+              (phase === 'input' ||
+                (phase === 'feedback' && feedback === 'correct')) &&
+              input.includes(idx)
+            const isWrongFeedback = idx === wrongIdx
             return (
               <button
                 key={`${level}-${idx}`}
@@ -323,18 +335,18 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
                 className={[
                   'h-12 w-12 rounded-md border-2 transition-all',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
-                  showHighlight
+                  isActive
                     ? 'border-dim-memory bg-dim-memory'
-                    : showClicked
-                      ? 'border-dim-memory bg-dim-memory/50'
-                      : phase === 'feedback' && isHighlighted
-                        ? feedback === 'wrong'
-                          ? 'border-error bg-error/15'
-                          : 'border-dim-memory bg-dim-memory'
+                    : isWrongFeedback
+                      ? 'border-error bg-error/15'
+                      : isInput
+                        ? feedback === 'correct'
+                          ? 'border-success bg-success/20'
+                          : 'border-dim-memory bg-dim-memory/50'
                         : 'border-border bg-card hover:bg-primary-bg',
                 ].join(' ')}
               >
-                {showReveal || showHighlight || showClicked ? (
+                {isActive || isInput ? (
                   <span className="block h-2 w-2 rounded-full bg-dim-memory mx-auto" />
                 ) : null}
               </button>

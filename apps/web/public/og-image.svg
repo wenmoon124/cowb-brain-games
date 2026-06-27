@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B35"/>
+      <stop offset="50%" stop-color="#FFB14A"/>
+      <stop offset="100%" stop-color="#FFD700"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g transform="translate(600, 280)">
+    <circle cx="0" cy="0" r="80" fill="#fff" opacity="0.95"/>
+    <path d="M-30 -20c0-11 9-20 20-20s20 9 20 20c0 5-2 9-4 13 5 3 8 8 8 14 0 8-7 15-15 15h-16c-8 0-15-7-15-15 0-6 3-11 8-14-2-4-4-8-4-13z" fill="#FF6B35"/>
+  </g>
+  <text x="600" y="420" font-family="Inter, sans-serif" font-size="72" font-weight="bold" fill="#fff" text-anchor="middle">BrainVerse</text>
+  <text x="600" y="480" font-family="Inter, sans-serif" font-size="28" fill="#fff" text-anchor="middle" opacity="0.9">Train Your Brain, Lower Your Brain Age</text>
+</svg>

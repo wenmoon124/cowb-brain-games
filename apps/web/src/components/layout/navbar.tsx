@@ -22,6 +22,8 @@ export function Navbar({ locale }: NavbarProps) {
   const navLinks = [
     { href: `/${locale}`, label: t('nav.home'), key: 'home' },
     { href: `/${locale}/games`, label: t('nav.games'), key: 'games' },
+    { href: `/${locale}/brain-age`, label: t('nav.brainAge'), key: 'brain-age' },
+    { href: `/${locale}/articles`, label: t('nav.articles'), key: 'articles' },
     {
       href: `/${locale}/dashboard`,
       label: t('nav.dashboard'),

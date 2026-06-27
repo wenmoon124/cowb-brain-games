@@ -7,16 +7,17 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        memory: 'border-transparent bg-dim-memory/15 text-dim-memory',
-        attention: 'border-transparent bg-dim-attention/15 text-dim-attention',
-        reaction: 'border-transparent bg-dim-reaction/15 text-dim-reaction',
-        executive: 'border-transparent bg-dim-executive/15 text-dim-executive',
+        // 维度 Badge：背景用 alpha 色，文字用加深色确保 WCAG AA ≥ 4.5:1
+        memory: 'border-transparent bg-dim-memory/15 text-dim-memory-text',
+        attention: 'border-transparent bg-dim-attention/15 text-dim-attention-text',
+        reaction: 'border-transparent bg-dim-reaction/15 text-dim-reaction-text',
+        executive: 'border-transparent bg-dim-executive/15 text-dim-executive-text',
         relaxation:
-          'border-transparent bg-dim-relaxation/15 text-dim-relaxation',
+          'border-transparent bg-dim-relaxation/15 text-dim-relaxation-text',
         success: 'border-transparent bg-success/15 text-success',
         warning: 'border-transparent bg-warning/15 text-warning',
         error: 'border-transparent bg-error/15 text-error',
-        info: 'border-transparent bg-primary-light text-info',
+        info: 'border-transparent bg-primary-light text-primary',
       },
     },
     defaultVariants: {

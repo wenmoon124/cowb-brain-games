@@ -18,6 +18,7 @@
   "nav": {
     "home": "Home",
     "games": "Games",
+    "brainAge": "Brain Age",
     "dashboard": "Dashboard",
     "profile": "Profile",
     "achievements": "Achievements",
@@ -87,6 +88,66 @@
     "breathingFlow": {
       "title": "Breathing Flow",
       "description": "Guided breathing relaxation"
+    },
+    "memoryMatrix": {
+      "title": "Memory Matrix",
+      "description": "Memorize flashing tiles, then tap them back"
+    },
+    "backwardDigitSpan": {
+      "title": "Backward Digit Span",
+      "description": "Recall digits in reverse order"
+    },
+    "spatialSequence": {
+      "title": "Spatial Sequence",
+      "description": "Repeat the sequence of lit tiles in order"
+    },
+    "patternMatch": {
+      "title": "Pattern Match",
+      "description": "Spot what changed in the pattern"
+    },
+    "attentionSpan": {
+      "title": "Attention Span",
+      "description": "Tap only when you see the target"
+    },
+    "eagleEye": {
+      "title": "Eagle Eye",
+      "description": "Track moving targets among distractors"
+    },
+    "distractionFilter": {
+      "title": "Distraction Filter",
+      "description": "Ignore distractions, focus on the center"
+    },
+    "splitFocus": {
+      "title": "Split Focus",
+      "description": "Monitor two zones simultaneously"
+    },
+    "clickHorizon": {
+      "title": "Click Horizon",
+      "description": "Tap drifting targets before they vanish"
+    },
+    "towerOfLogic": {
+      "title": "Tower of Logic",
+      "description": "Solve the disk tower puzzle in minimum moves"
+    },
+    "changeFlex": {
+      "title": "Change Flex",
+      "description": "Switch between tasks rapidly"
+    },
+    "pathFinder": {
+      "title": "Path Finder",
+      "description": "Navigate mazes of increasing complexity"
+    },
+    "matrixReasoning": {
+      "title": "Matrix Reasoning",
+      "description": "Complete the visual logic pattern"
+    },
+    "audioAlphaDiver": {
+      "title": "Audio Alpha Diver",
+      "description": "Immersive sound-based relaxation dive"
+    },
+    "stressSandbox": {
+      "title": "Stress Sandbox",
+      "description": "Tactile play to release tension"
     },
     "comingSoon": "Coming Soon",
     "backToGames": "Back to Games"

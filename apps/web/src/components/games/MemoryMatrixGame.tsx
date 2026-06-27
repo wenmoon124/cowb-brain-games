@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { Grid3x3, Play } from 'lucide-react'
+import { LayoutGrid, Play } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
@@ -17,7 +17,7 @@ interface Texts {
   description: string
   start: string
   level: string
-  fails: string
+  lives: string
   watch: string
   repeat: string
   correct: string
@@ -26,82 +26,83 @@ interface Texts {
   playAgain: string
   maxLevel: string
   correctRounds: string
+  wrongTaps: string
 }
 
 const TEXTS: Record<Locale, Texts> = {
   en: {
-    title: 'Spatial Memory',
+    title: 'Memory Matrix',
     description:
-      'Memorize the highlighted cells, then tap them back. Grid grows each level. 3 fails ends the game.',
+      'Memorize the flashing tiles, then tap them back. Grid grows each level.',
     start: 'Start',
     level: 'Level',
-    fails: 'Fails',
+    lives: 'Lives',
     watch: 'Memorize',
-    repeat: 'Repeat the pattern',
+    repeat: 'Tap the tiles',
     correct: 'Correct!',
     wrong: 'Wrong!',
     gameover: 'Game Over',
     playAgain: 'Play Again',
     maxLevel: 'Max Level',
     correctRounds: 'Correct Rounds',
+    wrongTaps: 'Wrong Taps',
   },
   zh: {
-    title: '空间记忆',
-    description: '记住高亮的格子，然后按顺序点击。每关网格变大，3次失败结束。',
+    title: '记忆矩阵',
+    description: '记住闪亮的格子，然后点击它们。每关数量增加。',
     start: '开始',
     level: '关卡',
-    fails: '失败',
+    lives: '生命',
     watch: '记忆中',
-    repeat: '重复图案',
+    repeat: '点击格子',
     correct: '正确！',
     wrong: '错误！',
     gameover: '游戏结束',
     playAgain: '再来一局',
     maxLevel: '最高关卡',
     correctRounds: '正确轮数',
+    wrongTaps: '错误点击',
   },
   ja: {
-    title: '空間記憶',
-    description: 'ハイライトされたセルを記憶し、再現しよう。レベル毎にグリッド拡大、3回失敗で終了。',
+    title: 'メモリーマトリックス',
+    description: '点滅したタイルを記憶し、タップしよう。レベル毎に増加。',
     start: '開始',
     level: 'レベル',
-    fails: '失敗',
+    lives: 'ライフ',
     watch: '記憶中',
-    repeat: 'パターンを再現',
+    repeat: 'タイルをタップ',
     correct: '正解！',
     wrong: '不正解！',
     gameover: 'ゲームオーバー',
     playAgain: 'もう一度',
     maxLevel: '最高レベル',
     correctRounds: '正解ラウンド',
+    wrongTaps: '誤タップ',
   },
 }
 
 const MAX_FAILS = 3
-const SHOW_MS = 2000
+const GRID_SIZE = 4
+const TOTAL_TILES = GRID_SIZE * GRID_SIZE
+const SHOW_MS = 1200
 
 function getLocale(locale: string): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
-function gridSizeForLevel(level: number): number {
-  return Math.min(2 + level, 7)
+function tilesCountForLevel(level: number): number {
+  return Math.min(3 + (level - 1), 8)
 }
 
-function highlightCountForLevel(level: number): number {
-  return level + 2
-}
-
-/** Level score = gridSize² × highlightCount × 50 × (1 + (level-1)×0.1) */
+/** levelScore = tilesCount × 100 × (1 + (level-1) × 0.15) */
 function levelScore(level: number): number {
-  const size = gridSizeForLevel(level)
-  const count = highlightCountForLevel(level)
-  const multiplier = 1 + (level - 1) * 0.1
-  return Math.round(size * size * count * 50 * multiplier)
+  const count = tilesCountForLevel(level)
+  const multiplier = 1 + (level - 1) * 0.15
+  return Math.round(count * 100 * multiplier)
 }
 
-function buildHighlighted(total: number, count: number): number[] {
-  const indices = Array.from({ length: total }, (_, i) => i)
+function buildHighlighted(count: number): number[] {
+  const indices = Array.from({ length: TOTAL_TILES }, (_, i) => i)
   for (let i = indices.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
     const tmp = indices[i]
@@ -113,11 +114,11 @@ function buildHighlighted(total: number, count: number): number[] {
   return indices.slice(0, count).sort((a, b) => a - b)
 }
 
-export interface SpatialMemoryGameProps {
+export interface MemoryMatrixGameProps {
   locale: string
 }
 
-export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
+export function MemoryMatrixGame({ locale }: MemoryMatrixGameProps) {
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -125,7 +126,8 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
   const [level, setLevel] = useState(1)
   const [highlighted, setHighlighted] = useState<number[]>([])
   const [clicked, setClicked] = useState<number[]>([])
-  const [fails, setFails] = useState(0)
+  const [lives, setLives] = useState(MAX_FAILS)
+  const [wrongTaps, setWrongTaps] = useState(0)
   const [maxLevel, setMaxLevel] = useState(0)
   const [correctRounds, setCorrectRounds] = useState(0)
   const [score, setScore] = useState(0)
@@ -154,10 +156,8 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
   }, [clearTimers])
 
   const startLevel = useCallback((nextLevel: number) => {
-    const size = gridSizeForLevel(nextLevel)
-    const total = size * size
-    const count = highlightCountForLevel(nextLevel)
-    const cells = buildHighlighted(total, count)
+    const count = tilesCountForLevel(nextLevel)
+    const cells = buildHighlighted(count)
     setLevel(nextLevel)
     setHighlighted(cells)
     setClicked([])
@@ -171,7 +171,8 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
 
   const startGame = useCallback(() => {
     finishedRef.current = false
-    setFails(0)
+    setLives(MAX_FAILS)
+    setWrongTaps(0)
     setMaxLevel(0)
     setCorrectRounds(0)
     setScore(0)
@@ -186,11 +187,13 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
 
     const isCorrect = highlighted.includes(index)
     if (!isCorrect) {
-      const newFails = fails + 1
-      setFails(newFails)
+      const newWrongTaps = wrongTaps + 1
+      setWrongTaps(newWrongTaps)
+      const newLives = lives - 1
+      setLives(newLives)
       setFeedback('wrong')
       setPhase('feedback')
-      if (newFails >= MAX_FAILS) {
+      if (newLives <= 0) {
         feedbackTimerRef.current = setTimeout(() => finishGame(), 1000)
       } else {
         feedbackTimerRef.current = setTimeout(() => {
@@ -221,15 +224,15 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
     return () => clearTimers()
   }, [clearTimers])
 
-  // Final = max(0, Σ level scores − fails × 100)
-  const finalScore = Math.max(0, score - fails * 100)
+  // finalScore = max(0, Σ levelScores − wrongTaps × 50)
+  const finalScore = Math.max(0, score - wrongTaps * 50)
 
   if (status === 'idle') {
     return (
       <Card className="border-primary-light bg-primary-bg">
         <CardContent className="flex flex-col items-center gap-lg p-3xl text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-dim-memory/15">
-            <Grid3x3 className="h-8 w-8 text-dim-memory" />
+            <LayoutGrid className="h-8 w-8 text-dim-memory" />
           </div>
           <h2 className="text-2xl font-bold text-text-primary">{t.title}</h2>
           <p className="text-sm text-text-secondary max-w-md">
@@ -258,13 +261,13 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
         stats={[
           { label: t.maxLevel, value: maxLevel },
           { label: t.correctRounds, value: correctRounds },
+          { label: t.wrongTaps, value: wrongTaps },
         ]}
       />
     )
   }
 
-  const size = gridSizeForLevel(level)
-  const failsPercent = (fails / MAX_FAILS) * 100
+  const livesPercent = (lives / MAX_FAILS) * 100
 
   return (
     <Card className="border-primary-light">
@@ -277,14 +280,14 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
             </span>
           </div>
           <div className="flex items-center gap-sm">
-            <span className="text-xs text-text-muted">{t.fails}</span>
+            <span className="text-xs text-text-muted">{t.lives}</span>
             <span className="text-md font-bold text-error">
-              {fails}/{MAX_FAILS}
+              {lives}/{MAX_FAILS}
             </span>
           </div>
         </div>
 
-        <Progress value={failsPercent} dimension="error" className="h-1.5" />
+        <Progress value={livesPercent} dimension="memory" className="h-1.5" />
 
         <div className="flex items-center justify-center">
           <span
@@ -302,11 +305,11 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
         <div
           className="grid gap-1.5 mx-auto"
           style={{
-            gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
-            maxWidth: `${size * 56}px`,
+            gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
+            maxWidth: `${GRID_SIZE * 56}px`,
           }}
         >
-          {Array.from({ length: size * size }).map((_, idx) => {
+          {Array.from({ length: TOTAL_TILES }).map((_, idx) => {
             const isHighlighted = highlighted.includes(idx)
             const isClicked = clicked.includes(idx)
             const showHighlight = phase === 'showing' && isHighlighted

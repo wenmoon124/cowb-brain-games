@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Gamepad2, LayoutDashboard, User } from 'lucide-react'
+import { Home, Gamepad2, Brain, LayoutDashboard, User } from 'lucide-react'
 import { type Locale } from '@/i18n/config'
 import { useTranslation } from '@/i18n/client'
 import { cn } from '@/lib/utils'
@@ -25,6 +25,11 @@ export function BottomNav({ locale }: BottomNavProps) {
       href: `/${locale}/games`,
       label: t('nav.games'),
       icon: Gamepad2,
+    },
+    {
+      href: `/${locale}/brain-age`,
+      label: t('nav.brainAge'),
+      icon: Brain,
     },
     {
       href: `/${locale}/dashboard`,

@@ -4,7 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { Shuffle, Play, RotateCcw, Heart } from 'lucide-react'
+import { Shuffle, Play, Heart } from 'lucide-react'
+import { GameTimer } from '@/components/games/GameTimer'
+import { GameResult } from '@/components/games/GameResult'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 type Phase = 'showing' | 'feedback'
@@ -31,7 +33,6 @@ interface Texts {
   gameover: string
   playAgain: string
   accuracy: string
-  finalScore: string
 }
 
 const COLOR_MAP: Record<Locale, Record<ColorKey, ColorDef>> = {
@@ -73,7 +74,6 @@ const TEXTS: Record<Locale, Texts> = {
     gameover: 'Game Over',
     playAgain: 'Play Again',
     accuracy: 'Accuracy',
-    finalScore: 'Final Score',
   },
   zh: {
     title: 'Stroop 挑战',
@@ -88,7 +88,6 @@ const TEXTS: Record<Locale, Texts> = {
     gameover: '游戏结束',
     playAgain: '再来一局',
     accuracy: '准确率',
-    finalScore: '最终得分',
   },
   ja: {
     title: 'ストループチャレンジ',
@@ -103,7 +102,6 @@ const TEXTS: Record<Locale, Texts> = {
     gameover: 'ゲームオーバー',
     playAgain: 'もう一度',
     accuracy: '正確率',
-    finalScore: '最終スコア',
   },
 }
 
@@ -128,10 +126,21 @@ function pickColor(exclude?: ColorKey): ColorKey {
   return (item ?? 'red') as ColorKey
 }
 
+/** Speed coefficient: clamp(1.5 - reactionTime/limit, 0.5, 1.5) */
+function speedCoefficient(reactionTimeMs: number, limitMs: number): number {
+  return Math.max(0.5, Math.min(1.5, 1.5 - reactionTimeMs / limitMs))
+}
+
+/** Consistency coefficient: incongruent=1.5, congruent=1.0 */
+function consistencyCoefficient(congruent: boolean): number {
+  return congruent ? 1.0 : 1.5
+}
+
 interface Question {
   wordKey: ColorKey
   colorKey: ColorKey
   options: ColorKey[]
+  congruent: boolean
 }
 
 function buildQuestion(): Question {
@@ -161,7 +170,7 @@ function buildQuestion(): Question {
       options[j] = tmp
     }
   }
-  return { wordKey, colorKey, options }
+  return { wordKey, colorKey, options, congruent }
 }
 
 export interface StroopChallengeGameProps {
@@ -181,7 +190,10 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
   const [lives, setLives] = useState(MAX_LIVES)
   const [correctCount, setCorrectCount] = useState(0)
   const [answeredCount, setAnsweredCount] = useState(0)
-  const [feedback, setFeedback] = useState<'none' | 'correct' | 'wrong' | 'timeout'>('none')
+  const [errors, setErrors] = useState(0)
+  const [feedback, setFeedback] = useState<
+    'none' | 'correct' | 'wrong' | 'timeout'
+  >('none')
   const [timeLeft, setTimeLeft] = useState(QUESTION_LIMIT_MS)
 
   const questionStartRef = useRef<number>(0)
@@ -234,15 +246,16 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
 
       clearTimers()
       intervalRef.current = setInterval(() => {
-        const remaining = QUESTION_LIMIT_MS - (Date.now() - questionStartRef.current)
+        const remaining =
+          QUESTION_LIMIT_MS - (Date.now() - questionStartRef.current)
         setTimeLeft(remaining > 0 ? remaining : 0)
       }, 50)
 
       timeoutRef.current = setTimeout(() => {
-        // timeout: -1 life, -50 score
+        // timeout: -1 life, count as error
         const newLives = livesRef.current - 1
         updateLives(newLives)
-        setScore((s) => Math.max(0, s - 50))
+        setErrors((e) => e + 1)
         setAnsweredCount((c) => c + 1)
         setFeedback('timeout')
         setPhase('feedback')
@@ -264,6 +277,7 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
     updateLives(MAX_LIVES)
     setCorrectCount(0)
     setAnsweredCount(0)
+    setErrors(0)
     setQuestionNumber(1)
     setStatus('playing')
     nextQuestion(1)
@@ -274,14 +288,22 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
     if (phase !== 'showing' || !question) return
     clearTimers()
     setAnsweredCount((c) => c + 1)
+    const rt = Date.now() - questionStartRef.current
+
     if (key === question.colorKey) {
-      setScore((s) => s + 100)
+      // Per-question score = 100 × speedCoef × consistencyCoef
+      const qScore = Math.round(
+        100 *
+          speedCoefficient(rt, QUESTION_LIMIT_MS) *
+          consistencyCoefficient(question.congruent)
+      )
+      setScore((s) => s + qScore)
       setCorrectCount((c) => c + 1)
       setFeedback('correct')
     } else {
       const newLives = livesRef.current - 1
       updateLives(newLives)
-      setScore((s) => Math.max(0, s - 50))
+      setErrors((e) => e + 1)
       setFeedback('wrong')
       if (newLives <= 0) {
         setPhase('feedback')
@@ -301,8 +323,8 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
 
   const accuracy =
     answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0
-  const livesBonus = lives * 200
-  const finalScore = score + livesBonus
+  // Final = max(0, Σ question scores − errors × 80)
+  const finalScore = Math.max(0, score - errors * 80)
 
   if (status === 'idle') {
     return (
@@ -331,43 +353,17 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
 
   if (status === 'finished') {
     return (
-      <Card className="border-primary-light bg-primary-bg">
-        <CardContent className="flex flex-col items-center gap-lg p-3xl text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-dim-executive/15">
-            <Shuffle className="h-8 w-8 text-dim-executive" />
-          </div>
-          <h2 className="text-2xl font-bold text-text-primary">{t.gameover}</h2>
-          <div className="grid grid-cols-3 gap-md w-full max-w-md">
-            <div className="rounded-md bg-card p-md">
-              <div className="text-xs text-text-muted">{t.finalScore}</div>
-              <div className="text-xl font-bold text-primary">
-                {finalScore}
-              </div>
-            </div>
-            <div className="rounded-md bg-card p-md">
-              <div className="text-xs text-text-muted">{t.accuracy}</div>
-              <div className="text-xl font-bold text-text-primary">
-                {accuracy}%
-              </div>
-            </div>
-            <div className="rounded-md bg-card p-md">
-              <div className="text-xs text-text-muted">{t.lives}</div>
-              <div className="text-xl font-bold text-text-primary">
-                {lives}/{MAX_LIVES}
-              </div>
-            </div>
-          </div>
-          <Button variant="primary" size="lg" onClick={startGame}>
-            <RotateCcw className="mr-xs h-5 w-5" />
-            {t.playAgain}
-          </Button>
-        </CardContent>
-      </Card>
+      <GameResult
+        score={finalScore}
+        accuracy={accuracy}
+        dimension="executive"
+        onRetry={startGame}
+        stats={[{ label: t.lives, value: `${lives}/${MAX_LIVES}` }]}
+      />
     )
   }
 
   const progressPercent = ((questionNumber - 1) / TOTAL_QUESTIONS) * 100
-  const timePercent = (timeLeft / QUESTION_LIMIT_MS) * 100
 
   return (
     <Card className="border-primary-light">
@@ -395,17 +391,13 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
           </div>
         </div>
 
-        <Progress
-          value={progressPercent}
-          dimension="default"
-          className="h-1.5"
-        />
+        <Progress value={progressPercent} dimension="default" className="h-1.5" />
 
         <div className="flex flex-col items-center justify-center rounded-lg bg-background-secondary p-3xl min-h-[160px]">
           {question && (
             <span
-              className="text-5xl font-bold"
-              style={{ color: colors[question.colorKey].hex }}
+              className="rounded-full px-2xl py-md text-5xl font-bold text-text-primary"
+              style={{ backgroundColor: colors[question.colorKey].hex }}
             >
               {colors[question.wordKey].label}
             </span>
@@ -427,7 +419,12 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
           )}
         </div>
 
-        <Progress value={timePercent} dimension="default" className="h-1" />
+        <GameTimer
+          timeLeft={timeLeft}
+          totalTime={QUESTION_LIMIT_MS}
+          dimension="executive"
+          showNumber
+        />
 
         <div className="grid grid-cols-2 gap-sm">
           {question?.options.map((key) => (
@@ -437,8 +434,8 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
               size="lg"
               onClick={() => handleAnswer(key)}
               disabled={phase !== 'showing'}
-              className="h-14 text-md font-bold"
-              style={{ color: colors[key].hex }}
+              className="h-14 text-md font-bold text-text-primary"
+              style={{ backgroundColor: colors[key].hex }}
             >
               {colors[key].label}
             </Button>

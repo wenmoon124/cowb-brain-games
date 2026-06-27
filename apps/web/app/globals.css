@@ -48,11 +48,19 @@
   --info: #ff6b35;
 
   /* Dimension Colors — 全部暖色化 (移除蓝/绿/紫/青) */
+  /* 背景用：保持高饱和度暖色，用于 Badge 背景/进度条/边框 */
   --dim-memory: #ec4899;       /* 热情粉 (替代紫色) */
   --dim-attention: #f97316;    /* 暖橙 (替代青色) */
   --dim-reaction: #fbbf24;     /* 暖黄 */
   --dim-executive: #f472b6;    /* 玫粉 (替代绿色) */
   --dim-relaxation: #fb7185;   /* 珊瑚红 (替代蓝色) */
+
+  /* Dimension Text Colors — 加深至 WCAG AA ≥ 4.5:1，用于所有文字场景 */
+  --dim-memory-text: #9d174d;       /* 深粉，对比度 ≥ 7:1 */
+  --dim-attention-text: #9a3412;    /* 深橙，对比度 ≥ 7:1 */
+  --dim-reaction-text: #92400e;     /* 深琥珀，对比度 ≥ 7:1 */
+  --dim-executive-text: #831843;    /* 深玫红，对比度 ≥ 7:1 */
+  --dim-relaxation-text: #9f1239;   /* 深珊瑚，对比度 ≥ 7:1 */
 
   /* Dimension Alpha Backgrounds */
   --dim-memory-light: #ec489920;

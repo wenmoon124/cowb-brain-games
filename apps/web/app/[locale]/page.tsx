@@ -10,6 +10,7 @@ import {
   Sparkles,
   ArrowRight,
 } from 'lucide-react'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export async function generateMetadata({
@@ -57,12 +58,16 @@ export default async function HomePage({
             {t('landing.hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-md justify-center">
-            <Button variant="primary" size="lg">
-              {t('landing.hero.cta')}
-              <ArrowRight className="ml-xs h-4 w-4" />
+            <Button variant="primary" size="lg" asChild>
+              <Link href={`/${locale}/brain-age`}>
+                {t('landing.hero.cta')}
+                <ArrowRight className="ml-xs h-4 w-4" />
+              </Link>
             </Button>
-            <Button variant="ghost" size="lg">
-              {t('common.buttons.learnMore')}
+            <Button variant="ghost" size="lg" asChild>
+              <Link href={`/${locale}/about`}>
+                {t('common.buttons.learnMore')}
+              </Link>
             </Button>
           </div>
         </div>
@@ -141,8 +146,11 @@ export default async function HomePage({
                     variant="secondary"
                     size="sm"
                     className="w-full"
+                    asChild
                   >
-                    {t('games.playNow')}
+                    <Link href={`/${locale}/games?dimension=${dim}`}>
+                      {t('games.playNow')}
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -160,9 +168,11 @@ export default async function HomePage({
           <p className="text-md text-text-secondary mb-2xl">
             {t('landing.hero.subtitle')}
           </p>
-          <Button variant="primary" size="xl">
-            {t('common.buttons.start')}
-            <ArrowRight className="ml-xs h-4 w-4" />
+          <Button variant="primary" size="xl" asChild>
+            <Link href={`/${locale}/games`}>
+              {t('common.buttons.start')}
+              <ArrowRight className="ml-xs h-4 w-4" />
+            </Link>
           </Button>
         </div>
       </section>

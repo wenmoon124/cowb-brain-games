@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { Brain, Play, Delete } from 'lucide-react'
+import { Rewind, Play, Delete } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
@@ -16,11 +16,11 @@ interface Texts {
   title: string
   description: string
   start: string
-  score: string
   length: string
   fails: string
   watch: string
   enter: string
+  reverseHint: string
   correct: string
   wrong: string
   gameover: string
@@ -32,15 +32,15 @@ interface Texts {
 
 const TEXTS: Record<Locale, Texts> = {
   en: {
-    title: 'Digit Span',
+    title: 'Backward Digit Span',
     description:
-      'Watch the digits flash, then enter them back. +1 length on success. 3 fails ends the game.',
+      'Watch the digits, then enter them in REVERSE order. Harder than it sounds.',
     start: 'Start',
-    score: 'Score',
     length: 'Length',
     fails: 'Fails',
     watch: 'Watch carefully',
-    enter: 'Enter the sequence',
+    enter: 'Enter in REVERSE',
+    reverseHint: 'Last digit first',
     correct: 'Correct!',
     wrong: 'Wrong!',
     gameover: 'Game Over',
@@ -50,14 +50,14 @@ const TEXTS: Record<Locale, Texts> = {
     clear: 'Clear',
   },
   zh: {
-    title: '数字广度',
-    description: '观察闪现的数字，然后输入。成功后长度+1，3次失败结束游戏。',
+    title: '倒序数字广度',
+    description: '观察数字，然后倒序输入。比看起来更难。',
     start: '开始',
-    score: '得分',
     length: '长度',
     fails: '失败',
     watch: '仔细观察',
-    enter: '输入序列',
+    enter: '倒序输入',
+    reverseHint: '最后一个数字先输',
     correct: '正确！',
     wrong: '错误！',
     gameover: '游戏结束',
@@ -67,14 +67,14 @@ const TEXTS: Record<Locale, Texts> = {
     clear: '清除',
   },
   ja: {
-    title: '数字スパン',
-    description: '点滅する数字を観察し、入力しよう。成功で長さ+1、3回失敗で終了。',
+    title: '逆順数字スパン',
+    description: '数字を観察し、逆順で入力しよう。見た目より難しい。',
     start: '開始',
-    score: 'スコア',
     length: '長さ',
     fails: '失敗',
     watch: 'よく見て',
-    enter: 'シーケンスを入力',
+    enter: '逆順で入力',
+    reverseHint: '最後の数字から',
     correct: '正解！',
     wrong: '不正解！',
     gameover: 'ゲームオーバー',
@@ -102,11 +102,11 @@ function generateSequence(length: number): number[] {
   return seq
 }
 
-export interface DigitSpanGameProps {
+export interface BackwardDigitSpanGameProps {
   locale: string
 }
 
-export function DigitSpanGame({ locale }: DigitSpanGameProps) {
+export function BackwardDigitSpanGame({ locale }: BackwardDigitSpanGameProps) {
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -180,7 +180,9 @@ export function DigitSpanGame({ locale }: DigitSpanGameProps) {
     const next = [...input, digit]
     setInput(next)
     if (next.length === sequence.length) {
-      const correct = next.every((d, i) => d === sequence[i])
+      // Expected: reversed sequence
+      const reversed = [...sequence].reverse()
+      const correct = next.every((d, i) => d === reversed[i])
       setFeedback(correct ? 'correct' : 'wrong')
       if (correct) {
         setCorrectRounds((c) => c + 1)
@@ -224,7 +226,7 @@ export function DigitSpanGame({ locale }: DigitSpanGameProps) {
   }, [clearTimer])
 
   // Scoring per spec:
-  // score = (maxSpan - 2) × 200 × accuracy
+  // score = (maxSpan - 2) × 250 × accuracy
   // accuracy = correctRounds / (correctRounds + fails)
   // if maxSpan < 3, score = 0
   const totalAttempts = correctRounds + fails
@@ -232,7 +234,7 @@ export function DigitSpanGame({ locale }: DigitSpanGameProps) {
     totalAttempts > 0 ? correctRounds / totalAttempts : 0
   const finalScore =
     maxSpan >= 3
-      ? Math.round((maxSpan - 2) * 200 * accuracyRate)
+      ? Math.round((maxSpan - 2) * 250 * accuracyRate)
       : 0
   const accuracyPercent = Math.round(accuracyRate * 100)
 
@@ -241,7 +243,7 @@ export function DigitSpanGame({ locale }: DigitSpanGameProps) {
       <Card className="border-primary-light bg-primary-bg">
         <CardContent className="flex flex-col items-center gap-lg p-3xl text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-dim-memory/15">
-            <Brain className="h-8 w-8 text-dim-memory" />
+            <Rewind className="h-8 w-8 text-dim-memory" />
           </div>
           <h2 className="text-2xl font-bold text-text-primary">{t.title}</h2>
           <p className="text-sm text-text-secondary max-w-md">
@@ -277,6 +279,7 @@ export function DigitSpanGame({ locale }: DigitSpanGameProps) {
   }
 
   const failsPercent = (fails / MAX_FAILS) * 100
+  const reversed = [...sequence].reverse()
 
   return (
     <Card className="border-primary-light">
@@ -310,16 +313,20 @@ export function DigitSpanGame({ locale }: DigitSpanGameProps) {
           {phase === 'input' && (
             <>
               <span className="text-xs text-text-muted mb-md">{t.enter}</span>
+              <span className="text-xs font-semibold text-dim-memory-text mb-md">
+                {t.reverseHint}
+              </span>
               <div className="flex items-center gap-xs min-h-[64px]">
                 {sequence.map((_, i) => {
                   const entered = input[i]
+                  const expected = reversed[i]
                   return (
                     <div
                       key={i}
                       className={[
                         'flex h-12 w-10 items-center justify-center rounded-md border-2 text-2xl font-bold',
                         feedback === 'wrong' && entered !== undefined
-                          ? entered === sequence[i]
+                          ? entered === expected
                             ? 'border-success text-success'
                             : 'border-error text-error'
                           : 'border-border text-text-primary',

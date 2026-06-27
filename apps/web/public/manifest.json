@@ -1,0 +1,21 @@
+{
+  "name": "BrainVerse",
+  "short_name": "BrainVerse",
+  "description": "Science-based brain training to sharpen memory, focus, and cognition.",
+  "start_url": "/en",
+  "display": "standalone",
+  "background_color": "#FFF8F0",
+  "theme_color": "#FF6B35",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

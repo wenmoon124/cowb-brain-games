@@ -9,11 +9,11 @@ const progressFillVariants = cva('h-full w-full flex-1 rounded-full transition-a
   variants: {
     dimension: {
       default: 'bg-gradient-primary',
-      memory: 'bg-gradient-to-r from-dim-memory to-purple-400',
-      attention: 'bg-gradient-to-r from-dim-attention to-cyan-400',
-      reaction: 'bg-gradient-to-r from-dim-reaction to-yellow-400',
-      executive: 'bg-gradient-to-r from-dim-executive to-green-400',
-      relaxation: 'bg-gradient-to-r from-dim-relaxation to-indigo-400',
+      memory: 'bg-dim-memory',
+      attention: 'bg-dim-attention',
+      reaction: 'bg-dim-reaction',
+      executive: 'bg-dim-executive',
+      relaxation: 'bg-dim-relaxation',
       success: 'bg-success',
       warning: 'bg-warning',
       error: 'bg-error',
