@@ -1,0 +1,161 @@
+{
+  "common": {
+    "appName": "BrainVerse",
+    "tagline": "脳のオペレーティングシステム",
+    "buttons": {
+      "start": "開始",
+      "continue": "続ける",
+      "learnMore": "詳しく見る",
+      "signIn": "ログイン",
+      "signUp": "登録",
+      "logout": "ログアウト",
+      "cancel": "キャンセル",
+      "save": "保存",
+      "delete": "削除",
+      "confirm": "確認"
+    }
+  },
+  "nav": {
+    "home": "ホーム",
+    "games": "ゲーム",
+    "dashboard": "ダッシュボード",
+    "profile": "プロフィール",
+    "achievements": "実績",
+    "about": "概要",
+    "contact": "お問い合わせ",
+    "articles": "記事"
+  },
+  "landing": {
+    "hero": {
+      "title": "あなたの脳の真の年齢を知る",
+      "subtitle": "記憶力、集中力、認知力を高める科学に基づいた脳トレ",
+      "cta": "無料評価を開始"
+    },
+    "features": {
+      "title": "BrainVerse を選ぶ理由",
+      "brainAge": {
+        "title": "脳年齢評価",
+        "description": "5 つの次元で認知パフォーマンスを測定"
+      },
+      "games": {
+        "title": "科学に基づくゲーム",
+        "description": "認知科学の原則に基づき設計された 18 以上のゲーム"
+      },
+      "growth": {
+        "title": "進捗を追跡",
+        "description": "詳細な分析で向上をモニタリング"
+      }
+    }
+  },
+  "games": {
+    "title": "ゲーム",
+    "description": "認知能力を鍛える",
+    "playNow": "今すぐプレイ",
+    "viewResults": "結果を見る",
+    "dimensions": {
+      "memory": "記憶力",
+      "attention": "注意力",
+      "reaction": "反応力",
+      "executive": "実行機能",
+      "relaxation": "リラクゼーション"
+    },
+    "difficulty": {
+      "easy": "簡単",
+      "medium": "普通",
+      "hard": "難しい"
+    }
+  },
+  "dashboard": {
+    "welcome": "おかえりなさい、{name}さん",
+    "brainAge": "あなたの脳年齢",
+    "totalScore": "合計スコア",
+    "streak": "連続日数",
+    "achievements": "最近の実績",
+    "recentGames": "最近のゲーム",
+    "noData": "まだデータがありません。最初のゲームを始めましょう！"
+  },
+  "auth": {
+    "signIn": {
+      "title": "ログイン",
+      "subtitle": "BrainVerse へおかえりなさい",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "forgotPassword": "パスワードをお忘れですか？",
+      "submit": "ログイン",
+      "noAccount": "アカウントをお持ちでないですか？",
+      "signUpLink": "登録"
+    },
+    "signUp": {
+      "title": "アカウント作成",
+      "subtitle": "脳トレの旅を始めましょう",
+      "nickname": "ニックネーム",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "confirmPassword": "パスワード確認",
+      "submit": "アカウント作成",
+      "hasAccount": "すでにアカウントをお持ちですか？",
+      "signInLink": "ログイン"
+    },
+    "turnstileVerifying": "あなたが人間であることを確認しています...",
+    "errors": {
+      "invalidCredentials": "メールアドレスまたはパスワードが正しくありません",
+      "emailExists": "このメールアドレスは既に登録されています",
+      "turnstileFailed": "認証に失敗しました。もう一度お試しください。"
+    }
+  },
+  "cookie": {
+    "title": "あなたのプライバシーを尊重します",
+    "description": "当サイトでは体験向上、トラフィック分析、コンテンツのパーソナライズのために Cookie を使用しています。以下で設定を選択してください。",
+    "acceptAll": "すべて許可",
+    "rejectOptional": "オプションを拒否",
+    "savePreferences": "設定を保存",
+    "strictlyNecessary": "必須 Cookie",
+    "strictlyNecessaryDescription": "これらの Cookie はウェブサイトの機能に不可欠です。",
+    "performanceAnalytics": "パフォーマンスと分析",
+    "performanceAnalyticsDescription": "これらの Cookie は訪問者のサイト利用状況を理解するのに役立ちます。",
+    "targetingAds": "ターゲティングと広告",
+    "targetingAdsDescription": "これらの Cookie は関連広告の配信に使用されます。"
+  },
+  "footer": {
+    "copyright": "© {year} BrainVerse. All rights reserved.",
+    "privacyPolicy": "プライバシーポリシー",
+    "termsOfService": "利用規約",
+    "contactUs": "お問い合わせ",
+    "followUs": "フォローする"
+  },
+  "errors": {
+    "generic": "エラーが発生しました。もう一度お試しください。",
+    "network": "ネットワークエラーです。接続を確認してください。",
+    "notFound": "ページが見つかりません",
+    "unauthorized": "このページを表示する権限がありません。",
+    "validation": {
+      "required": "この項目は必須です",
+      "invalidEmail": "有効なメールアドレスを入力してください",
+      "passwordTooShort": "パスワードは 8 文字以上でなければなりません",
+      "passwordsDoNotMatch": "パスワードが一致しません"
+    }
+  },
+  "games_runtime": {
+    "level": "レベル {n}",
+    "score": "スコア：{n}",
+    "lives": "ライフ",
+    "correct": "正解！",
+    "wrong": "不正解！",
+    "accuracy": "正答率：{percent}%",
+    "reactionTime": "反応：{ms}ms",
+    "start": "開始",
+    "pause": "一時停止",
+    "resume": "再開",
+    "finish": "終了",
+    "next": "次へ",
+    "retry": "もう一度",
+    "results": {
+      "title": "ゲーム結果",
+      "finalScore": "最終スコア",
+      "accuracy": "正答率",
+      "avgReaction": "平均反応時間",
+      "bestStreak": "最高連続記録",
+      "newRecord": "新記録！"
+    }
+  }
+}

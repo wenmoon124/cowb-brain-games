@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="BrainVerse PK Battle - Challenge other players in real-time cognitive duels." />
+  <meta name="theme-color" content="#4A7CFF" />
+  <link rel="manifest" href="../../manifest.json" />
+  <title>PK Battle - BrainVerse 2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles/global.css" />
+  <style>
+    .pk { padding-top: 72px; padding-bottom: 100px; max-width: var(--container-max); margin: 0 auto; padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+    @media (min-width: 768px) { .pk { padding-left: var(--spacing-xl); padding-right: var(--spacing-xl); } }
+
+    /* ---- State Panels ---- */
+    .state-panel { display: none; animation: fadeIn var(--transition-normal); }
+    .state-panel.active { display: block; }
+
+    /* ---- Lobby ---- */
+    .lobby-hero { text-align: center; padding: var(--spacing-2xl) 0 var(--spacing-xl); }
+    .lobby-title { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--text-primary); margin-bottom: var(--spacing-sm); }
+    .lobby-title .bv-gradient-text { background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .lobby-subtitle { font-size: var(--font-size-md); color: var(--text-secondary); max-width: 480px; margin: 0 auto var(--spacing-xl); }
+    .online-count { display: inline-flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-xs) var(--spacing-md); background: var(--dim-executive-light); border-radius: var(--radius-full); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--dim-executive); margin-bottom: var(--spacing-xl); }
+    .online-dot { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--dim-executive); animation: pulse 2s ease-in-out infinite; }
+
+    /* ---- Find Match Button ---- */
+    .find-match-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-sm);
+      padding: var(--spacing-md) var(--spacing-2xl); font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);
+      color: #FFFFFF; background: var(--gradient-primary); border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-glow-primary); cursor: pointer; border: none; position: relative; overflow: hidden;
+      animation: pulseGlow 2s ease-in-out infinite; transition: transform var(--transition-normal);
+    }
+    .find-match-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl), var(--shadow-glow-primary); }
+    .find-match-btn:active { transform: translateY(0); }
+    .find-match-btn svg { width: 24px; height: 24px; }
+
+    /* ---- Mode Selection ---- */
+    .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin: var(--spacing-xl) 0; }
+    @media (max-width: 639px) { .mode-grid { grid-template-columns: 1fr; } }
+    .mode-card {
+      background: var(--card); border: 2px solid var(--border); border-radius: var(--radius-lg);
+      padding: var(--spacing-lg); text-align: center; cursor: pointer; transition: all var(--transition-normal);
+    }
+    .mode-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .mode-card.selected { border-color: var(--primary); background: var(--primary-bg); box-shadow: var(--shadow-glow-primary); }
+    .mode-icon { width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--spacing-sm); }
+    .mode-icon svg { width: 24px; height: 24px; }
+    .mode-name { font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); margin-bottom: var(--spacing-xs); }
+    .mode-desc { font-size: var(--font-size-xs); color: var(--text-muted); }
+
+    /* ---- Recent Matches & Leaderboard ---- */
+    .lobby-cols { display: grid; grid-template-columns: 1fr; gap: var(--spacing-lg); margin-top: var(--spacing-xl); }
+    @media (min-width: 768px) { .lobby-cols { grid-template-columns: 1fr 1fr; } }
+    .lobby-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--spacing-lg); box-shadow: var(--shadow-sm); }
+    .lobby-card-title { font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: var(--spacing-sm); }
+    .lobby-card-title svg { width: 18px; height: 18px; color: var(--primary); }
+    .match-item { display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-sm) 0; }
+    .match-item + .match-item { border-top: 1px solid var(--border-light); }
+    .match-result { width: 28px; height: 28px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); flex-shrink: 0; }
+    .match-result.win { background: rgba(80,200,168,0.15); color: var(--success); }
+    .match-result.loss { background: rgba(239,68,68,0.15); color: var(--error); }
+    .match-info { flex: 1; }
+    .match-opponent { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-primary); }
+    .match-meta { font-size: var(--font-size-xs); color: var(--text-muted); }
+    .match-score { font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--text-primary); }
+
+    /* ---- Leaderboard Preview ---- */
+    .lb-item { display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-sm) 0; }
+    .lb-item + .lb-item { border-top: 1px solid var(--border-light); }
+    .lb-rank { width: 28px; height: 28px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); flex-shrink: 0; }
+    .lb-rank.gold { background: var(--accent-light); color: var(--accent); }
+    .lb-rank.silver { background: var(--bg-secondary); color: var(--text-secondary); }
+    .lb-rank.bronze { background: var(--dim-memory-light); color: var(--dim-memory); }
+    .lb-rank.normal { background: var(--bg-secondary); color: var(--text-muted); }
+    .lb-name { flex: 1; font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-primary); }
+    .lb-score { font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--primary); }
+
+    /* ---- Battle State ---- */
+    .battle-arena {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-xl);
+      padding: var(--spacing-lg); box-shadow: var(--shadow-lg); min-height: 400px;
+    }
+    .battle-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-lg); }
+    .battle-timer { font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--text-primary); font-variant-numeric: tabular-nums; }
+    .battle-vs {
+      padding: var(--spacing-xs) var(--spacing-md); background: var(--gradient-accent); border-radius: var(--radius-full);
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: #FFFFFF;
+      animation: bounceIn var(--transition-bounce);
+    }
+    .battle-split { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--spacing-md); align-items: start; }
+    @media (max-width: 639px) { .battle-split { grid-template-columns: 1fr; gap: var(--spacing-sm); } }
+    .battle-player { text-align: center; }
+    .battle-player-name { font-size: var(--font-size-md); font-weight: var(--font-weight-bold); color: var(--text-primary); margin-bottom: var(--spacing-xs); }
+    .battle-player-score { font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); }
+    .battle-player-score.p1 { color: var(--primary); }
+    .battle-player-score.p2 { color: var(--dim-memory); }
+    .battle-lives { display: flex; justify-content: center; gap: var(--spacing-xs); margin-top: var(--spacing-sm); }
+    .battle-divider { width: 2px; align-self: stretch; background: var(--border); border-radius: var(--radius-full); }
+    @media (max-width: 639px) { .battle-divider { width: 100%; height: 2px; } }
+    .battle-game-area {
+      background: var(--bg-secondary); border: 2px dashed var(--border); border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl); text-align: center; margin-top: var(--spacing-lg); min-height: 200px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .battle-game-area p { font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); color: var(--text-secondary); }
+    .battle-game-area .bv-text-xs { color: var(--text-muted); margin-top: var(--spacing-sm); }
+
+    /* ---- Result State ---- */
+    .result-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-xl);
+      padding: var(--spacing-2xl); text-align: center; box-shadow: var(--shadow-lg); max-width: 500px; margin: var(--spacing-2xl) auto;
+      animation: scaleIn var(--transition-bounce);
+    }
+    .result-crown { font-size: 48px; margin-bottom: var(--spacing-md); }
+    .result-title { font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--text-primary); margin-bottom: var(--spacing-sm); }
+    .result-subtitle { font-size: var(--font-size-md); color: var(--text-secondary); margin-bottom: var(--spacing-xl); }
+    .result-scores { display: flex; align-items: center; justify-content: center; gap: var(--spacing-xl); margin-bottom: var(--spacing-xl); }
+    .result-player { text-align: center; }
+    .result-player-name { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-secondary); margin-bottom: var(--spacing-xs); }
+    .result-player-score { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); }
+    .result-player-score.winner { color: var(--success); }
+    .result-player-score.loser { color: var(--text-muted); }
+    .result-vs-sm { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--text-muted); }
+    .result-xp {
+      display: inline-flex; align-items: center; gap: var(--spacing-sm);
+      padding: var(--spacing-sm) var(--spacing-lg); background: var(--accent-light); border-radius: var(--radius-full);
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--accent); margin-bottom: var(--spacing-xl);
+    }
+    .result-actions { display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap; }
+
+    /* ---- State Tabs ---- */
+    .state-tabs { display: flex; gap: var(--spacing-sm); justify-content: center; margin-bottom: var(--spacing-xl); }
+    .state-tab {
+      padding: var(--spacing-sm) var(--spacing-lg); border-radius: var(--radius-full);
+      font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-muted);
+      background: var(--bg-secondary); border: 1px solid var(--border); cursor: pointer; transition: all var(--transition-fast);
+    }
+    .state-tab:hover { color: var(--text-primary); border-color: var(--primary); }
+    .state-tab.active { background: var(--primary); color: #FFFFFF; border-color: var(--primary); }
+  </style>
+</head>
+<body>
+
+  <!-- ====== Top Navigation ====== -->
+  <nav class="bv-nav" id="topNav">
+    <a href="../landing/index.html" class="bv-nav-brand">
+      <svg class="bv-nav-brand-icon" viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="12" stroke="url(#navGrad)" stroke-width="2.5"/>
+        <circle cx="14" cy="14" r="5" fill="url(#navGrad)"/>
+        <circle cx="14" cy="5" r="2.5" fill="var(--dim-memory)"/>
+        <circle cx="21" cy="18" r="2" fill="var(--dim-attention)"/>
+        <circle cx="7" cy="18" r="2" fill="var(--dim-executive)"/>
+        <defs><linearGradient id="navGrad" x1="2" y1="2" x2="26" y2="26"><stop stop-color="var(--primary)"/><stop offset="1" stop-color="var(--dim-memory)"/></linearGradient></defs>
+      </svg>
+      CowB.cc
+    </a>
+    <div class="bv-nav-links">
+      <a href="../landing/index.html" class="bv-nav-link">Home</a>
+      <a href="../game-hub/index.html" class="bv-nav-link">Games</a>
+      <a href="../seo-science/index.html" class="bv-nav-link">Science</a>
+      <a href="#" class="bv-nav-link">Leaderboard</a>
+      <a href="../dashboard/index.html" class="bv-nav-link">Dashboard</a>
+    </div>
+    <div class="bv-nav-actions">
+      <div class="bv-avatar bv-avatar-md bv-avatar-gradient" style="cursor:pointer;">
+        <div style="width:100%;height:100%;border-radius:var(--radius-full);background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:var(--font-size-sm);font-weight:var(--font-weight-bold);color:#FFFFFF;position:relative;z-index:1;">W</div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pk">
+
+    <!-- State Tabs (for demo) -->
+    <div class="state-tabs">
+      <button class="state-tab active" data-state="lobby">Lobby</button>
+      <button class="state-tab" data-state="battle">Battle</button>
+      <button class="state-tab" data-state="result">Result</button>
+    </div>
+
+    <!-- ====== LOBBY STATE ====== -->
+    <div class="state-panel active" id="state-lobby">
+      <div class="lobby-hero">
+        <h1 class="lobby-title"><span class="bv-gradient-text">Cognitive Arena</span></h1>
+        <p class="lobby-subtitle">Challenge players worldwide in real-time brain battles. Prove your cognitive prowess!</p>
+        <div class="online-count">
+          <span class="online-dot"></span>
+          <span>1,234 online now</span>
+        </div>
+        <button class="find-match-btn" onclick="switchState('battle')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Find Match
+        </button>
+      </div>
+
+      <!-- Mode Selection -->
+      <div class="mode-grid">
+        <div class="mode-card selected">
+          <div class="mode-icon" style="background:var(--primary-light);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div>
+          <div class="mode-name">Quick Match</div>
+          <div class="mode-desc">3 rounds, 60s each</div>
+        </div>
+        <div class="mode-card">
+          <div class="mode-icon" style="background:var(--accent-light);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div class="mode-name">Ranked</div>
+          <div class="mode-desc">5 rounds, ELO rated</div>
+        </div>
+        <div class="mode-card">
+          <div class="mode-icon" style="background:var(--dim-memory-light);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--dim-memory)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="mode-name">Friend Challenge</div>
+          <div class="mode-desc">Invite a friend</div>
+        </div>
+      </div>
+
+      <!-- Recent Matches & Leaderboard -->
+      <div class="lobby-cols">
+        <div class="lobby-card">
+          <div class="lobby-card-title">
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l3 2"/></svg>
+            Recent Matches
+          </div>
+          <div class="match-item">
+            <div class="match-result win">W</div>
+            <div class="match-info"><div class="match-opponent">BrainMaster99</div><div class="match-meta">2 min ago - Quick Match</div></div>
+            <div class="match-score">850 - 720</div>
+          </div>
+          <div class="match-item">
+            <div class="match-result loss">L</div>
+            <div class="match-info"><div class="match-opponent">NeuroNinja</div><div class="match-meta">15 min ago - Ranked</div></div>
+            <div class="match-score">680 - 790</div>
+          </div>
+          <div class="match-item">
+            <div class="match-result win">W</div>
+            <div class="match-info"><div class="match-opponent">MindWizard</div><div class="match-meta">1 hr ago - Quick Match</div></div>
+            <div class="match-score">920 - 650</div>
+          </div>
+        </div>
+        <div class="lobby-card">
+          <div class="lobby-card-title">
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 2l2 4h4l-3 3 1 4-4-2-4 2 1-4-3-3h4z"/></svg>
+            Top Players
+          </div>
+          <div class="lb-item"><div class="lb-rank gold">1</div><div class="lb-name">BrainMaster99</div><div class="lb-score">2,450</div></div>
+          <div class="lb-item"><div class="lb-rank silver">2</div><div class="lb-name">NeuroNinja</div><div class="lb-score">2,380</div></div>
+          <div class="lb-item"><div class="lb-rank bronze">3</div><div class="lb-name">MindWizard</div><div class="lb-score">2,210</div></div>
+          <div class="lb-item"><div class="lb-rank normal">4</div><div class="lb-name">CognitiveKing</div><div class="lb-score">2,150</div></div>
+          <div class="lb-item"><div class="lb-rank normal">5</div><div class="lb-name">WenMoon124</div><div class="lb-score">1,847</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== BATTLE STATE ====== -->
+    <div class="state-panel" id="state-battle">
+      <div class="battle-arena">
+        <div class="battle-header">
+          <div class="battle-timer" id="battleTimer">0:45</div>
+          <div class="battle-vs">VS</div>
+          <div style="font-size:var(--font-size-sm);font-weight:var(--font-weight-semibold);color:var(--text-secondary);">Round 2/3</div>
+        </div>
+        <div class="battle-split">
+          <div class="battle-player">
+            <div class="battle-player-name">WenMoon124</div>
+            <div class="battle-player-score p1">420</div>
+            <div class="battle-lives">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="var(--error)"><path d="M10 18s-7-4.35-7-9.5C3 4.02 6.13 1 10 1s7 3.02 7 7.5c0 5.15-7 9.5-7 9.5z"/></svg>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="var(--error)"><path d="M10 18s-7-4.35-7-9.5C3 4.02 6.13 1 10 1s7 3.02 7 7.5c0 5.15-7 9.5-7 9.5z"/></svg>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="var(--error)"><path d="M10 18s-7-4.35-7-9.5C3 4.02 6.13 1 10 1s7 3.02 7 7.5c0 5.15-7 9.5-7 9.5z"/></svg>
+            </div>
+          </div>
+          <div class="battle-divider"></div>
+          <div class="battle-player">
+            <div class="battle-player-name">BrainMaster99</div>
+            <div class="battle-player-score p2">380</div>
+            <div class="battle-lives">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="var(--error)"><path d="M10 18s-7-4.35-7-9.5C3 4.02 6.13 1 10 1s7 3.02 7 7.5c0 5.15-7 9.5-7 9.5z"/></svg>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="var(--error)"><path d="M10 18s-7-4.35-7-9.5C3 4.02 6.13 1 10 1s7 3.02 7 7.5c0 5.15-7 9.5-7 9.5z"/></svg>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="var(--text-muted)" opacity="0.3"><path d="M10 18s-7-4.35-7-9.5C3 4.02 6.13 1 10 1s7 3.02 7 7.5c0 5.15-7 9.5-7 9.5z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="battle-game-area">
+          <p>Memory Matrix Challenge</p>
+          <span class="bv-text-xs">Remember the pattern and recall it</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== RESULT STATE ====== -->
+    <div class="state-panel" id="state-result">
+      <div class="result-card">
+        <div class="result-crown">&#x1F3C6;</div>
+        <h2 class="result-title">Victory!</h2>
+        <p class="result-subtitle">You defeated BrainMaster99</p>
+        <div class="result-scores">
+          <div class="result-player">
+            <div class="result-player-name">WenMoon124</div>
+            <div class="result-player-score winner">850</div>
+          </div>
+          <div class="result-vs-sm">vs</div>
+          <div class="result-player">
+            <div class="result-player-name">BrainMaster99</div>
+            <div class="result-player-score loser">720</div>
+          </div>
+        </div>
+        <div class="result-xp">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="9 1 11 6 16 7 12 10 13 15 9 13 5 15 6 10 2 7 7 6"/></svg>
+          +45 XP Earned
+        </div>
+        <div class="result-actions">
+          <button class="bv-btn bv-btn-primary bv-btn-lg" onclick="switchState('battle')">Rematch</button>
+          <button class="bv-btn bv-btn-secondary bv-btn-lg" onclick="switchState('lobby')">Back to Lobby</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ====== Bottom Navigation (Mobile) ====== -->
+  <nav class="bv-nav-bottom">
+    <a href="../landing/index.html" class="bv-nav-bottom-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="../game-hub/index.html" class="bv-nav-bottom-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Games</span>
+    </a>
+    <a href="../seo-science/index.html" class="bv-nav-bottom-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Science</span>
+    </a>
+    <a href="#" class="bv-nav-bottom-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span>PK Battle</span>
+    </a>
+    <a href="../dashboard/index.html" class="bv-nav-bottom-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      <span>Dashboard</span>
+    </a>
+  </nav>
+
+  <!-- ====== Footer ====== -->
+  <footer style="background:var(--bg-secondary);border-top:1px solid var(--border);padding:var(--spacing-xl) var(--spacing-md);text-align:center;margin-top:var(--spacing-2xl);">
+    <div style="max-width:var(--container-max);margin:0 auto;">
+      <div style="font-size:var(--font-size-md);font-weight:var(--font-weight-bold);color:var(--text-primary);margin-bottom:var(--spacing-sm);">CowB.cc</div>
+      <div style="font-size:var(--font-size-xs);color:var(--text-muted);line-height:var(--line-height-relaxed);">
+        &copy; 2025 CowB.cc. All rights reserved.<br/>
+        Created by <a href="mailto:Wenmoon124@gmail.com" style="color:var(--primary);">WenMoon124</a> | <a href="mailto:Wenmoon124@gmail.com" style="color:var(--primary);">Wenmoon124@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // State switching
+    function switchState(state) {
+      document.querySelectorAll('.state-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('state-' + state).classList.add('active');
+      document.querySelector('[data-state="' + state + '"]').classList.add('active');
+    }
+    document.querySelectorAll('.state-tab').forEach(tab => {
+      tab.addEventListener('click', () => switchState(tab.dataset.state));
+    });
+
+    // Mode card selection
+    document.querySelectorAll('.mode-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+    });
+
+    // Battle timer countdown
+    (function() {
+      let seconds = 45;
+      const el = document.getElementById('battleTimer');
+      function tick() {
+        if (seconds <= 0) return;
+        seconds--;
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        if (el) el.textContent = m + ':' + String(s).padStart(2, '0');
+      }
+      setInterval(tick, 1000);
+    })();
+
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('topNav').classList.toggle('bv-nav--scrolled', window.scrollY > 10);
+    });
+  </script>
+
+</body>
+</html>

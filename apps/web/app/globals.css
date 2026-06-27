@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   BrainVerse 2.0 — Design Token CSS Variables
+   ============================================================ */
+
+/* ---- Light Mode (default) ---- */
+:root {
+  /* Brand / Primary Colors */
+  --primary: #4a7cff;
+  --primary-hover: #3a6cee;
+  --primary-light: #4a7cff20;
+  --primary-bg: #4a7cff08;
+
+  /* Secondary Colors */
+  --secondary: #50c8a8;
+  --secondary-hover: #3fb898;
+  --secondary-light: #50c8a820;
+
+  /* Accent Colors */
+  --accent: #ffb14a;
+  --accent-hover: #ffa030;
+  --accent-light: #ffb14a20;
+
+  /* Background & Surface */
+  --bg-primary: #f7f9fc;
+  --bg-secondary: #eef1f6;
+  --card: #ffffff;
+  --card-hover: #f8fafd;
+
+  /* Text */
+  --text-primary: #1a202c;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+
+  /* Border */
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+
+  /* Semantic Colors */
+  --success: #50c8a8;
+  --warning: #ffb14a;
+  --error: #ef4444;
+  --info: #4a7cff;
+
+  /* Dimension Colors */
+  --dim-memory: #8b5cf6;
+  --dim-attention: #06b6d4;
+  --dim-reaction: #ffb14a;
+  --dim-executive: #10b981;
+  --dim-relaxation: #4a7cff;
+
+  /* Dimension Alpha Backgrounds */
+  --dim-memory-light: #8b5cf620;
+  --dim-attention-light: #06b6d420;
+  --dim-reaction-light: #ffb14a20;
+  --dim-executive-light: #10b98120;
+  --dim-relaxation-light: #4a7cff20;
+
+  /* Spacing Scale (4px base) */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.16);
+  --shadow-glow-primary: 0 0 20px #4a7cff40;
+  --shadow-glow-secondary: 0 0 20px #50c8a840;
+  --shadow-glow-accent: 0 0 20px #ffb14a40;
+  --shadow-glow-memory: 0 0 20px #8b5cf640;
+  --shadow-glow-attention: 0 0 20px #06b6d440;
+  --shadow-glow-reaction: 0 0 20px #ffb14a40;
+  --shadow-glow-executive: 0 0 20px #10b98140;
+  --shadow-glow-relaxation: 0 0 20px #4a7cff40;
+
+  /* Glass Effect */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-blur: 16px;
+}
+
+/* ---- Dark Mode (.dark class override) ---- */
+.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #162032;
+  --card: #1e293b;
+  --card-hover: #253347;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #334155;
+  --border-light: #1e293b;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.5);
+
+  --glass-bg: rgba(30, 41, 59, 0.72);
+  --glass-border: rgba(51, 65, 85, 0.5);
+}
+
+/* ---- Auto Dark Mode (prefers-color-scheme: dark) ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg-primary: #0f172a;
+    --bg-secondary: #162032;
+    --card: #1e293b;
+    --card-hover: #253347;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: #334155;
+    --border-light: #1e293b;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.5);
+
+    --glass-bg: rgba(30, 41, 59, 0.72);
+    --glass-border: rgba(51, 65, 85, 0.5);
+  }
+}
+
+/* ============================================================
+   Base Styles
+   ============================================================ */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--primary-light);
+    color: var(--text-primary);
+  }
+}
+
+/* ============================================================
+   Global Scrollbar Styles
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg-primary);
+}
+
+/* ============================================================
+   Safe Area Insets (Mobile)
+   ============================================================ */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-area-left {
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.safe-area-right {
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* ============================================================
+   Reduced Motion (Accessibility)
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

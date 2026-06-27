@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0F172A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Rapid Response | BrainVerse 2.0</title>
+  <link rel="stylesheet" href="../../styles/global.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       Rapid Response — Reaction Speed Game
+       Dimension: Reaction (var(--dim-reaction) = #FFB14A)
+       ============================================================ */
+
+    /* ---- Page-level overrides ---- */
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* ---- App Shell ---- */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      height: 100dvh;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* ============================================================
+       FIXED TOP BAR (56px)
+       ============================================================ */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      height: 56px;
+      padding-top: env(safe-area-inset-top, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-bottom: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+
+    /* Accent gradient line under top bar */
+    .top-bar::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--dim-reaction), transparent);
+      opacity: 0.5;
+    }
+
+    .top-bar-left,
+    .top-bar-center,
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    .top-bar-left { flex: 1; min-width: 0; }
+    .top-bar-center { flex: 0 0 auto; }
+    .top-bar-right { flex: 1; justify-content: flex-end; min-width: 0; }
+
+    /* Back button */
+    .btn-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      min-width: 44px;
+      min-height: 44px;
+      border: none;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      flex-shrink: 0;
+    }
+    .btn-back:hover { background: var(--border); }
+    .btn-back:active { transform: scale(0.92); }
+    .btn-back svg { width: 20px; height: 20px; }
+
+    /* Game name */
+    .game-name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-primary);
+    }
+
+    /* Level pill */
+    .level-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      background: var(--dim-reaction);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      color: var(--bg);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .level-pill svg { width: 12px; height: 12px; }
+
+    /* Score */
+    .score-display {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+    }
+    .score-display svg { width: 16px; height: 16px; color: var(--dim-reaction); }
+
+    /* Lives */
+    .lives-display {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .heart-icon {
+      width: 18px;
+      height: 18px;
+      transition: all var(--transition-normal);
+    }
+    .heart-icon.active {
+      color: var(--error);
+      fill: var(--error);
+      filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.4));
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    .heart-icon.empty {
+      color: var(--text-muted);
+      fill: none;
+      opacity: 0.3;
+    }
+
+    /* Accuracy bar */
+    .accuracy-meter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .accuracy-label {
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .accuracy-bar {
+      width: 48px;
+      height: 4px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .accuracy-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--dim-reaction), var(--accent));
+      border-radius: var(--radius-full);
+      transition: width var(--transition-normal);
+    }
+
+    /* ============================================================
+       GAME AREA (Main Center)
+       ============================================================ */
+    .game-area {
+      flex: 1;
+      margin-top: 56px;
+      margin-bottom: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: var(--z-base);
+      overflow: hidden;
+      background: var(--card);
+      border-radius: 0;
+    }
+
+    /* Subtle dot grid pattern */
+    .game-area::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, var(--dim-reaction-light) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    /* Ambient glow */
+    .game-area::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60%;
+      height: 60%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, var(--dim-reaction-light), transparent 70%);
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Level info overlay */
+    .game-info-overlay {
+      position: absolute;
+      top: var(--spacing-md);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      padding: 6px var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--glass-border);
+    }
+    .game-info-item {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    .game-info-item span {
+      color: var(--dim-reaction);
+    }
+
+    /* ============================================================
+       CHARGE CORES (Targets)
+       ============================================================ */
+    .target-container {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+    }
+
+    .charge-core {
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      transform: translate(-50%, -50%) scale(0);
+      cursor: pointer;
+      z-index: 3;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Pop-in animation */
+    .charge-core.appearing {
+      animation: core-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes core-pop-in {
+      0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    /* Disappear (missed) */
+    .charge-core.disappearing {
+      animation: core-shrink-out 0.3s ease-in forwards;
+      pointer-events: none;
+    }
+
+    @keyframes core-shrink-out {
+      0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+    }
+
+    /* Hit explosion */
+    .charge-core.hit {
+      animation: core-explode 0.4s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes core-explode {
+      0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      30%  { transform: translate(-50%, -50%) scale(1.5); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    }
+
+    /* Outer ring (dim-reaction color, shrinking countdown) */
+    .core-outer-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid var(--dim-reaction);
+      box-shadow: 0 0 16px var(--shadow-glow-reaction), inset 0 0 12px var(--dim-reaction-light);
+      animation: ring-shrink var(--ring-duration, 1500ms) linear forwards;
+    }
+
+    @keyframes ring-shrink {
+      0%   { transform: scale(1); opacity: 1; }
+      70%  { opacity: 0.7; }
+      100% { transform: scale(0.2); opacity: 0; }
+    }
+
+    /* Inner hit zone (white) */
+    .core-inner-zone {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 36px;
+      height: 36px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--card), var(--text-muted));
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Core glow center */
+    .core-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: var(--dim-reaction);
+      box-shadow: 0 0 8px var(--shadow-glow-reaction);
+      animation: core-pulse 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes core-pulse {
+      0%   { box-shadow: 0 0 6px var(--shadow-glow-reaction); transform: translate(-50%, -50%) scale(0.9); }
+      100% { box-shadow: 0 0 14px var(--shadow-glow-reaction); transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    /* Mobile: 20% larger hit area */
+    @media (max-width: 768px) {
+      .charge-core {
+        width: 86px;
+        height: 86px;
+      }
+      .core-inner-zone {
+        width: 44px;
+        height: 44px;
+      }
+    }
+
+    /* ============================================================
+       HIT EFFECTS
+       ============================================================ */
+    /* Radial burst flash */
+    .hit-burst {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent), var(--dim-reaction-light) 40%, transparent 70%);
+      pointer-events: none;
+      animation: burst-flash 0.5s ease-out forwards;
+      z-index: 4;
+    }
+
+    @keyframes burst-flash {
+      0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+    }
+
+    /* Score popup "+10" */
+    .score-popup {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--dim-reaction);
+      pointer-events: none;
+      animation: score-bounce-up 0.8s ease-out forwards;
+      z-index: 5;
+      text-shadow: 0 0 10px var(--shadow-glow-reaction);
+    }
+
+    @keyframes score-bounce-up {
+      0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+      20%  { transform: translate(-50%, calc(-50% - 10px)) scale(1.15); opacity: 1; }
+      100% { transform: translate(-50%, calc(-50% - 50px)) scale(0.8); opacity: 0; }
+    }
+
+    /* Reaction time "234ms" */
+    .reaction-popup {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-secondary);
+      pointer-events: none;
+      animation: reaction-fade 1s ease-out forwards;
+      z-index: 5;
+      white-space: nowrap;
+    }
+
+    @keyframes reaction-fade {
+      0%   { transform: translate(-50%, calc(-50% + 20px)) scale(0.8); opacity: 1; }
+      100% { transform: translate(-50%, calc(-50% + 60px)) scale(0.9); opacity: 0; }
+    }
+
+    /* ============================================================
+       FIXED BOTTOM BAR (72px)
+       ============================================================ */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      height: 72px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-top: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+
+    /* Accent gradient line above bottom bar */
+    .bottom-bar::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--dim-reaction), transparent);
+      opacity: 0.4;
+    }
+
+    .bottom-bar-left,
+    .bottom-bar-center,
+    .bottom-bar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    .bottom-bar-left { flex: 1; justify-content: flex-start; }
+    .bottom-bar-center { flex: 0 0 auto; }
+    .bottom-bar-right { flex: 1; justify-content: flex-end; }
+
+    /* Control buttons (Pause, Sound) */
+    .btn-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-control:hover { background: var(--border); color: var(--text-primary); }
+    .btn-control:active { transform: scale(0.92); }
+    .btn-control svg { width: 20px; height: 20px; }
+
+    /* Primary action button */
+    .btn-primary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      min-height: 48px;
+      padding: 0 var(--spacing-xl);
+      border: none;
+      border-radius: var(--radius-lg);
+      background: var(--dim-reaction);
+      color: var(--bg);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-bold);
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      box-shadow: var(--shadow-glow-reaction);
+      white-space: nowrap;
+    }
+    .btn-primary-action:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px var(--shadow-glow-reaction);
+    }
+    .btn-primary-action:active { transform: translateY(0) scale(0.97); }
+    .btn-primary-action svg { width: 18px; height: 18px; }
+
+    /* Hint button */
+    .btn-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0 var(--spacing-md);
+      border: none;
+      background: var(--dim-reaction-light);
+      border-radius: var(--radius-md);
+      color: var(--dim-reaction);
+      font-family: var(--font-family);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-hint:hover { background: var(--accent); }
+    .btn-hint:active { transform: scale(0.95); }
+    .btn-hint svg { width: 16px; height: 16px; }
+
+    /* ============================================================
+       PAUSE OVERLAY
+       ============================================================ */
+    .pause-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-modal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: var(--spacing-lg);
+      animation: fadeIn var(--transition-normal);
+    }
+    .pause-overlay.hidden { display: none; }
+
+    .pause-card {
+      width: 100%;
+      max-width: 320px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-xl) var(--spacing-lg);
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+      animation: scaleIn var(--transition-normal);
+    }
+    .pause-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-lg);
+    }
+    .pause-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+    .btn-pause {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      width: 100%;
+      min-height: 48px;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-pause svg { width: 18px; height: 18px; }
+    .btn-pause-resume {
+      background: var(--dim-reaction);
+      color: var(--bg);
+      box-shadow: var(--shadow-glow-reaction);
+    }
+    .btn-pause-restart { background: var(--bg-secondary); color: var(--text-primary); }
+    .btn-pause-restart:hover { background: var(--border); }
+    .btn-pause-quit { background: rgba(239, 68, 68, 0.1); color: var(--error); }
+    .btn-pause-quit:hover { background: rgba(239, 68, 68, 0.2); }
+    .btn-pause:active { transform: scale(0.97); }
+
+    .pause-settings {
+      border-top: 1px solid var(--border-light);
+      padding-top: var(--spacing-md);
+    }
+    .pause-settings-title {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--spacing-sm);
+    }
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-xs) 0;
+    }
+    .setting-label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       GAME OVER OVERLAY
+       ============================================================ */
+    .game-over-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: var(--spacing-lg);
+      animation: fadeIn var(--transition-normal);
+    }
+    .game-over-overlay.hidden { display: none; }
+
+    .game-over-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-xl) var(--spacing-lg);
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+      animation: scaleIn var(--transition-normal);
+    }
+    .game-over-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-xs);
+      background: var(--gradient-accent);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .game-over-subtitle {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .stars-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+    .star {
+      font-size: 32px;
+      line-height: 1;
+      animation: star-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    }
+    .star:nth-child(1) { animation-delay: 0.2s; }
+    .star:nth-child(2) { animation-delay: 0.35s; }
+    .star:nth-child(3) { animation-delay: 0.5s; }
+    .star.empty { opacity: 0.2; filter: grayscale(1); }
+
+    @keyframes star-pop {
+      0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .final-score {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-xs);
+      font-variant-numeric: tabular-nums;
+    }
+    .final-score-label {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-xl);
+    }
+    .stat-item {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md) var(--spacing-sm);
+    }
+    .stat-value {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .game-over-buttons {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+    .btn-go-primary {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 48px;
+      border: none;
+      border-radius: var(--radius-lg);
+      background: var(--dim-reaction);
+      color: var(--bg);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      box-shadow: var(--shadow-glow-reaction);
+    }
+    .btn-go-primary:hover { transform: translateY(-1px); }
+    .btn-go-primary:active { transform: scale(0.97); }
+
+    .btn-go-secondary {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 48px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-go-secondary:hover { background: var(--border); }
+    .btn-go-secondary:active { transform: scale(0.97); }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 640px) {
+      .top-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+      .game-name { font-size: var(--font-size-xs); }
+      .level-pill { font-size: 10px; padding: 2px 8px; }
+      .score-display { font-size: var(--font-size-xs); }
+      .accuracy-meter { display: none; }
+      .bottom-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+      .btn-primary-action { min-height: 44px; padding: 0 var(--spacing-lg); font-size: var(--font-size-sm); }
+      .btn-hint span { display: none; }
+      .btn-hint { padding: 0; width: 44px; }
+      .game-over-card { padding: var(--spacing-lg) var(--spacing-md); }
+      .game-over-title { font-size: var(--font-size-xl); }
+      .final-score { font-size: var(--font-size-3xl); }
+      .game-info-overlay { top: var(--spacing-sm); padding: 4px var(--spacing-sm); gap: var(--spacing-sm); }
+      .game-info-item { font-size: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- ===== FIXED TOP BAR (56px) ===== -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <a href="../game-hub/index.html" class="btn-back" aria-label="Go back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </a>
+        <span class="game-name">Rapid Response</span>
+      </div>
+      <div class="top-bar-center">
+        <div class="level-pill">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+          </svg>
+          Level 3
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="score-display">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+          </svg>
+          1,280
+        </div>
+        <div class="lives-display">
+          <svg class="heart-icon active" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <svg class="heart-icon active" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <svg class="heart-icon active" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="accuracy-meter">
+          <span class="accuracy-label">ACC</span>
+          <div class="accuracy-bar">
+            <div class="accuracy-bar-fill" style="width: 85%"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== GAME AREA (Main Center) ===== -->
+    <main class="game-area">
+      <!-- Level info overlay -->
+      <div class="game-info-overlay">
+        <div class="game-info-item">Window: <span>350ms</span></div>
+        <div class="game-info-item">Targets: <span>2x</span></div>
+      </div>
+
+      <!-- Target container -->
+      <div class="target-container" id="targetContainer">
+        <!-- Charge Core 1 -->
+        <div class="charge-core appearing" style="left: 30%; top: 40%;" onclick="hitTarget(this, event)">
+          <div class="core-outer-ring" style="--ring-duration: 1500ms;"></div>
+          <div class="core-inner-zone"></div>
+          <div class="core-glow"></div>
+        </div>
+
+        <!-- Charge Core 2 -->
+        <div class="charge-core appearing" style="left: 65%; top: 55%; animation-delay: 0.15s;" onclick="hitTarget(this, event)">
+          <div class="core-outer-ring" style="--ring-duration: 1500ms;"></div>
+          <div class="core-inner-zone"></div>
+          <div class="core-glow"></div>
+        </div>
+
+        <!-- Charge Core 3 -->
+        <div class="charge-core appearing" style="left: 48%; top: 72%; animation-delay: 0.3s;" onclick="hitTarget(this, event)">
+          <div class="core-outer-ring" style="--ring-duration: 1500ms;"></div>
+          <div class="core-inner-zone"></div>
+          <div class="core-glow"></div>
+        </div>
+
+        <!-- Hit burst effect example -->
+        <div class="hit-burst" style="left: 22%; top: 35%;"></div>
+
+        <!-- Score popup example -->
+        <div class="score-popup" style="left: 22%; top: 28%;">+10</div>
+
+        <!-- Reaction time popup example -->
+        <div class="reaction-popup" style="left: 22%; top: 42%;">234ms</div>
+      </div>
+    </main>
+
+    <!-- ===== FIXED BOTTOM BAR (72px) ===== -->
+    <footer class="bottom-bar">
+      <div class="bottom-bar-left">
+        <button class="btn-control" aria-label="Pause game" onclick="togglePause()">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16" rx="1"/>
+            <rect x="14" y="4" width="4" height="16" rx="1"/>
+          </svg>
+        </button>
+      </div>
+      <div class="bottom-bar-center">
+        <button class="btn-primary-action" id="mainActionBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          Start
+        </button>
+      </div>
+      <div class="bottom-bar-right">
+        <button class="btn-hint" aria-label="Get hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Hint</span>
+        </button>
+        <button class="btn-control" aria-label="Toggle sound" id="soundBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- ===== PAUSE OVERLAY ===== -->
+    <div class="pause-overlay hidden" id="pauseOverlay">
+      <div class="pause-card">
+        <div class="pause-title">Paused</div>
+        <div class="pause-buttons">
+          <button class="btn-pause btn-pause-resume" onclick="togglePause()">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            Resume
+          </button>
+          <button class="btn-pause btn-pause-restart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+            Restart
+          </button>
+          <a href="../game-hub/index.html" class="btn-pause btn-pause-quit" style="text-decoration:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Quit to Hub
+          </a>
+        </div>
+        <div class="pause-settings">
+          <div class="pause-settings-title">Settings</div>
+          <div class="setting-row">
+            <span class="setting-label">Sound</span>
+            <button class="bv-toggle" aria-label="Toggle sound" onclick="this.classList.toggle('active')">
+              <span class="bv-toggle-track"><span class="bv-toggle-thumb"></span></span>
+            </button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Vibration</span>
+            <button class="bv-toggle" aria-label="Toggle vibration" onclick="this.classList.toggle('active')">
+              <span class="bv-toggle-track"><span class="bv-toggle-thumb"></span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GAME OVER OVERLAY ===== -->
+    <div class="game-over-overlay hidden" id="gameOverOverlay">
+      <div class="game-over-card">
+        <div class="game-over-title">Game Over</div>
+        <div class="game-over-subtitle">Great reflexes! Keep training.</div>
+        <div class="stars-row">
+          <span class="star">&#11088;</span>
+          <span class="star">&#11088;</span>
+          <span class="star empty">&#11088;</span>
+        </div>
+        <div class="final-score">1,280</div>
+        <div class="final-score-label">Final Score</div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value">85%</div>
+            <div class="stat-label">Accuracy</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">287ms</div>
+            <div class="stat-label">Avg Time</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">1,540</div>
+            <div class="stat-label">Best</div>
+          </div>
+        </div>
+        <div class="game-over-buttons">
+          <button class="btn-go-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+            Play Again
+          </button>
+          <a href="../game-hub/index.html" class="btn-go-secondary" style="text-decoration:none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+            Back to Hub
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Brand footer -->
+  <meta name="author" content="WenMoon124">
+
+  <script>
+    function togglePause() {
+      document.getElementById('pauseOverlay').classList.toggle('hidden');
+    }
+
+    function hitTarget(el, event) {
+      if (el.classList.contains('hit') || el.classList.contains('disappearing')) return;
+      el.classList.remove('appearing');
+      el.classList.add('hit');
+
+      const rect = el.getBoundingClientRect();
+      const area = document.getElementById('targetContainer');
+      const areaRect = area.getBoundingClientRect();
+      const x = rect.left + rect.width / 2 - areaRect.left;
+      const y = rect.top + rect.height / 2 - areaRect.top;
+
+      // Create burst effect
+      const burst = document.createElement('div');
+      burst.className = 'hit-burst';
+      burst.style.left = x + 'px';
+      burst.style.top = y + 'px';
+      area.appendChild(burst);
+      setTimeout(() => burst.remove(), 500);
+
+      // Create score popup
+      const score = document.createElement('div');
+      score.className = 'score-popup';
+      score.style.left = x + 'px';
+      score.style.top = (y - 15) + 'px';
+      score.textContent = '+10';
+      area.appendChild(score);
+      setTimeout(() => score.remove(), 800);
+
+      // Create reaction time popup
+      const reactionTime = Math.floor(200 + Math.random() * 200);
+      const rt = document.createElement('div');
+      rt.className = 'reaction-popup';
+      rt.style.left = x + 'px';
+      rt.style.top = (y + 15) + 'px';
+      rt.textContent = reactionTime + 'ms';
+      area.appendChild(rt);
+      setTimeout(() => rt.remove(), 1000);
+
+      setTimeout(() => el.remove(), 400);
+    }
+
+    // Sound toggle
+    const soundBtn = document.getElementById('soundBtn');
+    let soundOn = true;
+    soundBtn.addEventListener('click', () => {
+      soundOn = !soundOn;
+      soundBtn.innerHTML = soundOn
+        ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+             <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+             <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+           </svg>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+             <line x1="23" y1="9" x2="17" y2="15"/>
+             <line x1="17" y1="9" x2="23" y2="15"/>
+           </svg>`;
+    });
+  </script>
+</body>
+</html>

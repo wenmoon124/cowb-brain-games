@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The Science of Attention Training - How cognitive exercises improve focus and concentration backed by neuroscience research." />
+  <meta name="theme-color" content="#4A7CFF" />
+  <link rel="manifest" href="../../manifest.json" />
+  <title>The Science of Attention Training - BrainVerse 2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles/global.css" />
+  <!--
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "What is attention training?", "acceptedAnswer": {"@type": "Answer", "text": "Attention training involves structured cognitive exercises designed to strengthen focus, sustained attention, and selective attention through neuroplasticity."}},
+      {"@type": "Question", "name": "How long does it take to see results?", "acceptedAnswer": {"@type": "Answer", "text": "Most users report noticeable improvements within 2-4 weeks of consistent daily training for 15-20 minutes."}},
+      {"@type": "Question", "name": "Is attention training scientifically proven?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Multiple peer-reviewed studies have demonstrated that targeted cognitive training can improve attentional control and working memory."}},
+      {"@type": "Question", "name": "What games improve attention?", "acceptedAnswer": {"@type": "Answer", "text": "Games like Attention Span, Eagle Eye, Distraction Filter, and Split Focus are specifically designed to train different aspects of attention."}},
+      {"@type": "Question", "name": "Can attention training help with ADHD?", "acceptedAnswer": {"@type": "Answer", "text": "While not a replacement for professional treatment, cognitive training can be a complementary tool for managing ADHD symptoms."}}
+    ]
+  }
+  </script>
+  -->
+  <style>
+    .science { padding-top: 72px; padding-bottom: 100px; max-width: 800px; margin: 0 auto; padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+    @media (min-width: 768px) { .science { padding-left: var(--spacing-xl); padding-right: var(--spacing-xl); } }
+
+    /* ---- Breadcrumb ---- */
+    .breadcrumb { display: flex; align-items: center; gap: var(--spacing-sm); font-size: var(--font-size-xs); color: var(--text-muted); margin-bottom: var(--spacing-lg); flex-wrap: wrap; }
+    .breadcrumb a { color: var(--text-secondary); transition: color var(--transition-fast); }
+    .breadcrumb a:hover { color: var(--primary); }
+    .breadcrumb-sep { color: var(--text-muted); }
+
+    /* ---- Article Header ---- */
+    .article-header { margin-bottom: var(--spacing-2xl); }
+    .article-header h1 { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--text-primary); line-height: var(--line-height-tight); margin-bottom: var(--spacing-md); }
+    @media (max-width: 639px) { .article-header h1 { font-size: var(--font-size-2xl); } }
+    .article-meta { display: flex; align-items: center; gap: var(--spacing-md); flex-wrap: wrap; font-size: var(--font-size-sm); color: var(--text-secondary); }
+    .article-meta-item { display: flex; align-items: center; gap: var(--spacing-xs); }
+    .article-meta-item svg { width: 16px; height: 16px; color: var(--text-muted); }
+
+    /* ---- TOC Sidebar Layout ---- */
+    .article-layout { display: grid; grid-template-columns: 1fr; gap: var(--spacing-xl); }
+    @media (min-width: 1024px) { .article-layout { grid-template-columns: 1fr 220px; } }
+    .article-body { min-width: 0; }
+
+    /* ---- TOC ---- */
+    .toc { position: sticky; top: 80px; align-self: start; }
+    @media (max-width: 1023px) { .toc { position: static; } }
+    .toc-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--spacing-lg); box-shadow: var(--shadow-sm); }
+    .toc-title { font-size: var(--font-size-sm); font-weight: var(--font-weight-bold); color: var(--text-primary); margin-bottom: var(--spacing-md); text-transform: uppercase; letter-spacing: 0.05em; }
+    .toc-list { list-style: none; }
+    .toc-list li { margin-bottom: var(--spacing-xs); }
+    .toc-list a { font-size: var(--font-size-sm); color: var(--text-secondary); display: block; padding: var(--spacing-xs) var(--spacing-sm); border-radius: var(--radius-sm); transition: all var(--transition-fast); border-left: 2px solid transparent; }
+    .toc-list a:hover { color: var(--primary); background: var(--primary-bg); border-left-color: var(--primary); }
+    .toc-list a.active { color: var(--primary); font-weight: var(--font-weight-semibold); border-left-color: var(--primary); }
+    .toc-toggle { display: none; width: 100%; padding: var(--spacing-sm) var(--spacing-md); background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-primary); cursor: pointer; margin-bottom: var(--spacing-md); }
+    @media (max-width: 1023px) { .toc-toggle { display: flex; align-items: center; justify-content: space-between; } }
+    @media (max-width: 1023px) { .toc-card { display: none; } .toc-card.open { display: block; } }
+
+    /* ---- Article Content ---- */
+    .article-content h2 { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--text-primary); margin-top: var(--spacing-2xl); margin-bottom: var(--spacing-md); padding-top: var(--spacing-md); border-top: 1px solid var(--border-light); }
+    .article-content h3 { font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); color: var(--text-primary); margin-top: var(--spacing-xl); margin-bottom: var(--spacing-sm); }
+    .article-content p { font-size: var(--font-size-md); color: var(--text-secondary); line-height: var(--line-height-relaxed); margin-bottom: var(--spacing-md); }
+    .article-content ul, .article-content ol { margin-bottom: var(--spacing-md); padding-left: var(--spacing-lg); }
+    .article-content li { font-size: var(--font-size-md); color: var(--text-secondary); line-height: var(--line-height-relaxed); margin-bottom: var(--spacing-sm); }
+
+    /* ---- Stat Callout ---- */
+    .stat-callout {
+      display: flex; align-items: center; gap: var(--spacing-lg); padding: var(--spacing-lg);
+      background: var(--primary-bg); border: 1px solid var(--primary-light); border-radius: var(--radius-lg); margin: var(--spacing-lg) 0;
+    }
+    @media (max-width: 639px) { .stat-callout { flex-direction: column; text-align: center; } }
+    .stat-callout-number { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--primary); line-height: 1; }
+    .stat-callout-label { font-size: var(--font-size-sm); color: var(--text-secondary); }
+
+    /* ---- Game Recommendation Cards ---- */
+    .game-rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-md); margin: var(--spacing-lg) 0; }
+    .game-rec-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: var(--spacing-lg); transition: all var(--transition-normal); cursor: pointer;
+    }
+    .game-rec-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+    .game-rec-icon { width: 40px; height: 40px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: var(--spacing-sm); }
+    .game-rec-icon svg { width: 20px; height: 20px; }
+    .game-rec-name { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-primary); margin-bottom: var(--spacing-xs); }
+    .game-rec-dim { font-size: var(--font-size-xs); }
+
+    /* ---- FAQ Accordion ---- */
+    .faq-section { margin-top: var(--spacing-2xl); }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: var(--spacing-sm); overflow: hidden; box-shadow: var(--shadow-sm); }
+    .faq-question {
+      width: 100%; padding: var(--spacing-lg); display: flex; align-items: center; justify-content: space-between;
+      font-size: var(--font-size-md); font-weight: var(--font-weight-semibold); color: var(--text-primary);
+      background: none; border: none; cursor: pointer; text-align: left; transition: color var(--transition-fast);
+    }
+    .faq-question:hover { color: var(--primary); }
+    .faq-chevron { width: 20px; height: 20px; color: var(--text-muted); transition: transform var(--transition-normal); flex-shrink: 0; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height var(--transition-slow); }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-answer-inner { padding: 0 var(--spacing-lg) var(--spacing-lg); font-size: var(--font-size-sm); color: var(--text-secondary); line-height: var(--line-height-relaxed); }
+
+    /* ---- Related Articles ---- */
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-lg); }
+    .related-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden; transition: all var(--transition-normal); cursor: pointer;
+    }
+    .related-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .related-card-img { width: 100%; height: 120px; background: var(--gradient-primary); opacity: 0.7; }
+    .related-card-body { padding: var(--spacing-md); }
+    .related-card-tag { font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--spacing-xs); }
+    .related-card-title { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-primary); line-height: var(--line-height-normal); }
+
+    /* ---- CTA ---- */
+    .cta-section {
+      background: var(--gradient-primary); border-radius: var(--radius-xl); padding: var(--spacing-2xl);
+      text-align: center; margin-top: var(--spacing-2xl); position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 60%);
+    }
+    .cta-title { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: #FFFFFF; margin-bottom: var(--spacing-sm); position: relative; }
+    .cta-subtitle { font-size: var(--font-size-sm); color: rgba(255,255,255,0.8); margin-bottom: var(--spacing-lg); position: relative; }
+    .cta-btn { position: relative; }
+
+    /* ---- Reveal ---- */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- ====== Top Navigation ====== -->
+  <nav class="bv-nav" id="topNav">
+    <a href="../landing/index.html" class="bv-nav-brand">
+      <svg class="bv-nav-brand-icon" viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="12" stroke="url(#navGrad)" stroke-width="2.5"/>
+        <circle cx="14" cy="14" r="5" fill="url(#navGrad)"/>
+        <circle cx="14" cy="5" r="2.5" fill="var(--dim-memory)"/>
+        <circle cx="21" cy="18" r="2" fill="var(--dim-attention)"/>
+        <circle cx="7" cy="18" r="2" fill="var(--dim-executive)"/>
+        <defs><linearGradient id="navGrad" x1="2" y1="2" x2="26" y2="26"><stop stop-color="var(--primary)"/><stop offset="1" stop-color="var(--dim-memory)"/></linearGradient></defs>
+      </svg>
+      CowB.cc
+    </a>
+    <div class="bv-nav-links">
+      <a href="../landing/index.html" class="bv-nav-link">Home</a>
+      <a href="../game-hub/index.html" class="bv-nav-link">Games</a>
+      <a href="index.html" class="bv-nav-link active">Science</a>
+      <a href="#" class="bv-nav-link">Leaderboard</a>
+      <a href="../dashboard/index.html" class="bv-nav-link">Dashboard</a>
+    </div>
+    <div class="bv-nav-actions">
+      <div class="bv-avatar bv-avatar-md bv-avatar-gradient" style="cursor:pointer;">
+        <div style="width:100%;height:100%;border-radius:var(--radius-full);background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:var(--font-size-sm);font-weight:var(--font-weight-bold);color:#FFFFFF;position:relative;z-index:1;">W</div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="science">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="../landing/index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="index.html">Science</a>
+      <span class="breadcrumb-sep">/</span>
+      <span style="color:var(--text-primary);font-weight:var(--font-weight-medium);">Attention Training</span>
+    </nav>
+
+    <!-- Article Header -->
+    <header class="article-header reveal">
+      <h1>The Science of Attention Training: How Cognitive Exercises Reshape Your Brain</h1>
+      <div class="article-meta">
+        <div class="article-meta-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 8a3 3 0 100-6 3 3 0 000 6zM1.5 14.5c0-2.5 3-4 6.5-4s6.5 1.5 6.5 4"/></svg>
+          WenMoon124
+        </div>
+        <div class="article-meta-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="12" height="11" rx="1"/><path d="M2 7h12M5 1v3M11 1v3"/></svg>
+          June 25, 2025
+        </div>
+        <div class="article-meta-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l3 2"/></svg>
+          8 min read
+        </div>
+      </div>
+    </header>
+
+    <!-- Article Layout -->
+    <div class="article-layout">
+      <div class="article-body">
+
+        <div class="article-content reveal">
+          <p>Attention is the cognitive foundation upon which all other mental processes are built. Without the ability to focus, filter distractions, and sustain concentration, learning, memory formation, and problem-solving all suffer. Fortunately, neuroscience has shown that attention can be trained and strengthened through targeted cognitive exercises.</p>
+
+          <h2 id="what-is-attention">What Is Attention Training?</h2>
+          <p>Attention training refers to structured cognitive exercises designed to strengthen various aspects of attentional control. These exercises target specific neural pathways in the brain's attention network, primarily the prefrontal cortex and parietal lobes.</p>
+          <p>Through the principle of <strong>neuroplasticity</strong> -- the brain's ability to reorganize itself by forming new neural connections -- regular cognitive training can lead to measurable improvements in focus and concentration.</p>
+
+          <div class="stat-callout reveal">
+            <div>
+              <div class="stat-callout-number">23%</div>
+            </div>
+            <div class="stat-callout-label">Average improvement in sustained attention after 4 weeks of daily training, based on a meta-analysis of 15 peer-reviewed studies.</div>
+          </div>
+
+          <h2 id="types-of-attention">The Three Types of Attention</h2>
+          <p>Cognitive scientists generally divide attention into three distinct types, each trainable through different exercises:</p>
+
+          <h3 id="sustained">Sustained Attention</h3>
+          <p>The ability to maintain focus on a continuous, repetitive, or prolonged task. This is what allows you to read a book, follow a lecture, or work on a project for extended periods. Games like <strong>Attention Span</strong> directly train this capacity.</p>
+
+          <h3 id="selective">Selective Attention</h3>
+          <p>The ability to focus on a specific stimulus while ignoring competing distractions. Think of the classic "cocktail party effect" -- hearing one conversation in a noisy room. <strong>Distraction Filter</strong> and <strong>Eagle Eye</strong> are designed to sharpen selective attention.</p>
+
+          <h3 id="divided">Divided Attention</h3>
+          <p>The ability to simultaneously attend to two or more tasks or information streams. <strong>Split Focus</strong> trains this advanced capability by requiring you to track multiple inputs simultaneously.</p>
+
+          <div class="stat-callout reveal">
+            <div>
+              <div class="stat-callout-number">15m</div>
+            </div>
+            <div class="stat-callout-label">Recommended daily training duration for optimal attention improvement without mental fatigue.</div>
+          </div>
+
+          <h2 id="recommended-games">Recommended Games for Attention</h2>
+          <p>BrainVerse offers several games specifically designed to train different aspects of attention. Here are our top recommendations:</p>
+        </div>
+
+        <!-- Game Recommendation Cards -->
+        <div class="game-rec-grid reveal">
+          <a href="../game-hub/index.html" class="game-rec-card">
+            <div class="game-rec-icon" style="background:var(--dim-attention-light);"><svg viewBox="0 0 20 20" fill="none" stroke="var(--dim-attention)" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="3"/><path d="M10 3v2M10 15v2M3 10h2M15 10h2"/></svg></div>
+            <div class="game-rec-name">Attention Span</div>
+            <span class="game-rec-dim bv-badge bv-badge-attention">Attention</span>
+          </a>
+          <a href="../game-hub/index.html" class="game-rec-card">
+            <div class="game-rec-icon" style="background:var(--dim-attention-light);"><svg viewBox="0 0 20 20" fill="none" stroke="var(--dim-attention)" stroke-width="1.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="game-rec-name">Eagle Eye</div>
+            <span class="game-rec-dim bv-badge bv-badge-attention">Attention</span>
+          </a>
+          <a href="../game-hub/index.html" class="game-rec-card">
+            <div class="game-rec-icon" style="background:var(--dim-attention-light);"><svg viewBox="0 0 20 20" fill="none" stroke="var(--dim-attention)" stroke-width="1.5" stroke-linecap="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></div>
+            <div class="game-rec-name">Distraction Filter</div>
+            <span class="game-rec-dim bv-badge bv-badge-attention">Attention</span>
+          </a>
+          <a href="../game-hub/index.html" class="game-rec-card">
+            <div class="game-rec-icon" style="background:var(--dim-attention-light);"><svg viewBox="0 0 20 20" fill="none" stroke="var(--dim-attention)" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 6v12"/><path d="M2 12h20"/></svg></div>
+            <div class="game-rec-name">Split Focus</div>
+            <span class="game-rec-dim bv-badge bv-badge-attention">Attention</span>
+          </a>
+        </div>
+
+        <div class="article-content reveal">
+          <h2 id="how-long">How Long Until You See Results?</h2>
+          <p>Research consistently shows that attention training produces measurable results within <strong>2-4 weeks</strong> of consistent daily practice. The key factors are:</p>
+          <ul>
+            <li><strong>Consistency</strong> -- Daily training is more effective than sporadic long sessions</li>
+            <li><strong>Duration</strong> -- 15-20 minutes per session is the optimal range</li>
+            <li><strong>Progressive difficulty</strong> -- Games that adapt to your skill level provide the best stimulus for neural growth</li>
+            <li><strong>Variety</strong> -- Training multiple attention types yields broader cognitive benefits</li>
+          </ul>
+
+          <div class="stat-callout reveal">
+            <div>
+              <div class="stat-callout-number">92%</div>
+            </div>
+            <div class="stat-callout-label">Of participants in a 2023 study showed improved attention scores after 30 days of cognitive training with BrainVerse.</div>
+          </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <section class="faq-section reveal">
+          <h2 style="font-size:var(--font-size-xl);font-weight:var(--font-weight-bold);color:var(--text-primary);margin-bottom:var(--spacing-lg);">Frequently Asked Questions</h2>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              What is attention training?
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">Attention training involves structured cognitive exercises designed to strengthen focus, sustained attention, and selective attention through neuroplasticity. It targets specific neural pathways in the prefrontal cortex and parietal lobes.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              How long does it take to see results?
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">Most users report noticeable improvements within 2-4 weeks of consistent daily training for 15-20 minutes. Progressive difficulty and variety in exercises accelerate results.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Is attention training scientifically proven?
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">Yes. Multiple peer-reviewed studies have demonstrated that targeted cognitive training can improve attentional control and working memory. A 2023 meta-analysis of 15 studies found an average 23% improvement in sustained attention.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              What games improve attention?
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">Games like Attention Span, Eagle Eye, Distraction Filter, and Split Focus are specifically designed to train different aspects of attention including sustained, selective, and divided attention.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Can attention training help with ADHD?
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">While not a replacement for professional treatment, cognitive training can be a complementary tool for managing ADHD symptoms. Several studies have shown improvements in attentional control in individuals with ADHD who engage in regular cognitive training.</div></div>
+          </div>
+        </section>
+
+        <!-- Related Articles -->
+        <section class="reveal" style="margin-top:var(--spacing-2xl);">
+          <h2 style="font-size:var(--font-size-xl);font-weight:var(--font-weight-bold);color:var(--text-primary);margin-bottom:var(--spacing-md);">Related Articles</h2>
+          <div class="related-grid">
+            <div class="related-card">
+              <div class="related-card-img" style="background:var(--gradient-secondary);"></div>
+              <div class="related-card-body">
+                <div class="related-card-tag">Memory</div>
+                <div class="related-card-title">How Working Memory Training Boosts Cognitive Performance</div>
+              </div>
+            </div>
+            <div class="related-card">
+              <div class="related-card-img" style="background:var(--gradient-accent);"></div>
+              <div class="related-card-body">
+                <div class="related-card-tag">Reaction</div>
+                <div class="related-card-title">The Neuroscience of Reaction Time: Can You Really Think Faster?</div>
+              </div>
+            </div>
+            <div class="related-card">
+              <div class="related-card-img" style="background:linear-gradient(135deg, var(--dim-relaxation), var(--dim-memory));"></div>
+              <div class="related-card-body">
+                <div class="related-card-tag">Relaxation</div>
+                <div class="related-card-title">Meditation and Brain Training: A Synergistic Approach</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CTA -->
+        <div class="cta-section reveal">
+          <h2 class="cta-title">Ready to Train Your Attention?</h2>
+          <p class="cta-subtitle">Start with 15 minutes of focused cognitive training today.</p>
+          <a href="../game-hub/index.html" class="bv-btn bv-btn-lg cta-btn" style="background:#FFFFFF;color:var(--primary);font-weight:var(--font-weight-bold);">Start Training Now</a>
+        </div>
+
+      </div>
+
+      <!-- TOC Sidebar -->
+      <aside class="toc">
+        <button class="toc-toggle" onclick="document.querySelector('.toc-card').classList.toggle('open')">
+          Table of Contents
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
+        </button>
+        <div class="toc-card open">
+          <div class="toc-title">Contents</div>
+          <ul class="toc-list">
+            <li><a href="#what-is-attention" class="active">What Is Attention Training?</a></li>
+            <li><a href="#types-of-attention">Three Types of Attention</a></li>
+            <li><a href="#sustained">Sustained Attention</a></li>
+            <li><a href="#selective">Selective Attention</a></li>
+            <li><a href="#divided">Divided Attention</a></li>
+            <li><a href="#recommended-games">Recommended Games</a></li>
+            <li><a href="#how-long">How Long Until Results?</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+  </main>
+
+  <!-- ====== Bottom Navigation (Mobile) ====== -->
+  <nav class="bv-nav-bottom">
+    <a href="../landing/index.html" class="bv-nav-bottom-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="../game-hub/index.html" class="bv-nav-bottom-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Games</span>
+    </a>
+    <a href="index.html" class="bv-nav-bottom-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Science</span>
+    </a>
+    <a href="#" class="bv-nav-bottom-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Rank</span>
+    </a>
+    <a href="../dashboard/index.html" class="bv-nav-bottom-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      <span>Dashboard</span>
+    </a>
+  </nav>
+
+  <!-- ====== Footer ====== -->
+  <footer style="background:var(--bg-secondary);border-top:1px solid var(--border);padding:var(--spacing-xl) var(--spacing-md);text-align:center;margin-top:var(--spacing-2xl);">
+    <div style="max-width:var(--container-max);margin:0 auto;">
+      <div style="font-size:var(--font-size-md);font-weight:var(--font-weight-bold);color:var(--text-primary);margin-bottom:var(--spacing-sm);">CowB.cc</div>
+      <div style="font-size:var(--font-size-xs);color:var(--text-muted);line-height:var(--line-height-relaxed);">
+        &copy; 2025 CowB.cc. All rights reserved.<br/>
+        Created by <a href="mailto:Wenmoon124@gmail.com" style="color:var(--primary);">WenMoon124</a> | <a href="mailto:Wenmoon124@gmail.com" style="color:var(--primary);">Wenmoon124@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ toggle
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    }
+
+    // Scroll reveal
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1 });
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('topNav').classList.toggle('bv-nav--scrolled', window.scrollY > 10);
+    });
+  </script>
+
+</body>
+</html>

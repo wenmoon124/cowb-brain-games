@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0F172A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Click Horizon | BrainVerse 2.0</title>
+  <link rel="stylesheet" href="../../styles/global.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       Click Horizon — Reaction Speed Game
+       Dimension: Reaction (var(--dim-reaction) = #FFB14A)
+       ============================================================ */
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      height: 100dvh;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* ============================================================
+       FIXED TOP BAR (56px)
+       ============================================================ */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      height: 56px;
+      padding-top: env(safe-area-inset-top, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-bottom: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+    .top-bar::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--dim-reaction), transparent);
+      opacity: 0.5;
+    }
+    .top-bar-left, .top-bar-center, .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    .top-bar-left { flex: 1; min-width: 0; }
+    .top-bar-center { flex: 0 0 auto; }
+    .top-bar-right { flex: 1; justify-content: flex-end; min-width: 0; }
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      min-width: 44px;
+      min-height: 44px;
+      border: none;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .btn-back:hover { background: var(--border); }
+    .btn-back:active { transform: scale(0.92); }
+    .btn-back svg { width: 20px; height: 20px; }
+
+    .game-name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-primary);
+    }
+
+    .level-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      background: var(--dim-reaction);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      color: var(--bg);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .level-pill svg { width: 12px; height: 12px; }
+
+    .score-display {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+    }
+    .score-display svg { width: 16px; height: 16px; color: var(--dim-reaction); }
+
+    .lives-display { display: flex; align-items: center; gap: 2px; }
+    .heart-icon {
+      width: 18px;
+      height: 18px;
+      transition: all var(--transition-normal);
+    }
+    .heart-icon.active {
+      color: var(--error);
+      fill: var(--error);
+      filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.4));
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    .heart-icon.empty {
+      color: var(--text-muted);
+      fill: none;
+      opacity: 0.3;
+    }
+
+    .accuracy-meter { display: flex; align-items: center; gap: 6px; }
+    .accuracy-label {
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .accuracy-bar {
+      width: 48px;
+      height: 4px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .accuracy-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--dim-reaction), var(--accent));
+      border-radius: var(--radius-full);
+      transition: width var(--transition-normal);
+    }
+
+    /* ============================================================
+       GAME AREA (Main Center)
+       ============================================================ */
+    .game-area {
+      flex: 1;
+      margin-top: 56px;
+      margin-bottom: 72px;
+      position: relative;
+      z-index: var(--z-base);
+      overflow: hidden;
+      background: var(--card);
+      cursor: crosshair;
+    }
+
+    /* Subtle grid pattern */
+    .game-area::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--dim-reaction-light) 1px, transparent 1px),
+        linear-gradient(90deg, var(--dim-reaction-light) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Mobile: no crosshair, larger touch area */
+    @media (max-width: 768px) {
+      .game-area { cursor: default; }
+    }
+
+    /* Game info overlay */
+    .game-info-overlay {
+      position: absolute;
+      top: var(--spacing-md);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      padding: 6px var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--glass-border);
+    }
+    .game-info-item {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    .game-info-item span { color: var(--dim-reaction); }
+
+    /* Multiplier badge */
+    .multiplier-badge {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      background: var(--dim-reaction-light);
+      border: 1px solid var(--dim-reaction);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      color: var(--dim-reaction);
+    }
+
+    /* ============================================================
+       MOVING TARGET
+       ============================================================ */
+    .target {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent), var(--dim-reaction));
+      box-shadow: var(--shadow-glow-reaction), 0 0 32px var(--dim-reaction-light);
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      cursor: crosshair;
+      transition: none;
+    }
+
+    @media (max-width: 768px) {
+      .target {
+        width: 36px;
+        height: 36px;
+        cursor: default;
+      }
+    }
+
+    /* Target inner glow */
+    .target::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: var(--card);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+    }
+
+    /* ============================================================
+       TRAIL EFFECT (5-8 fading copies)
+       ============================================================ */
+    .trail-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--dim-reaction);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .trail-dot:nth-child(1) { opacity: 0.35; width: 22px; height: 22px; }
+    .trail-dot:nth-child(2) { opacity: 0.28; width: 20px; height: 20px; }
+    .trail-dot:nth-child(3) { opacity: 0.22; width: 18px; height: 18px; }
+    .trail-dot:nth-child(4) { opacity: 0.16; width: 16px; height: 16px; }
+    .trail-dot:nth-child(5) { opacity: 0.12; width: 14px; height: 14px; }
+    .trail-dot:nth-child(6) { opacity: 0.08; width: 12px; height: 12px; }
+    .trail-dot:nth-child(7) { opacity: 0.05; width: 10px; height: 10px; }
+
+    @media (max-width: 768px) {
+      .trail-dot:nth-child(1) { width: 32px; height: 32px; }
+      .trail-dot:nth-child(2) { width: 30px; height: 30px; }
+      .trail-dot:nth-child(3) { width: 28px; height: 28px; }
+      .trail-dot:nth-child(4) { width: 26px; height: 26px; }
+      .trail-dot:nth-child(5) { width: 24px; height: 24px; }
+      .trail-dot:nth-child(6) { width: 22px; height: 22px; }
+      .trail-dot:nth-child(7) { width: 20px; height: 20px; }
+    }
+
+    /* ============================================================
+       HIT EFFECTS
+       ============================================================ */
+    /* Ripple animation */
+    .hit-ripple {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--dim-reaction);
+      transform: translate(-50%, -50%) scale(0.3);
+      pointer-events: none;
+      z-index: 4;
+      animation: ripple-expand 0.6s ease-out forwards;
+    }
+
+    @keyframes ripple-expand {
+      0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 1; border-width: 3px; }
+      100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; border-width: 1px; }
+    }
+
+    .hit-ripple-2 { animation-delay: 0.1s; }
+
+    /* Score popup */
+    .score-popup {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--dim-reaction);
+      pointer-events: none;
+      animation: score-float 0.8s ease-out forwards;
+      z-index: 5;
+      text-shadow: 0 0 12px var(--shadow-glow-reaction);
+    }
+
+    @keyframes score-float {
+      0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+      20%  { transform: translate(-50%, calc(-50% - 10px)) scale(1.15); opacity: 1; }
+      100% { transform: translate(-50%, calc(-50% - 55px)) scale(0.8); opacity: 0; }
+    }
+
+    /* Miss X mark */
+    .miss-x {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--error);
+      pointer-events: none;
+      animation: miss-fade 0.5s ease-out forwards;
+      z-index: 4;
+      opacity: 0.8;
+    }
+
+    @keyframes miss-fade {
+      0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0.8; }
+      100% { transform: translate(-50%, calc(-50% - 20px)) scale(0.9); opacity: 0; }
+    }
+
+    /* ============================================================
+       FIXED BOTTOM BAR (72px)
+       ============================================================ */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      height: 72px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-top: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+    .bottom-bar::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--dim-reaction), transparent);
+      opacity: 0.4;
+    }
+    .bottom-bar-left, .bottom-bar-center, .bottom-bar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    .bottom-bar-left { flex: 1; justify-content: flex-start; }
+    .bottom-bar-center { flex: 0 0 auto; }
+    .bottom-bar-right { flex: 1; justify-content: flex-end; }
+
+    .btn-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-control:hover { background: var(--border); color: var(--text-primary); }
+    .btn-control:active { transform: scale(0.92); }
+    .btn-control svg { width: 20px; height: 20px; }
+
+    .btn-primary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      min-height: 48px;
+      padding: 0 var(--spacing-xl);
+      border: none;
+      border-radius: var(--radius-lg);
+      background: var(--dim-reaction);
+      color: var(--bg);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-bold);
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      box-shadow: var(--shadow-glow-reaction);
+      white-space: nowrap;
+    }
+    .btn-primary-action:hover { transform: translateY(-1px); box-shadow: 0 6px 28px var(--shadow-glow-reaction); }
+    .btn-primary-action:active { transform: translateY(0) scale(0.97); }
+    .btn-primary-action svg { width: 18px; height: 18px; }
+
+    .btn-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0 var(--spacing-md);
+      border: none;
+      background: var(--dim-reaction-light);
+      border-radius: var(--radius-md);
+      color: var(--dim-reaction);
+      font-family: var(--font-family);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-hint:hover { background: var(--accent); }
+    .btn-hint:active { transform: scale(0.95); }
+    .btn-hint svg { width: 16px; height: 16px; }
+
+    /* ============================================================
+       PAUSE OVERLAY
+       ============================================================ */
+    .pause-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-modal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: var(--spacing-lg);
+      animation: fadeIn var(--transition-normal);
+    }
+    .pause-overlay.hidden { display: none; }
+
+    .pause-card {
+      width: 100%;
+      max-width: 320px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-xl) var(--spacing-lg);
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+      animation: scaleIn var(--transition-normal);
+    }
+    .pause-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-lg);
+    }
+    .pause-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+    .btn-pause {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      width: 100%;
+      min-height: 48px;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      text-decoration: none;
+    }
+    .btn-pause svg { width: 18px; height: 18px; }
+    .btn-pause-resume {
+      background: var(--dim-reaction);
+      color: var(--bg);
+      box-shadow: var(--shadow-glow-reaction);
+    }
+    .btn-pause-restart { background: var(--bg-secondary); color: var(--text-primary); }
+    .btn-pause-restart:hover { background: var(--border); }
+    .btn-pause-quit { background: rgba(239, 68, 68, 0.1); color: var(--error); }
+    .btn-pause-quit:hover { background: rgba(239, 68, 68, 0.2); }
+    .btn-pause:active { transform: scale(0.97); }
+
+    .pause-settings {
+      border-top: 1px solid var(--border-light);
+      padding-top: var(--spacing-md);
+    }
+    .pause-settings-title {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--spacing-sm);
+    }
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-xs) 0;
+    }
+    .setting-label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       GAME OVER OVERLAY
+       ============================================================ */
+    .game-over-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: var(--spacing-lg);
+      animation: fadeIn var(--transition-normal);
+    }
+    .game-over-overlay.hidden { display: none; }
+
+    .game-over-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-xl) var(--spacing-lg);
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+      animation: scaleIn var(--transition-normal);
+    }
+    .game-over-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-xs);
+      background: var(--gradient-accent);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .game-over-subtitle {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .stars-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+    .star {
+      font-size: 32px;
+      line-height: 1;
+      animation: star-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    }
+    .star:nth-child(1) { animation-delay: 0.2s; }
+    .star:nth-child(2) { animation-delay: 0.35s; }
+    .star:nth-child(3) { animation-delay: 0.5s; }
+    .star.empty { opacity: 0.2; filter: grayscale(1); }
+
+    @keyframes star-pop {
+      0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .final-score {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-xs);
+      font-variant-numeric: tabular-nums;
+    }
+    .final-score-label {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-xl);
+    }
+    .stat-item {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md) var(--spacing-sm);
+    }
+    .stat-value {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .game-over-buttons {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+    .btn-go-primary {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 48px;
+      border: none;
+      border-radius: var(--radius-lg);
+      background: var(--dim-reaction);
+      color: var(--bg);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      box-shadow: var(--shadow-glow-reaction);
+    }
+    .btn-go-primary:hover { transform: translateY(-1px); }
+    .btn-go-primary:active { transform: scale(0.97); }
+
+    .btn-go-secondary {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 48px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      text-decoration: none;
+    }
+    .btn-go-secondary:hover { background: var(--border); }
+    .btn-go-secondary:active { transform: scale(0.97); }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 640px) {
+      .top-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+      .game-name { font-size: var(--font-size-xs); }
+      .level-pill { font-size: 10px; padding: 2px 8px; }
+      .score-display { font-size: var(--font-size-xs); }
+      .accuracy-meter { display: none; }
+      .bottom-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+      .btn-primary-action { min-height: 44px; padding: 0 var(--spacing-lg); font-size: var(--font-size-sm); }
+      .btn-hint span { display: none; }
+      .btn-hint { padding: 0; width: 44px; }
+      .game-over-card { padding: var(--spacing-lg) var(--spacing-md); }
+      .game-over-title { font-size: var(--font-size-xl); }
+      .final-score { font-size: var(--font-size-3xl); }
+      .game-info-overlay { top: var(--spacing-sm); padding: 4px var(--spacing-sm); gap: var(--spacing-sm); }
+      .game-info-item { font-size: 10px; }
+      .multiplier-badge { top: var(--spacing-sm); right: var(--spacing-sm); font-size: var(--font-size-xs); padding: 3px 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- ===== FIXED TOP BAR (56px) ===== -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <a href="../game-hub/index.html" class="btn-back" aria-label="Go back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </a>
+        <span class="game-name">Click Horizon</span>
+      </div>
+      <div class="top-bar-center">
+        <div class="level-pill">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+          </svg>
+          Level 4
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="score-display">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+          </svg>
+          3,750
+        </div>
+        <div class="lives-display">
+          <svg class="heart-icon active" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <svg class="heart-icon active" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <svg class="heart-icon active" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="accuracy-meter">
+          <span class="accuracy-label">ACC</span>
+          <div class="accuracy-bar">
+            <div class="accuracy-bar-fill" style="width: 91%"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== GAME AREA (Main Center) ===== -->
+    <main class="game-area" id="gameArea">
+
+      <!-- Game info overlay -->
+      <div class="game-info-overlay">
+        <div class="game-info-item">Speed: <span>2.5x</span></div>
+        <div class="game-info-item">Size: <span>24px</span></div>
+      </div>
+
+      <!-- Multiplier badge -->
+      <div class="multiplier-badge" id="multiplierBadge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+        x3
+      </div>
+
+      <!-- Trail dots (fading copies behind target) -->
+      <div class="trail-dot" id="trail1" style="left: 40%; top: 45%;"></div>
+      <div class="trail-dot" id="trail2" style="left: 38%; top: 43%;"></div>
+      <div class="trail-dot" id="trail3" style="left: 36%; top: 41%;"></div>
+      <div class="trail-dot" id="trail4" style="left: 34%; top: 39%;"></div>
+      <div class="trail-dot" id="trail5" style="left: 32%; top: 37%;"></div>
+      <div class="trail-dot" id="trail6" style="left: 30%; top: 35%;"></div>
+      <div class="trail-dot" id="trail7" style="left: 28%; top: 33%;"></div>
+
+      <!-- The main moving target -->
+      <div class="target" id="target" style="left: 50%; top: 50%;"></div>
+
+      <!-- Example hit ripple -->
+      <div class="hit-ripple" style="left: 72%; top: 30%;"></div>
+      <div class="hit-ripple hit-ripple-2" style="left: 72%; top: 30%;"></div>
+
+      <!-- Example score popup -->
+      <div class="score-popup" style="left: 72%; top: 24%;">+30</div>
+
+      <!-- Example miss X -->
+      <div class="miss-x" style="left: 20%; top: 65%;">&#10005;</div>
+
+    </main>
+
+    <!-- ===== FIXED BOTTOM BAR (72px) ===== -->
+    <footer class="bottom-bar">
+      <div class="bottom-bar-left">
+        <button class="btn-control" aria-label="Pause game" onclick="togglePause()">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16" rx="1"/>
+            <rect x="14" y="4" width="4" height="16" rx="1"/>
+          </svg>
+        </button>
+      </div>
+      <div class="bottom-bar-center">
+        <button class="btn-primary-action" id="mainActionBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          Start
+        </button>
+      </div>
+      <div class="bottom-bar-right">
+        <button class="btn-hint" aria-label="Get hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Hint</span>
+        </button>
+        <button class="btn-control" aria-label="Toggle sound" id="soundBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- ===== PAUSE OVERLAY ===== -->
+    <div class="pause-overlay hidden" id="pauseOverlay">
+      <div class="pause-card">
+        <div class="pause-title">Paused</div>
+        <div class="pause-buttons">
+          <button class="btn-pause btn-pause-resume" onclick="togglePause()">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            Resume
+          </button>
+          <button class="btn-pause btn-pause-restart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+            Restart
+          </button>
+          <a href="../game-hub/index.html" class="btn-pause btn-pause-quit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Quit to Hub
+          </a>
+        </div>
+        <div class="pause-settings">
+          <div class="pause-settings-title">Settings</div>
+          <div class="setting-row">
+            <span class="setting-label">Sound</span>
+            <button class="bv-toggle" aria-label="Toggle sound" onclick="this.classList.toggle('active')">
+              <span class="bv-toggle-track"><span class="bv-toggle-thumb"></span></span>
+            </button>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Vibration</span>
+            <button class="bv-toggle" aria-label="Toggle vibration" onclick="this.classList.toggle('active')">
+              <span class="bv-toggle-track"><span class="bv-toggle-thumb"></span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GAME OVER OVERLAY ===== -->
+    <div class="game-over-overlay hidden" id="gameOverOverlay">
+      <div class="game-over-card">
+        <div class="game-over-title">Game Over</div>
+        <div class="game-over-subtitle">Sharp aim! Your tracking is improving.</div>
+        <div class="stars-row">
+          <span class="star">&#11088;</span>
+          <span class="star">&#11088;</span>
+          <span class="star">&#11088;</span>
+        </div>
+        <div class="final-score">3,750</div>
+        <div class="final-score-label">Final Score</div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value">91%</div>
+            <div class="stat-label">Accuracy</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">x3</div>
+            <div class="stat-label">Max Combo</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">4,200</div>
+            <div class="stat-label">Best</div>
+          </div>
+        </div>
+        <div class="game-over-buttons">
+          <button class="btn-go-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+            Play Again
+          </button>
+          <a href="../game-hub/index.html" class="btn-go-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+            Back to Hub
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <meta name="author" content="WenMoon124">
+
+  <script>
+    // ===== Click Horizon - Moving Target Game =====
+    const gameArea = document.getElementById('gameArea');
+    const target = document.getElementById('target');
+    const trailCount = 7;
+    const trails = [];
+    for (let i = 1; i <= trailCount; i++) {
+      trails.push(document.getElementById('trail' + i));
+    }
+
+    // Target state
+    let targetX = 50;
+    let targetY = 50;
+    let velocityX = 1.8;
+    let velocityY = 1.2;
+    const speed = 2.5;
+    const trailHistory = [];
+
+    // Initialize trail history
+    for (let i = 0; i < trailCount; i++) {
+      trailHistory.push({ x: 50, y: 50 });
+    }
+
+    let multiplier = 3;
+    let consecutiveHits = 3;
+    let isPaused = false;
+    let animFrameId = null;
+
+    function updateTarget() {
+      if (isPaused) return;
+
+      const rect = gameArea.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      // Move target
+      targetX += velocityX * speed;
+      targetY += velocityY * speed;
+
+      // Bounce off walls (with padding)
+      const pad = 30;
+      if (targetX < pad) { targetX = pad; velocityX = Math.abs(velocityX); }
+      if (targetX > w - pad) { targetX = w - pad; velocityX = -Math.abs(velocityX); }
+      if (targetY < pad) { targetY = pad; velocityY = Math.abs(velocityY); }
+      if (targetY > h - pad) { targetY = h - pad; velocityY = -Math.abs(velocityY); }
+
+      // Update trail history
+      trailHistory.unshift({ x: targetX, y: targetY });
+      if (trailHistory.length > trailCount) trailHistory.pop();
+
+      // Update target position
+      target.style.left = targetX + 'px';
+      target.style.top = targetY + 'px';
+
+      // Update trail dots
+      for (let i = 0; i < trailCount; i++) {
+        if (trailHistory[i + 1]) {
+          trails[i].style.left = trailHistory[i + 1].x + 'px';
+          trails[i].style.top = trailHistory[i + 1].y + 'px';
+        }
+      }
+
+      animFrameId = requestAnimationFrame(updateTarget);
+    }
+
+    // Click/tap handler
+    gameArea.addEventListener('click', (e) => {
+      if (isPaused) return;
+
+      const rect = gameArea.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      // Check if hit the target
+      const dx = clickX - targetX;
+      const dy = clickY - targetY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const hitRadius = window.innerWidth <= 768 ? 36 : 24;
+      const hitThreshold = hitRadius + 10;
+
+      if (dist <= hitThreshold) {
+        // HIT!
+        consecutiveHits++;
+        multiplier = Math.min(Math.ceil(consecutiveHits / 2), 5);
+        const points = 10 * multiplier;
+
+        // Ripple effect
+        const ripple1 = document.createElement('div');
+        ripple1.className = 'hit-ripple';
+        ripple1.style.left = targetX + 'px';
+        ripple1.style.top = targetY + 'px';
+        gameArea.appendChild(ripple1);
+
+        const ripple2 = document.createElement('div');
+        ripple2.className = 'hit-ripple hit-ripple-2';
+        ripple2.style.left = targetX + 'px';
+        ripple2.style.top = targetY + 'px';
+        gameArea.appendChild(ripple2);
+
+        setTimeout(() => { ripple1.remove(); ripple2.remove(); }, 700);
+
+        // Score popup
+        const popup = document.createElement('div');
+        popup.className = 'score-popup';
+        popup.style.left = targetX + 'px';
+        popup.style.top = (targetY - 20) + 'px';
+        popup.textContent = '+' + points;
+        gameArea.appendChild(popup);
+        setTimeout(() => popup.remove(), 800);
+
+        updateMultiplier();
+
+        // Randomize direction after hit
+        const angle = Math.random() * Math.PI * 2;
+        velocityX = Math.cos(angle);
+        velocityY = Math.sin(angle);
+      } else {
+        // MISS
+        consecutiveHits = 0;
+        multiplier = 1;
+        updateMultiplier();
+
+        const miss = document.createElement('div');
+        miss.className = 'miss-x';
+        miss.style.left = clickX + 'px';
+        miss.style.top = clickY + 'px';
+        miss.innerHTML = '&#10005;';
+        gameArea.appendChild(miss);
+        setTimeout(() => miss.remove(), 500);
+      }
+    });
+
+    function updateMultiplier() {
+      const badge = document.getElementById('multiplierBadge');
+      badge.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+        x${multiplier}
+      `;
+      badge.style.animation = 'none';
+      badge.offsetHeight;
+      badge.style.animation = multiplier > 1 ? 'streak-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)' : '';
+    }
+
+    function togglePause() {
+      isPaused = !isPaused;
+      document.getElementById('pauseOverlay').classList.toggle('hidden');
+      if (!isPaused) {
+        animFrameId = requestAnimationFrame(updateTarget);
+      } else {
+        cancelAnimationFrame(animFrameId);
+      }
+    }
+
+    // Keyboard: Escape to pause
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') togglePause();
+    });
+
+    // Sound toggle
+    const soundBtn = document.getElementById('soundBtn');
+    let soundOn = true;
+    soundBtn.addEventListener('click', () => {
+      soundOn = !soundOn;
+      soundBtn.innerHTML = soundOn
+        ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+             <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+             <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+           </svg>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+             <line x1="23" y1="9" x2="17" y2="15"/>
+             <line x1="17" y1="9" x2="23" y2="15"/>
+           </svg>`;
+    });
+
+    // Start animation
+    animFrameId = requestAnimationFrame(updateTarget);
+  </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+{
+  "common": {
+    "appName": "BrainVerse",
+    "tagline": "脑力操作系统",
+    "buttons": {
+      "start": "开始",
+      "continue": "继续",
+      "learnMore": "了解更多",
+      "signIn": "登录",
+      "signUp": "注册",
+      "logout": "退出登录",
+      "cancel": "取消",
+      "save": "保存",
+      "delete": "删除",
+      "confirm": "确认"
+    }
+  },
+  "nav": {
+    "home": "首页",
+    "games": "游戏",
+    "dashboard": "仪表盘",
+    "profile": "个人中心",
+    "achievements": "成就",
+    "about": "关于",
+    "contact": "联系我们",
+    "articles": "文章"
+  },
+  "landing": {
+    "hero": {
+      "title": "发现你大脑的真实年龄",
+      "subtitle": "基于科学的脑力训练，提升记忆、专注与认知能力",
+      "cta": "开始免费评估"
+    },
+    "features": {
+      "title": "为什么选择 BrainVerse？",
+      "brainAge": {
+        "title": "脑力年龄评估",
+        "description": "从 5 个维度衡量你的认知表现"
+      },
+      "games": {
+        "title": "科学游戏训练",
+        "description": "18+ 款基于认知科学原理设计的游戏"
+      },
+      "growth": {
+        "title": "追踪你的进步",
+        "description": "通过详细的数据分析监控提升"
+      }
+    }
+  },
+  "games": {
+    "title": "游戏",
+    "description": "训练你的认知能力",
+    "playNow": "立即开始",
+    "viewResults": "查看结果",
+    "dimensions": {
+      "memory": "记忆力",
+      "attention": "注意力",
+      "reaction": "反应力",
+      "executive": "执行功能",
+      "relaxation": "放松"
+    },
+    "difficulty": {
+      "easy": "简单",
+      "medium": "中等",
+      "hard": "困难"
+    }
+  },
+  "dashboard": {
+    "welcome": "欢迎回来，{name}",
+    "brainAge": "你的脑力年龄",
+    "totalScore": "总分",
+    "streak": "连续打卡",
+    "achievements": "最近成就",
+    "recentGames": "最近游戏",
+    "noData": "还没有数据，开始你的第一局游戏吧！"
+  },
+  "auth": {
+    "signIn": {
+      "title": "登录",
+      "subtitle": "欢迎回到 BrainVerse",
+      "email": "邮箱",
+      "password": "密码",
+      "forgotPassword": "忘记密码？",
+      "submit": "登录",
+      "noAccount": "还没有账号？",
+      "signUpLink": "注册"
+    },
+    "signUp": {
+      "title": "创建账号",
+      "subtitle": "开启你的脑力训练之旅",
+      "nickname": "昵称",
+      "email": "邮箱",
+      "password": "密码",
+      "confirmPassword": "确认密码",
+      "submit": "创建账号",
+      "hasAccount": "已有账号？",
+      "signInLink": "登录"
+    },
+    "turnstileVerifying": "正在验证你是否为人类...",
+    "errors": {
+      "invalidCredentials": "邮箱或密码错误",
+      "emailExists": "该邮箱已注册",
+      "turnstileFailed": "验证失败，请重试。"
+    }
+  },
+  "cookie": {
+    "title": "我们尊重你的隐私",
+    "description": "我们使用 Cookie 来提升你的体验、分析流量并个性化内容。请在下方选择你的偏好设置。",
+    "acceptAll": "全部接受",
+    "rejectOptional": "拒绝可选",
+    "savePreferences": "保存偏好",
+    "strictlyNecessary": "严格必要",
+    "strictlyNecessaryDescription": "这些 Cookie 是网站正常运行所必需的。",
+    "performanceAnalytics": "性能与分析",
+    "performanceAnalyticsDescription": "这些 Cookie 帮助我们了解访客如何与网站互动。",
+    "targetingAds": "定向与广告",
+    "targetingAdsDescription": "这些 Cookie 用于投放相关广告。"
+  },
+  "footer": {
+    "copyright": "© {year} BrainVerse. 保留所有权利。",
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款",
+    "contactUs": "联系我们",
+    "followUs": "关注我们"
+  },
+  "errors": {
+    "generic": "出错了，请重试。",
+    "network": "网络错误，请检查你的连接。",
+    "notFound": "页面未找到",
+    "unauthorized": "你没有权限查看此页面。",
+    "validation": {
+      "required": "此字段为必填项",
+      "invalidEmail": "请输入有效的邮箱地址",
+      "passwordTooShort": "密码至少需要 8 个字符",
+      "passwordsDoNotMatch": "两次输入的密码不一致"
+    }
+  },
+  "games_runtime": {
+    "level": "第 {n} 关",
+    "score": "得分：{n}",
+    "lives": "生命值",
+    "correct": "正确！",
+    "wrong": "错误！",
+    "accuracy": "准确率：{percent}%",
+    "reactionTime": "反应：{ms}ms",
+    "start": "开始",
+    "pause": "暂停",
+    "resume": "继续",
+    "finish": "完成",
+    "next": "下一题",
+    "retry": "再试一次",
+    "results": {
+      "title": "游戏结果",
+      "finalScore": "最终得分",
+      "accuracy": "准确率",
+      "avgReaction": "平均反应时间",
+      "bestStreak": "最佳连击",
+      "newRecord": "新纪录！"
+    }
+  }
+}

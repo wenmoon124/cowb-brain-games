@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Breath Synchronizer - BrainVerse 2.0</title>
+  <meta name="description" content="Guided breathing exercise to relax and focus your mind. BrainVerse by CowB.cc">
+  <meta name="theme-color" content="#EBF4FF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="../../manifest.json">
+  <link rel="stylesheet" href="../../styles/global.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       RELAXATION PAGE OVERRIDES
+       ============================================ */
+    :root {
+      --relax-bg: linear-gradient(135deg, #EBF4FF, #F0F9FF, #E8F4FD);
+      --relax-bg-pulse: rgba(74, 124, 255, 0.04);
+      --relax-ring-primary: var(--dim-relaxation);
+      --relax-ring-secondary: var(--secondary);
+      --relax-glow: rgba(74, 124, 255, 0.25);
+      --relax-ripple: rgba(74, 124, 255, 0.15);
+      --relax-particle: rgba(74, 124, 255, 0.12);
+      --relax-text-hint: rgba(74, 124, 255, 0.5);
+      --relax-safe-top: env(safe-area-inset-top, 0px);
+      --relax-safe-bottom: env(safe-area-inset-bottom, 0px);
+      --relax-transition: 1000ms ease-in-out;
+    }
+
+    /* Dark mode overrides */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --relax-bg: linear-gradient(135deg, #0F172A, #162032, #1A2744);
+        --relax-bg-pulse: rgba(74, 124, 255, 0.06);
+        --relax-glow: rgba(74, 124, 255, 0.35);
+        --relax-ripple: rgba(74, 124, 255, 0.2);
+        --relax-particle: rgba(74, 124, 255, 0.18);
+        --relax-text-hint: rgba(74, 124, 255, 0.6);
+      }
+    }
+
+    .dark {
+      --relax-bg: linear-gradient(135deg, #0F172A, #162032, #1A2744);
+      --relax-bg-pulse: rgba(74, 124, 255, 0.06);
+      --relax-glow: rgba(74, 124, 255, 0.35);
+      --relax-ripple: rgba(74, 124, 255, 0.2);
+      --relax-particle: rgba(74, 124, 255, 0.18);
+      --relax-text-hint: rgba(74, 124, 255, 0.6);
+    }
+
+    /* ============================================
+       BASE RESET
+       ============================================ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-family);
+      background: var(--relax-bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* ============================================
+       APP SHELL
+       ============================================ */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      height: 100dvh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ============================================
+       1. TOP BAR - Minimal, no score/lives
+       ============================================ */
+    .top-bar {
+      position: relative;
+      z-index: var(--z-sticky);
+      height: 56px;
+      padding-top: var(--relax-safe-top);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .top-bar-left,
+    .top-bar-center,
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .top-bar-left { flex: 1; min-width: 0; }
+    .top-bar-center { flex: 0 0 auto; }
+    .top-bar-right { flex: 1; justify-content: flex-end; min-width: 0; }
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: var(--primary-bg);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .btn-back:hover { background: var(--primary-light); color: var(--primary); }
+    .btn-back:active { transform: scale(0.92); }
+    .btn-back svg { width: 18px; height: 18px; }
+
+    .game-name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-secondary);
+    }
+
+    .session-timer {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      background: var(--primary-bg);
+      border-radius: var(--radius-sm);
+    }
+
+    .session-timer svg { width: 13px; height: 13px; color: var(--dim-relaxation); }
+
+    /* ============================================
+       2. MAIN GAME AREA
+       ============================================ */
+    .game-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: var(--z-base);
+      overflow: hidden;
+      padding: var(--spacing-md);
+    }
+
+    /* Pulsing background gradient */
+    .bg-pulse {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--relax-bg-pulse), transparent 70%);
+      transition: opacity var(--relax-transition);
+      pointer-events: none;
+    }
+
+    .bg-pulse.inhale { opacity: 1; }
+    .bg-pulse.hold { opacity: 0.5; }
+    .bg-pulse.exhale { opacity: 0.15; }
+
+    /* Floating particles */
+    .particles-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .floating-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--relax-particle);
+      animation: floatParticle linear infinite;
+    }
+
+    @keyframes floatParticle {
+      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
+    }
+
+    /* ============================================
+       BREATH RING - SVG based
+       ============================================ */
+    .breath-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 260px;
+      height: 260px;
+      z-index: 2;
+    }
+
+    .breath-ring-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .breath-ring-track {
+      fill: none;
+      stroke: var(--border-light);
+      stroke-width: 6;
+    }
+
+    .breath-ring-main {
+      fill: none;
+      stroke: url(#breathGradient);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 816;
+      stroke-dashoffset: 816;
+      transition: stroke-dashoffset var(--relax-transition);
+      filter: drop-shadow(0 0 12px var(--relax-glow));
+    }
+
+    .breath-ring-glow {
+      fill: none;
+      stroke: url(#breathGradient);
+      stroke-width: 18;
+      stroke-linecap: round;
+      stroke-dasharray: 816;
+      stroke-dashoffset: 816;
+      transition: stroke-dashoffset var(--relax-transition);
+      opacity: 0.12;
+      filter: blur(8px);
+    }
+
+    /* Water ripple rings */
+    .ripple-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid var(--relax-ripple);
+      animation: rippleExpand 4s ease-out infinite;
+      pointer-events: none;
+    }
+
+    .ripple-ring:nth-child(1) { animation-delay: 0s; }
+    .ripple-ring:nth-child(2) { animation-delay: 1.3s; }
+    .ripple-ring:nth-child(3) { animation-delay: 2.6s; }
+
+    @keyframes rippleExpand {
+      0% { width: 140px; height: 140px; opacity: 0.5; }
+      100% { width: 340px; height: 340px; opacity: 0; }
+    }
+
+    /* Inner ring - touch indicator */
+    .inner-ring {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--primary-bg);
+      border: 2px solid var(--primary-light);
+      transition: all 400ms ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .inner-ring.active {
+      background: var(--primary-light);
+      border-color: var(--dim-relaxation);
+      transform: scale(1.1);
+      box-shadow: 0 0 30px var(--relax-glow);
+    }
+
+    .inner-ring-label {
+      font-size: var(--font-size-xs);
+      color: var(--relax-text-hint);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.02em;
+    }
+
+    /* ============================================
+       BREATH TEXT
+       ============================================ */
+    .breath-text {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      margin-top: var(--spacing-xl);
+    }
+
+    .breath-instruction {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+      opacity: 0.9;
+      transition: opacity 500ms ease;
+      letter-spacing: 0.02em;
+    }
+
+    .breath-hint {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      margin-top: var(--spacing-xs);
+      transition: opacity 500ms ease;
+    }
+
+    /* ============================================
+       SESSION STATS
+       ============================================ */
+    .session-stats {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+    }
+
+    .stat-block { text-align: center; }
+
+    .stat-value {
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-label {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      margin-top: 2px;
+      letter-spacing: 0.04em;
+    }
+
+    .stat-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+    }
+
+    /* ============================================
+       3. BOTTOM BAR - Pause, End, Sound, Info
+       ============================================ */
+    .bottom-bar {
+      position: relative;
+      z-index: var(--z-sticky);
+      height: 64px;
+      padding-bottom: var(--relax-safe-bottom);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .btn-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: var(--primary-bg);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-control:hover { background: var(--primary-light); color: var(--dim-relaxation); }
+    .btn-control:active { transform: scale(0.92); }
+    .btn-control svg { width: 18px; height: 18px; }
+
+    .btn-end-session {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 0 var(--spacing-lg);
+      border: 1px solid var(--primary-light);
+      border-radius: var(--radius-md);
+      background: var(--primary-bg);
+      color: var(--dim-relaxation);
+      font-family: var(--font-family);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-end-session:hover { background: var(--primary-light); }
+    .btn-end-session:active { transform: scale(0.96); }
+    .btn-end-session svg { width: 16px; height: 16px; }
+
+    /* ============================================
+       PAUSE OVERLAY
+       ============================================ */
+    .pause-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: var(--spacing-lg);
+    }
+
+    .pause-overlay.hidden { display: none; }
+
+    .pause-card {
+      width: 100%;
+      max-width: 320px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-2xl) var(--spacing-lg);
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+      animation: overlayEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes overlayEnter {
+      0% { opacity: 0; transform: scale(0.9) translateY(16px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .pause-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-lg);
+      color: var(--text-primary);
+    }
+
+    .pause-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    .btn-pause {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      width: 100%;
+      min-height: 48px;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-pause svg { width: 18px; height: 18px; }
+    .btn-pause:active { transform: scale(0.97); }
+
+    .btn-pause-resume {
+      background: var(--dim-relaxation);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-glow-relaxation);
+    }
+
+    .btn-pause-resume:hover { opacity: 0.9; }
+
+    .btn-pause-end {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+    }
+
+    .btn-pause-end:hover { background: var(--border); }
+
+    /* ============================================
+       INFO OVERLAY
+       ============================================ */
+    .info-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: var(--spacing-lg);
+    }
+
+    .info-overlay.hidden { display: none; }
+
+    .info-card {
+      width: 100%;
+      max-width: 360px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-2xl) var(--spacing-lg);
+      box-shadow: var(--shadow-xl);
+      animation: overlayEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .info-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-md);
+      color: var(--text-primary);
+    }
+
+    .info-text {
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-relaxed);
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .info-text strong {
+      color: var(--dim-relaxation);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .btn-info-close {
+      width: 100%;
+      min-height: 48px;
+      border: none;
+      border-radius: var(--radius-lg);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-info-close:hover { background: var(--border); }
+    .btn-info-close:active { transform: scale(0.97); }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 640px) {
+      .top-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+      .game-name { font-size: var(--font-size-xs); }
+      .session-timer { font-size: var(--font-size-xs); padding: 2px var(--spacing-xs); }
+      .breath-container { width: 220px; height: 220px; }
+      .breath-instruction { font-size: var(--font-size-lg); }
+      .bottom-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); gap: var(--spacing-xs); }
+      .btn-end-session { padding: 0 var(--spacing-md); font-size: var(--font-size-xs); }
+      .session-stats { gap: var(--spacing-md); }
+    }
+
+    @media (min-width: 768px) {
+      .breath-container { width: 320px; height: 320px; }
+      .breath-instruction { font-size: var(--font-size-2xl); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <!-- ============================================
+         1. TOP BAR
+         ============================================ -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <a href="../game-hub/index.html" class="btn-back" aria-label="Go back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </a>
+        <span class="game-name">Breath Synchronizer</span>
+      </div>
+
+      <div class="top-bar-center">
+        <!-- Minimal center - just session timer -->
+      </div>
+
+      <div class="top-bar-right">
+        <div class="session-timer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span id="sessionTimer">0:00</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================
+         2. GAME AREA
+         ============================================ -->
+    <main class="game-area">
+      <!-- Pulsing background -->
+      <div class="bg-pulse" id="bgPulse"></div>
+
+      <!-- Floating particles -->
+      <div class="particles-container" id="particlesContainer"></div>
+
+      <!-- Breath Ring -->
+      <div class="breath-container" id="breathContainer">
+        <!-- Water ripple rings -->
+        <div class="ripple-ring"></div>
+        <div class="ripple-ring"></div>
+        <div class="ripple-ring"></div>
+
+        <!-- SVG Ring -->
+        <svg class="breath-ring-svg" viewBox="0 0 280 280">
+          <defs>
+            <linearGradient id="breathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4A7CFF"/>
+              <stop offset="50%" stop-color="#50C8A8"/>
+              <stop offset="100%" stop-color="#8B5CF6"/>
+            </linearGradient>
+          </defs>
+          <!-- Track -->
+          <circle class="breath-ring-track" cx="140" cy="140" r="130"/>
+          <!-- Glow layer -->
+          <circle class="breath-ring-glow" cx="140" cy="140" r="130" id="ringGlow"/>
+          <!-- Main ring -->
+          <circle class="breath-ring-main" cx="140" cy="140" r="130" id="ringMain"/>
+        </svg>
+
+        <!-- Inner touch ring -->
+        <div class="inner-ring" id="innerRing">
+          <span class="inner-ring-label">Touch to sync</span>
+        </div>
+      </div>
+
+      <!-- Breath instruction text -->
+      <div class="breath-text">
+        <div class="breath-instruction" id="breathInstruction">Breathe In...</div>
+        <div class="breath-hint" id="breathHint">Follow the ring</div>
+      </div>
+
+      <!-- Session stats -->
+      <div class="session-stats">
+        <div class="stat-block">
+          <div class="stat-value" id="cycleCount">0</div>
+          <div class="stat-label">Cycles</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-block">
+          <div class="stat-value" id="sessionTime">0:00</div>
+          <div class="stat-label">Session</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ============================================
+         3. BOTTOM BAR
+         ============================================ -->
+    <footer class="bottom-bar">
+      <button class="btn-control" id="btnPause" aria-label="Pause session">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="4" width="4" height="16" rx="1"/>
+          <rect x="14" y="4" width="4" height="16" rx="1"/>
+        </svg>
+      </button>
+
+      <button class="btn-end-session" id="btnEndSession">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <line x1="9" y1="9" x2="15" y2="15"/>
+          <line x1="15" y1="9" x2="9" y2="15"/>
+        </svg>
+        End Session
+      </button>
+
+      <button class="btn-control" id="btnSound" aria-label="Toggle sound">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+      </button>
+
+      <button class="btn-control" id="btnInfo" aria-label="Info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+      </button>
+    </footer>
+
+  </div>
+
+  <!-- ============================================
+       PAUSE OVERLAY
+       ============================================ -->
+  <div class="pause-overlay hidden" id="pauseOverlay">
+    <div class="pause-card">
+      <div class="pause-title">Session Paused</div>
+      <div class="pause-buttons">
+        <button class="btn-pause btn-pause-resume" id="btnResume">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          Resume
+        </button>
+        <button class="btn-pause btn-pause-end" id="btnQuit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          End Session
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       INFO OVERLAY
+       ============================================ -->
+  <div class="info-overlay hidden" id="infoOverlay">
+    <div class="info-card">
+      <div class="info-title">Breath Synchronizer</div>
+      <div class="info-text">
+        A guided breathing exercise to help you relax and focus your mind.<br><br>
+        <strong>Inhale (4s)</strong> - The ring expands as you breathe in.<br>
+        <strong>Hold (4s)</strong> - Hold your breath with the ring.<br>
+        <strong>Exhale (4s)</strong> - The ring contracts as you breathe out.<br><br>
+        Touch and hold the center ring to synchronize your breathing with the guide. Each full cycle takes 12 seconds.
+      </div>
+      <button class="btn-info-close" id="btnCloseInfo">Got it</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       JAVASCRIPT
+       ============================================ -->
+  <script>
+    (function() {
+      // ---- Elements ----
+      const ringMain = document.getElementById('ringMain');
+      const ringGlow = document.getElementById('ringGlow');
+      const bgPulse = document.getElementById('bgPulse');
+      const breathInstruction = document.getElementById('breathInstruction');
+      const breathHint = document.getElementById('breathHint');
+      const innerRing = document.getElementById('innerRing');
+      const sessionTimerEl = document.getElementById('sessionTimer');
+      const sessionTimeEl = document.getElementById('sessionTime');
+      const cycleCountEl = document.getElementById('cycleCount');
+      const pauseOverlay = document.getElementById('pauseOverlay');
+      const infoOverlay = document.getElementById('infoOverlay');
+      const particlesContainer = document.getElementById('particlesContainer');
+
+      // ---- State ----
+      const CIRCUMFERENCE = 2 * Math.PI * 130; // ~816
+      const PHASES = [
+        { name: 'inhale', text: 'Breathe In...', hint: 'Expand with the ring', duration: 4000, offset: 0 },
+        { name: 'hold', text: 'Hold...', hint: 'Stay steady', duration: 4000, offset: 0 },
+        { name: 'exhale', text: 'Breathe Out...', hint: 'Release slowly', duration: 4000, offset: 0 }
+      ];
+      PHASES[0].offset = CIRCUMFERENCE * 0.33;
+      PHASES[1].offset = CIRCUMFERENCE * 0.66;
+      PHASES[2].offset = CIRCUMFERENCE;
+
+      let currentPhase = 0;
+      let cycles = 0;
+      let sessionSeconds = 0;
+      let isPaused = false;
+      let isHolding = false;
+      let sessionInterval = null;
+      let phaseTimeout = null;
+
+      // ---- Create floating particles ----
+      function createParticles() {
+        for (let i = 0; i < 20; i++) {
+          const p = document.createElement('div');
+          p.className = 'floating-particle';
+          const size = Math.random() * 4 + 2;
+          p.style.width = size + 'px';
+          p.style.height = size + 'px';
+          p.style.left = Math.random() * 100 + '%';
+          p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+          p.style.animationDelay = (Math.random() * 10) + 's';
+          p.style.opacity = Math.random() * 0.3 + 0.1;
+          particlesContainer.appendChild(p);
+        }
+      }
+
+      // ---- Format time ----
+      function formatTime(seconds) {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return m + ':' + (s < 10 ? '0' : '') + s;
+      }
+
+      // ---- Phase animation ----
+      function startPhase() {
+        const phase = PHASES[currentPhase];
+
+        // Update ring
+        const dashOffset = CIRCUMFERENCE - phase.offset;
+        ringMain.style.strokeDashoffset = dashOffset;
+        ringGlow.style.strokeDashoffset = dashOffset;
+
+        // Update background
+        bgPulse.className = 'bg-pulse ' + phase.name;
+
+        // Update text with fade
+        breathInstruction.style.opacity = '0';
+        breathHint.style.opacity = '0';
+        setTimeout(() => {
+          breathInstruction.textContent = phase.text;
+          breathHint.textContent = phase.hint;
+          breathInstruction.style.opacity = '0.9';
+          breathHint.style.opacity = '1';
+        }, 300);
+
+        // Schedule next phase
+        phaseTimeout = setTimeout(() => {
+          currentPhase = (currentPhase + 1) % 3;
+          if (currentPhase === 0) {
+            cycles++;
+            cycleCountEl.textContent = cycles;
+          }
+          if (!isPaused) startPhase();
+        }, phase.duration);
+      }
+
+      // ---- Session timer ----
+      function startSessionTimer() {
+        sessionInterval = setInterval(() => {
+          if (!isPaused) {
+            sessionSeconds++;
+            const t = formatTime(sessionSeconds);
+            sessionTimerEl.textContent = t;
+            sessionTimeEl.textContent = t;
+          }
+        }, 1000);
+      }
+
+      // ---- Touch/hold sync ----
+      innerRing.addEventListener('mousedown', () => { isHolding = true; innerRing.classList.add('active'); });
+      innerRing.addEventListener('mouseup', () => { isHolding = false; innerRing.classList.remove('active'); });
+      innerRing.addEventListener('mouseleave', () => { isHolding = false; innerRing.classList.remove('active'); });
+      innerRing.addEventListener('touchstart', (e) => { e.preventDefault(); isHolding = true; innerRing.classList.add('active'); });
+      innerRing.addEventListener('touchend', () => { isHolding = false; innerRing.classList.remove('active'); });
+
+      // ---- Pause / Resume ----
+      function togglePause() {
+        isPaused = !isPaused;
+        pauseOverlay.classList.toggle('hidden', !isPaused);
+        if (isPaused) {
+          clearTimeout(phaseTimeout);
+        } else {
+          startPhase();
+        }
+      }
+
+      document.getElementById('btnPause').addEventListener('click', togglePause);
+      document.getElementById('btnResume').addEventListener('click', togglePause);
+      document.getElementById('btnQuit').addEventListener('click', () => {
+        clearTimeout(phaseTimeout);
+        clearInterval(sessionInterval);
+        window.location.href = '../game-hub/index.html';
+      });
+
+      // ---- Sound toggle ----
+      let soundOn = true;
+      const btnSound = document.getElementById('btnSound');
+      btnSound.addEventListener('click', () => {
+        soundOn = !soundOn;
+        btnSound.innerHTML = soundOn
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+      });
+
+      // ---- Info ----
+      document.getElementById('btnInfo').addEventListener('click', () => {
+        infoOverlay.classList.remove('hidden');
+        isPaused = true;
+        clearTimeout(phaseTimeout);
+      });
+      document.getElementById('btnCloseInfo').addEventListener('click', () => {
+        infoOverlay.classList.add('hidden');
+        isPaused = false;
+        startPhase();
+      });
+
+      // ---- End session ----
+      document.getElementById('btnEndSession').addEventListener('click', () => {
+        isPaused = true;
+        clearTimeout(phaseTimeout);
+        clearInterval(sessionInterval);
+        pauseOverlay.classList.remove('hidden');
+      });
+
+      // ---- Init ----
+      createParticles();
+      startPhase();
+      startSessionTimer();
+    })();
+  </script>
+</body>
+</html>

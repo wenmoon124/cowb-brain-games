@@ -1,0 +1,40 @@
+# Node.js
+node_modules
+dist
+build
+.turbo
+
+# Environment
+.env
+.env.local
+.env.production
+.env.development
+.dev.vars
+
+# Cloudflare
+.wrangler
+.mf
+
+# Next.js
+.next
+out
+
+# IDE
+.vscode/settings.json
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log
+pnpm-debug.log
+
+# Testing
+coverage
+.nyc_output
+
+# Misc
+*.tsbuildinfo

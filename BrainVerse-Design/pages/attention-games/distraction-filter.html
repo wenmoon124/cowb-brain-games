@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BrainVerse 2.0 - Distraction Filter | CowB.cc</title>
+  <meta name="description" content="Filter distractions. Track targets through chaos.">
+  <meta name="theme-color" content="#06B6D4">
+  <link rel="manifest" href="../../manifest.json">
+  <link rel="stylesheet" href="../../styles/global.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       Distraction Filter - Game-Specific Styles
+       All colors use CSS custom properties from global.css
+       ============================================ */
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      height: 100dvh;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* ===== FIXED TOP BAR (56px) ===== */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      height: 56px;
+      padding-top: env(safe-area-inset-top, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .top-bar::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--dim-attention), transparent);
+      opacity: 0.4;
+    }
+
+    .top-bar-left,
+    .top-bar-center,
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    .top-bar-left { flex: 1; min-width: 0; }
+    .top-bar-center { flex: 0 0 auto; }
+    .top-bar-right { flex: 1; justify-content: flex-end; min-width: 0; }
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .btn-back:hover { background: var(--card-hover); }
+    .btn-back:active { transform: scale(0.92); }
+    .btn-back svg { width: 20px; height: 20px; }
+
+    .game-name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-primary);
+    }
+
+    .level-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      background: var(--dim-attention);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: #FFFFFF;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .level-pill svg { width: 12px; height: 12px; }
+
+    .score-display {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+    .score-display svg { width: 14px; height: 14px; color: var(--accent); }
+
+    .lives-display { display: flex; align-items: center; gap: 2px; }
+    .heart { font-size: 14px; line-height: 1; transition: all var(--transition-normal); }
+    .heart.lost { opacity: 0.2; filter: grayscale(1); }
+
+    .accuracy-meter { display: flex; align-items: center; gap: 6px; }
+    .accuracy-label { font-size: 10px; font-weight: var(--font-weight-medium); color: var(--text-muted); text-transform: uppercase; }
+    .accuracy-bar { width: 48px; height: 4px; background: var(--bg-secondary); border-radius: var(--radius-full); overflow: hidden; }
+    .accuracy-bar-fill { height: 100%; background: linear-gradient(90deg, var(--dim-attention), var(--dim-attention-light)); border-radius: var(--radius-full); transition: width var(--transition-normal); }
+
+    /* ===== MAIN GAME AREA ===== */
+    .game-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: var(--z-base);
+      overflow: hidden;
+      padding: var(--spacing-lg);
+      padding-top: calc(56px + var(--spacing-lg) + env(safe-area-inset-top, 0px));
+      padding-bottom: calc(72px + var(--spacing-lg) + env(safe-area-inset-bottom, 0px));
+      background-image: radial-gradient(circle, var(--dim-attention-light) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Phase banner */
+    .phase-banner {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      padding: 6px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-secondary);
+    }
+    .phase-banner-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-extrabold);
+    }
+    .phase-banner-icon.mark { background: var(--accent-light); color: var(--accent); }
+    .phase-banner-icon.chaos { background: rgba(239, 68, 68, 0.15); color: var(--error); }
+    .phase-banner-icon.select { background: rgba(80, 200, 168, 0.15); color: var(--success); }
+
+    /* Particle info */
+    .particle-info {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-muted);
+    }
+    .particle-info span {
+      padding: 3px 10px;
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+    }
+    .particle-info .target-count { color: var(--error); }
+    .particle-info .progress-count { color: var(--success); }
+
+    /* ===== ARENA ===== */
+    .arena {
+      width: 100%;
+      max-width: 400px;
+      aspect-ratio: 1 / 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Particle base */
+    .particle {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      z-index: 2;
+    }
+    .particle:active { transform: scale(0.9); }
+
+    /* Red circle (target) */
+    .particle.target {
+      border-radius: 50%;
+      background: var(--error);
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+    }
+
+    /* Blue square (distractor) */
+    .particle.distractor {
+      border-radius: 4px;
+      background: var(--info);
+      box-shadow: 0 0 8px rgba(74, 124, 255, 0.3);
+    }
+
+    /* Marked target (pulsing ring) */
+    .particle.marked::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px solid var(--dim-attention);
+      animation: mark-pulse 1s ease-in-out infinite;
+    }
+    @keyframes mark-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.3; }
+    }
+
+    /* Selected particle - checkmark overlay */
+    .particle.selected::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 3;
+    }
+    .particle.selected::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      z-index: 4;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322C55E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+      background-size: 20px;
+      background-position: center;
+      background-repeat: no-repeat;
+      animation: check-appear 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes check-appear {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+
+    /* Correct selection glow */
+    .particle.correct-glow {
+      box-shadow: 0 0 16px rgba(80, 200, 168, 0.6), 0 0 32px rgba(80, 200, 168, 0.3) !important;
+    }
+
+    /* Wrong selection flash */
+    .particle.wrong-flash {
+      animation: wrong-shake 0.4s ease;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.6) !important;
+    }
+    @keyframes wrong-shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(3px); }
+    }
+
+    /* Chaos movement animation */
+    .particle.moving {
+      animation: chaos-move var(--move-duration, 5s) ease-in-out infinite alternate;
+    }
+    @keyframes chaos-move {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(var(--dx1, 20px), var(--dy1, -15px)); }
+      50% { transform: translate(var(--dx2, -25px), var(--dy2, 10px)); }
+      75% { transform: translate(var(--dx3, 15px), var(--dy3, 25px)); }
+      100% { transform: translate(var(--dx4, -10px), var(--dy4, -20px)); }
+    }
+
+    /* ===== FIXED BOTTOM BAR (72px) ===== */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      height: 72px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .bottom-bar::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--dim-attention), transparent);
+      opacity: 0.4;
+    }
+
+    .bottom-bar-left,
+    .bottom-bar-center,
+    .bottom-bar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    .bottom-bar-left { flex: 1; justify-content: flex-start; }
+    .bottom-bar-center { flex: 0 0 auto; }
+    .bottom-bar-right { flex: 1; justify-content: flex-end; }
+
+    .btn-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-control:hover { background: var(--card-hover); color: var(--text-primary); }
+    .btn-control:active { transform: scale(0.92); }
+    .btn-control svg { width: 20px; height: 20px; }
+
+    .btn-primary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      min-height: 44px;
+      padding: 0 var(--spacing-xl);
+      border: none;
+      border-radius: var(--radius-lg);
+      background: var(--dim-attention);
+      color: #FFFFFF;
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      box-shadow: var(--shadow-glow-attention);
+      white-space: nowrap;
+    }
+    .btn-primary-action:hover { transform: translateY(-1px); box-shadow: 0 0 28px var(--dim-attention-light); }
+    .btn-primary-action:active { transform: translateY(0) scale(0.97); }
+    .btn-primary-action svg { width: 18px; height: 18px; }
+
+    .btn-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 44px;
+      padding: 0 var(--spacing-md);
+      border: none;
+      background: var(--accent-light);
+      border-radius: var(--radius-md);
+      color: var(--accent);
+      font-family: var(--font-family);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-hint:hover { filter: brightness(1.1); }
+    .btn-hint:active { transform: scale(0.95); }
+    .btn-hint svg { width: 16px; height: 16px; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      .top-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+      .game-name { font-size: var(--font-size-xs); }
+      .level-pill { font-size: 10px; padding: 2px 8px; }
+      .score-display { font-size: var(--font-size-xs); }
+      .accuracy-meter { display: none; }
+      .game-area { padding: var(--spacing-md); padding-top: calc(56px + var(--spacing-md) + env(safe-area-inset-top, 0px)); padding-bottom: calc(72px + var(--spacing-md) + env(safe-area-inset-bottom, 0px)); }
+      .bottom-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+      .btn-primary-action { min-height: 44px; padding: 0 var(--spacing-lg); font-size: var(--font-size-sm); }
+      .btn-hint span { display: none; }
+      .btn-hint { padding: 0; width: 44px; }
+      .arena { max-width: 320px; }
+      .particle { width: 30px; height: 30px; }
+    }
+
+    @media (max-width: 380px) {
+      .arena { max-width: 280px; }
+      .particle { width: 26px; height: 26px; }
+      .particle-info { font-size: var(--font-size-xs); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- ===== TOP BAR ===== -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <a href="../game-hub/index.html" class="btn-back" aria-label="Go back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </a>
+        <span class="game-name">Distraction Filter</span>
+      </div>
+      <div class="top-bar-center">
+        <div class="level-pill">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+          </svg>
+          Level 4
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="score-display">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+          </svg>
+          2,100
+        </div>
+        <div class="lives-display">
+          <span class="heart">&#10084;&#65039;</span>
+          <span class="heart">&#10084;&#65039;</span>
+          <span class="heart">&#10084;&#65039;</span>
+        </div>
+        <div class="accuracy-meter">
+          <span class="accuracy-label">ACC</span>
+          <div class="accuracy-bar">
+            <div class="accuracy-bar-fill" style="width: 92%"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== GAME AREA ===== -->
+    <main class="game-area">
+
+      <!-- Phase banner -->
+      <div class="phase-banner">
+        <div class="phase-banner-icon select">3</div>
+        <span>Phase 3: Select the marked targets</span>
+      </div>
+
+      <!-- Particle info -->
+      <div class="particle-info">
+        <span>12 Particles</span>
+        <span class="target-count">3 Targets</span>
+        <span class="progress-count">Found 1/3</span>
+      </div>
+
+      <!-- Arena -->
+      <div class="arena" id="arena">
+
+        <!-- Red circle targets (3 marked) -->
+        <div class="particle target marked selected correct-glow" style="top: 12%; left: 18%;" data-id="t1"></div>
+        <div class="particle target marked" style="top: 65%; left: 72%;" data-id="t2"></div>
+        <div class="particle target marked" style="top: 38%; left: 55%;" data-id="t3"></div>
+
+        <!-- More red circle targets (non-marked) -->
+        <div class="particle target" style="top: 22%; left: 78%;"></div>
+        <div class="particle target" style="top: 75%; left: 25%;"></div>
+        <div class="particle target" style="top: 48%; left: 12%;"></div>
+
+        <!-- Blue square distractors -->
+        <div class="particle distractor" style="top: 8%; left: 45%;"></div>
+        <div class="particle distractor" style="top: 28%; left: 35%;"></div>
+        <div class="particle distractor" style="top: 55%; left: 88%;"></div>
+        <div class="particle distractor" style="top: 82%; left: 58%;"></div>
+        <div class="particle distractor" style="top: 42%; left: 42%;"></div>
+        <div class="particle distractor" style="top: 18%; left: 62%;"></div>
+
+      </div>
+
+    </main>
+
+    <!-- ===== BOTTOM BAR ===== -->
+    <footer class="bottom-bar">
+      <div class="bottom-bar-left">
+        <button class="btn-control" aria-label="Pause game">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16" rx="1"/>
+            <rect x="14" y="4" width="4" height="16" rx="1"/>
+          </svg>
+        </button>
+      </div>
+      <div class="bottom-bar-center">
+        <button class="btn-primary-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          Submit
+        </button>
+      </div>
+      <div class="bottom-bar-right">
+        <button class="btn-hint" aria-label="Get hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Hint</span>
+        </button>
+        <button class="btn-control" aria-label="Toggle sound">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Sound toggle
+    const soundBtn = document.querySelector('.btn-control[aria-label="Toggle sound"]');
+    let soundOn = true;
+    soundBtn.addEventListener('click', () => {
+      soundOn = !soundOn;
+      soundBtn.innerHTML = soundOn
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+    });
+
+    // Particle click handler
+    const arena = document.getElementById('arena');
+    const particles = arena.querySelectorAll('.particle');
+
+    particles.forEach(p => {
+      p.addEventListener('click', () => {
+        if (p.classList.contains('selected')) return;
+        p.classList.add('selected');
+
+        if (p.classList.contains('marked')) {
+          p.classList.add('correct-glow');
+        } else {
+          p.classList.add('wrong-flash');
+          setTimeout(() => {
+            p.classList.remove('selected', 'wrong-flash');
+          }, 600);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

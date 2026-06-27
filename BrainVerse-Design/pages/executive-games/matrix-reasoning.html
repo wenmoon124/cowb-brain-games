@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BrainVerse 2.0 - Matrix Reasoning</title>
+  <meta name="theme-color" content="#F7F9FC">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="../../manifest.json">
+  <link rel="stylesheet" href="../../styles/global.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --game-top-h: 56px;
+      --game-bottom-h: 72px;
+      --game-safe-top: env(safe-area-inset-top, 0px);
+      --game-safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      height: 100%; overflow: hidden;
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .app-shell { display: flex; flex-direction: column; height: 100%; height: 100dvh; position: relative; overflow: hidden; }
+
+    /* ===== FIXED TOP BAR ===== */
+    .game-top-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-sticky);
+      height: var(--game-top-h); padding-top: var(--game-safe-top);
+      display: flex; align-items: center; justify-content: space-between;
+      padding-left: var(--spacing-sm); padding-right: var(--spacing-sm);
+      background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .game-top-bar::after {
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--dim-executive), transparent); opacity: 0.4;
+    }
+    .top-left, .top-center, .top-right { display: flex; align-items: center; gap: var(--spacing-xs); }
+    .top-left { flex: 1; min-width: 0; }
+    .top-center { flex: 0 0 auto; }
+    .top-right { flex: 1; justify-content: flex-end; min-width: 0; }
+    .btn-back {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border: none;
+      background: var(--bg-secondary); border-radius: var(--radius-md);
+      color: var(--text-primary); cursor: pointer; transition: all var(--transition-fast); flex-shrink: 0;
+    }
+    .btn-back:hover { background: var(--border); }
+    .btn-back:active { transform: scale(0.92); }
+    .btn-back svg { width: 20px; height: 20px; }
+    .game-name { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .level-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; background: var(--dim-executive); border-radius: var(--radius-full);
+      font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: #fff; white-space: nowrap;
+    }
+    .level-pill svg { width: 12px; height: 12px; }
+    .score-display { display: flex; align-items: center; gap: 3px; font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--text-primary); }
+    .score-display svg { width: 14px; height: 14px; color: var(--accent); }
+    .lives-display { display: flex; align-items: center; gap: 2px; }
+    .heart-icon { width: 16px; height: 16px; }
+    .heart-icon.active { color: var(--error); fill: var(--error); filter: drop-shadow(0 0 3px rgba(239,68,68,0.4)); animation: heartbeat 1.5s ease-in-out infinite; }
+    .heart-icon.empty { color: var(--text-muted); fill: none; opacity: 0.3; }
+    .accuracy-bar-wrap { display: flex; align-items: center; gap: 4px; }
+    .accuracy-label { font-size: 10px; font-weight: var(--font-weight-medium); color: var(--text-muted); }
+    .accuracy-bar { width: 48px; height: 4px; background: var(--bg-secondary); border-radius: var(--radius-full); overflow: hidden; }
+    .accuracy-bar-fill { height: 100%; background: linear-gradient(90deg, var(--dim-executive), var(--success)); border-radius: var(--radius-full); transition: width var(--transition-normal); }
+
+    /* ===== GAME AREA ===== */
+    .game-area {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: relative; z-index: var(--z-base); overflow: auto;
+      padding: calc(var(--game-top-h) + var(--game-safe-top) + var(--spacing-md)) var(--spacing-md) calc(var(--game-bottom-h) + var(--game-safe-bottom) + var(--spacing-md));
+      background-image: radial-gradient(circle, var(--border-light) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .game-content { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-md); }
+
+    /* ===== DIFFICULTY CHIP ===== */
+    .difficulty-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px; background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold);
+      color: var(--text-secondary); flex-shrink: 0;
+    }
+    .difficulty-chip svg { width: 14px; height: 14px; }
+    .difficulty-chip .value { color: var(--dim-executive); font-weight: var(--font-weight-bold); }
+
+    /* ===== 3x3 MATRIX ===== */
+    .matrix-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-sm); width: 100%; max-width: 360px;
+    }
+    .matrix-cell {
+      aspect-ratio: 1; background: var(--card);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; box-shadow: var(--shadow-sm);
+      transition: all var(--transition-normal);
+    }
+    .matrix-cell .cell-shape { width: 60%; height: 60%; transition: all var(--transition-normal); }
+    .matrix-cell.missing {
+      border: 2px dashed var(--border);
+      background: var(--bg-secondary);
+    }
+    .matrix-cell.missing .missing-label {
+      font-size: var(--font-size-3xl); font-weight: var(--font-weight-extrabold, 800);
+      color: var(--text-muted);
+    }
+    .matrix-cell.filled { animation: fillPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes fillPop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ===== ANSWER OPTIONS ===== */
+    .answer-label {
+      font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold);
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .answer-options { display: flex; gap: var(--spacing-sm); flex-wrap: wrap; justify-content: center; max-width: 400px; }
+    .answer-card {
+      width: 80px; height: 80px; background: var(--card);
+      border: 2px solid var(--border); border-radius: var(--radius-lg);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all var(--transition-fast);
+      box-shadow: var(--shadow-sm); position: relative;
+    }
+    .answer-card:hover { background: var(--card-hover); border-color: var(--dim-executive); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .answer-card:active { transform: scale(0.95); }
+    .answer-card.selected {
+      border-color: var(--dim-executive);
+      box-shadow: var(--shadow-glow-executive);
+      background: rgba(16,185,129,0.06);
+    }
+    .answer-card.correct {
+      border-color: var(--success);
+      box-shadow: 0 0 20px rgba(34,197,94,0.3);
+      background: rgba(34,197,94,0.08);
+      animation: correctBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes correctBounce { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    .answer-card.wrong {
+      border-color: var(--error);
+      box-shadow: 0 0 16px rgba(239,68,68,0.25);
+      background: rgba(239,68,68,0.08);
+      animation: shake 0.4s ease;
+    }
+    .answer-card .card-shape { width: 55%; height: 55%; }
+    .answer-card .wrong-overlay {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(239,68,68,0.12); border-radius: var(--radius-md);
+      animation: fadeIn var(--transition-fast);
+    }
+    .answer-card .wrong-x { font-size: var(--font-size-3xl); font-weight: var(--font-weight-extrabold, 800); color: var(--error); }
+    .answer-card.fly-to-matrix { animation: flyToSlot 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes flyToSlot {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.5) translateY(-40px); opacity: 0.8; }
+      100% { transform: scale(0) translateY(-80px); opacity: 0; }
+    }
+
+    /* ===== FIXED BOTTOM BAR ===== */
+    .game-bottom-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: var(--z-sticky);
+      height: var(--game-bottom-h); padding-bottom: var(--game-safe-bottom);
+      display: flex; align-items: center; justify-content: space-between;
+      padding-left: var(--spacing-sm); padding-right: var(--spacing-sm);
+      background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-top: 1px solid var(--border); flex-shrink: 0;
+    }
+    .game-bottom-bar::before {
+      content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--dim-executive), transparent); opacity: 0.4;
+    }
+    .bottom-left, .bottom-center, .bottom-right { display: flex; align-items: center; gap: var(--spacing-xs); }
+    .bottom-left { flex: 1; justify-content: flex-start; }
+    .bottom-center { flex: 0 0 auto; }
+    .bottom-right { flex: 1; justify-content: flex-end; }
+    .btn-ctrl {
+      display: flex; align-items: center; justify-content: center;
+      min-width: 44px; min-height: 44px; width: 44px; height: 44px;
+      border: none; background: var(--bg-secondary); border-radius: var(--radius-md);
+      color: var(--text-secondary); cursor: pointer; transition: all var(--transition-fast);
+    }
+    .btn-ctrl:hover { background: var(--border); color: var(--text-primary); }
+    .btn-ctrl:active { transform: scale(0.92); }
+    .btn-ctrl svg { width: 20px; height: 20px; }
+    .btn-submit {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      min-height: 44px; padding: 0 var(--spacing-xl); border: none; border-radius: var(--radius-lg);
+      background: var(--dim-executive); color: #fff;
+      font-family: var(--font-family); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+      cursor: pointer; transition: all var(--transition-fast);
+      box-shadow: var(--shadow-glow-executive); white-space: nowrap;
+    }
+    .btn-submit:hover { transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0) scale(0.97); }
+    .btn-submit svg { width: 18px; height: 18px; }
+    .btn-hint {
+      display: inline-flex; align-items: center; gap: 4px;
+      min-height: 44px; padding: 0 14px; border: none;
+      background: rgba(255,177,74,0.1); border-radius: var(--radius-md);
+      color: var(--warning); font-family: var(--font-family);
+      font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold);
+      cursor: pointer; transition: all var(--transition-fast);
+    }
+    .btn-hint:hover { background: rgba(255,177,74,0.18); }
+    .btn-hint:active { transform: scale(0.95); }
+    .btn-hint svg { width: 16px; height: 16px; }
+
+    /* ===== PAUSE OVERLAY ===== */
+    .pause-overlay {
+      position: fixed; inset: 0; z-index: var(--z-modal);
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      padding: var(--spacing-lg); animation: fadeIn var(--transition-normal);
+    }
+    .pause-overlay.hidden { display: none; }
+    .pause-card {
+      width: 100%; max-width: 320px; background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: var(--spacing-xl);
+      text-align: center; box-shadow: var(--shadow-xl); animation: scaleIn var(--transition-normal);
+    }
+    .pause-title { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); margin-bottom: var(--spacing-lg); }
+    .pause-buttons { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+    .btn-pause {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; min-height: 48px; border: none; border-radius: var(--radius-lg);
+      font-family: var(--font-family); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+      cursor: pointer; transition: all var(--transition-fast);
+    }
+    .btn-pause svg { width: 18px; height: 18px; }
+    .btn-pause-resume { background: var(--dim-executive); color: #fff; box-shadow: var(--shadow-glow-executive); }
+    .btn-pause-restart { background: var(--bg-secondary); color: var(--text-primary); }
+    .btn-pause-quit { background: rgba(239,68,68,0.08); color: var(--error); }
+    .btn-pause:active { transform: scale(0.97); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 639px) {
+      .game-top-bar { padding-left: var(--spacing-xs); padding-right: var(--spacing-xs); }
+      .game-name { font-size: var(--font-size-xs); }
+      .level-pill { font-size: 10px; padding: 2px 8px; }
+      .score-display { font-size: var(--font-size-xs); }
+      .accuracy-bar-wrap { display: none; }
+      .game-bottom-bar { padding-left: var(--spacing-xs); padding-right: var(--spacing-xs); }
+      .btn-submit { min-height: 44px; padding: 0 var(--spacing-lg); font-size: var(--font-size-xs); }
+      .btn-hint span { display: none; }
+      .btn-hint { padding: 0; width: 44px; }
+      .matrix-grid { gap: var(--spacing-xs); max-width: 300px; }
+      .answer-card { width: 68px; height: 68px; }
+      .difficulty-chip { font-size: 10px; padding: 4px 10px; }
+    }
+    @media (max-width: 380px) {
+      .matrix-grid { max-width: 260px; gap: var(--spacing-xs); }
+      .answer-card { width: 60px; height: 60px; }
+      .answer-options { gap: var(--spacing-xs); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="game-top-bar">
+      <div class="top-left">
+        <a href="../game-hub/index.html" class="btn-back" aria-label="Go back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </a>
+        <span class="game-name">Matrix Reasoning</span>
+      </div>
+      <div class="top-center">
+        <div class="level-pill">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+          Level 1
+        </div>
+      </div>
+      <div class="top-right">
+        <div class="score-display">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+          <span id="score-value">0</span>
+        </div>
+        <div class="lives-display" id="lives-display">
+          <svg class="heart-icon active" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <svg class="heart-icon active" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <svg class="heart-icon active" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="accuracy-bar-wrap">
+          <span class="accuracy-label">ACC</span>
+          <div class="accuracy-bar"><div class="accuracy-bar-fill" id="accuracy-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="game-area">
+      <div class="game-content">
+        <div class="difficulty-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          Logic Depth: <span class="value" id="logic-depth">2 dimensions</span>
+        </div>
+        <div class="matrix-grid" id="matrix-grid"></div>
+        <div class="answer-label">Choose the missing piece</div>
+        <div class="answer-options" id="answer-options"></div>
+      </div>
+    </main>
+
+    <footer class="game-bottom-bar">
+      <div class="bottom-left">
+        <button class="btn-ctrl" id="btn-pause" aria-label="Pause game">
+          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        </button>
+      </div>
+      <div class="bottom-center">
+        <button class="btn-submit" id="btn-next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+          Next
+        </button>
+      </div>
+      <div class="bottom-right">
+        <button class="btn-hint" id="btn-hint" aria-label="Get hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>Hint</span>
+        </button>
+        <button class="btn-ctrl" id="btn-sound" aria-label="Toggle sound">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
+    </footer>
+
+    <div class="pause-overlay hidden" id="pause-overlay">
+      <div class="pause-card">
+        <div class="pause-title">Paused</div>
+        <div class="pause-buttons">
+          <button class="btn-pause btn-pause-resume" id="btn-resume">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Resume
+          </button>
+          <button class="btn-pause btn-pause-restart" id="btn-restart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            New Puzzle
+          </button>
+          <a href="../game-hub/index.html" class="btn-pause btn-pause-quit" style="text-decoration:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Quit to Hub
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const shapeTypes = ['circle', 'square', 'triangle', 'diamond'];
+    const shapeColors = ['var(--error)', 'var(--info)', 'var(--dim-executive)', 'var(--accent)', 'var(--dim-memory)'];
+    const rotations = [0, 45, 90, 135];
+
+    let matrix = [], answerOptions = [], correctAnswer = 0, selectedOption = -1;
+    let score = 0, lives = 3, totalAttempts = 0, correctAttempts = 0, answered = false;
+
+    const matrixGrid = document.getElementById('matrix-grid');
+    const answerContainer = document.getElementById('answer-options');
+    const scoreValue = document.getElementById('score-value');
+    const accuracyFill = document.getElementById('accuracy-fill');
+    const livesDisplay = document.getElementById('lives-display');
+
+    function generateShapeSVG(type, color, rotation) {
+      const strokeColor = 'rgba(255,255,255,0.25)';
+      const sw = 2;
+      let shape = '';
+      const transform = rotation ? ` transform="rotate(${rotation} 50 50)"` : '';
+      switch (type) {
+        case 'circle': shape = `<circle cx="50" cy="50" r="35" fill="${color}" stroke="${strokeColor}" stroke-width="${sw}"/>`; break;
+        case 'square': shape = `<rect x="18" y="18" width="64" height="64" rx="4" fill="${color}" stroke="${strokeColor}" stroke-width="${sw}"${transform}/>`; break;
+        case 'triangle': shape = `<polygon points="50,15 85,80 15,80" fill="${color}" stroke="${strokeColor}" stroke-width="${sw}"${transform}/>`; break;
+        case 'diamond': shape = `<polygon points="50,12 85,50 50,88 15,50" fill="${color}" stroke="${strokeColor}" stroke-width="${sw}"/>`; break;
+      }
+      return `<svg viewBox="0 0 100 100" class="cell-shape">${shape}</svg>`;
+    }
+
+    function generatePuzzle() {
+      answered = false; selectedOption = -1;
+      const types = ['circle', 'square', 'triangle'];
+      const cols = [0, 1, 2];
+      const rots = [0, 45, 90];
+      matrix = [];
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+        matrix.push({ type: types[r], color: shapeColors[cols[c]], rotation: rots[c] });
+      }
+      answerOptions = [];
+      answerOptions.push({ ...matrix[8] });
+      answerOptions.push({ type: 'diamond', color: matrix[8].color, rotation: matrix[8].rotation });
+      answerOptions.push({ type: matrix[8].type, color: shapeColors[0], rotation: matrix[8].rotation });
+      answerOptions.push({ type: matrix[8].type, color: matrix[8].color, rotation: 0 });
+      for (let i = answerOptions.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [answerOptions[i], answerOptions[j]] = [answerOptions[j], answerOptions[i]]; }
+      renderMatrix(); renderOptions();
+    }
+
+    function renderMatrix() {
+      matrixGrid.innerHTML = '';
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'matrix-cell'; cell.dataset.index = i;
+        if (i === 8) { cell.classList.add('missing'); cell.id = 'missing-cell'; cell.innerHTML = '<span class="missing-label">?</span>'; }
+        else { const m = matrix[i]; cell.innerHTML = generateShapeSVG(m.type, m.color, m.rotation); }
+        matrixGrid.appendChild(cell);
+      }
+    }
+
+    function renderOptions() {
+      answerContainer.innerHTML = '';
+      answerOptions.forEach((opt, idx) => {
+        const card = document.createElement('div');
+        card.className = 'answer-card'; card.dataset.index = idx;
+        card.innerHTML = generateShapeSVG(opt.type, opt.color, opt.rotation);
+        card.addEventListener('click', () => selectOption(idx));
+        answerContainer.appendChild(card);
+      });
+    }
+
+    function selectOption(idx) {
+      if (answered) return;
+      answerContainer.querySelectorAll('.answer-card').forEach(c => c.classList.remove('selected'));
+      selectedOption = idx;
+      answerContainer.querySelectorAll('.answer-card')[idx].classList.add('selected');
+    }
+
+    function checkAnswer() {
+      if (selectedOption < 0 || answered) return;
+      answered = true; totalAttempts++;
+      const cards = answerContainer.querySelectorAll('.answer-card');
+      const selectedCard = cards[selectedOption];
+      const isCorrect = answerOptions[selectedOption].type === matrix[8].type &&
+                        answerOptions[selectedOption].color === matrix[8].color &&
+                        answerOptions[selectedOption].rotation === matrix[8].rotation;
+      if (isCorrect) {
+        correctAttempts++; score += 50; scoreValue.textContent = score;
+        selectedCard.classList.remove('selected');
+        selectedCard.classList.add('correct', 'fly-to-matrix');
+        setTimeout(() => {
+          const missingCell = document.getElementById('missing-cell');
+          missingCell.classList.remove('missing'); missingCell.classList.add('filled');
+          missingCell.innerHTML = generateShapeSVG(matrix[8].type, matrix[8].color, matrix[8].rotation);
+        }, 400);
+      } else {
+        selectedCard.classList.remove('selected'); selectedCard.classList.add('wrong');
+        const overlay = document.createElement('div');
+        overlay.className = 'wrong-overlay'; overlay.innerHTML = '<span class="wrong-x">X</span>';
+        selectedCard.appendChild(overlay);
+        lives--; updateLives();
+        const correctIdx = answerOptions.findIndex(opt => opt.type === matrix[8].type && opt.color === matrix[8].color && opt.rotation === matrix[8].rotation);
+        if (correctIdx >= 0) cards[correctIdx].classList.add('correct');
+      }
+      const acc = totalAttempts > 0 ? Math.round((correctAttempts / totalAttempts) * 100) : 100;
+      accuracyFill.style.width = acc + '%';
+    }
+
+    function updateLives() {
+      const hearts = livesDisplay.querySelectorAll('.heart-icon');
+      hearts.forEach((h, i) => {
+        if (i >= lives) { h.classList.remove('active'); h.classList.add('empty'); }
+        else { h.classList.remove('empty'); h.classList.add('active'); }
+      });
+    }
+
+    function nextPuzzle() {
+      if (lives <= 0) { alert('Game Over! Final Score: ' + score); lives = 3; score = 0; totalAttempts = 0; correctAttempts = 0; scoreValue.textContent = '0'; accuracyFill.style.width = '100%'; updateLives(); }
+      generatePuzzle();
+    }
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+      if (!answered && selectedOption >= 0) { checkAnswer(); setTimeout(nextPuzzle, 1200); }
+      else if (answered) nextPuzzle();
+    });
+
+    document.getElementById('btn-hint').addEventListener('click', () => {
+      if (answered) return;
+      lives--; updateLives();
+      const correctIdx = answerOptions.findIndex(opt => opt.type === matrix[8].type && opt.color === matrix[8].color && opt.rotation === matrix[8].rotation);
+      if (correctIdx >= 0) {
+        const cards = answerContainer.querySelectorAll('.answer-card');
+        cards[correctIdx].style.boxShadow = '0 0 24px rgba(245,158,11,0.4)';
+        cards[correctIdx].style.borderColor = 'var(--warning)';
+        setTimeout(() => { cards[correctIdx].style.boxShadow = ''; cards[correctIdx].style.borderColor = ''; }, 1500);
+      }
+    });
+
+    document.getElementById('btn-pause').addEventListener('click', () => document.getElementById('pause-overlay').classList.remove('hidden'));
+    document.getElementById('btn-resume').addEventListener('click', () => document.getElementById('pause-overlay').classList.add('hidden'));
+    document.getElementById('btn-restart').addEventListener('click', () => {
+      lives = 3; score = 0; totalAttempts = 0; correctAttempts = 0;
+      scoreValue.textContent = '0'; accuracyFill.style.width = '100%'; updateLives(); generatePuzzle();
+      document.getElementById('pause-overlay').classList.add('hidden');
+    });
+
+    let soundOn = true;
+    document.getElementById('btn-sound').addEventListener('click', function() {
+      soundOn = !soundOn;
+      this.innerHTML = soundOn
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+    });
+
+    generatePuzzle();
+  </script>
+</body>
+</html>

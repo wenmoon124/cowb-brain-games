@@ -1,0 +1,161 @@
+{
+  "common": {
+    "appName": "BrainVerse",
+    "tagline": "Train Your Brain, Lower Your Brain Age",
+    "buttons": {
+      "start": "Start",
+      "continue": "Continue",
+      "learnMore": "Learn More",
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "logout": "Log Out",
+      "cancel": "Cancel",
+      "save": "Save",
+      "delete": "Delete",
+      "confirm": "Confirm"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "games": "Games",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "achievements": "Achievements",
+    "about": "About",
+    "contact": "Contact",
+    "articles": "Articles"
+  },
+  "landing": {
+    "hero": {
+      "title": "Discover Your Brain's True Age",
+      "subtitle": "Science-based brain training to sharpen memory, focus, and cognition",
+      "cta": "Start Free Assessment"
+    },
+    "features": {
+      "title": "Why BrainVerse?",
+      "brainAge": {
+        "title": "Brain Age Assessment",
+        "description": "Measure your cognitive performance across 5 dimensions"
+      },
+      "games": {
+        "title": "Science-Based Games",
+        "description": "18+ games designed by cognitive science principles"
+      },
+      "growth": {
+        "title": "Track Your Progress",
+        "description": "Monitor improvements with detailed analytics"
+      }
+    }
+  },
+  "games": {
+    "title": "Games",
+    "description": "Train your cognitive abilities",
+    "playNow": "Play Now",
+    "viewResults": "View Results",
+    "dimensions": {
+      "memory": "Memory",
+      "attention": "Attention",
+      "reaction": "Reaction",
+      "executive": "Executive Function",
+      "relaxation": "Relaxation"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {name}",
+    "brainAge": "Your Brain Age",
+    "totalScore": "Total Score",
+    "streak": "Current Streak",
+    "achievements": "Recent Achievements",
+    "recentGames": "Recent Games",
+    "noData": "No data yet. Start your first game!"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign In",
+      "subtitle": "Welcome back to BrainVerse",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "submit": "Sign In",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign Up"
+    },
+    "signUp": {
+      "title": "Create Account",
+      "subtitle": "Start your brain training journey",
+      "nickname": "Nickname",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account?",
+      "signInLink": "Sign In"
+    },
+    "turnstileVerifying": "Verifying you are human...",
+    "errors": {
+      "invalidCredentials": "Invalid email or password",
+      "emailExists": "Email already registered",
+      "turnstileFailed": "Verification failed. Please try again."
+    }
+  },
+  "cookie": {
+    "title": "We Value Your Privacy",
+    "description": "We use cookies to enhance your experience, analyze traffic, and personalize content. Choose your preferences below.",
+    "acceptAll": "Accept All",
+    "rejectOptional": "Reject Optional",
+    "savePreferences": "Save Preferences",
+    "strictlyNecessary": "Strictly Necessary",
+    "strictlyNecessaryDescription": "These cookies are essential for the website to function.",
+    "performanceAnalytics": "Performance & Analytics",
+    "performanceAnalyticsDescription": "These cookies help us understand how visitors interact with the website.",
+    "targetingAds": "Targeting & Advertising",
+    "targetingAdsDescription": "These cookies are used to deliver relevant ads."
+  },
+  "footer": {
+    "copyright": "© {year} BrainVerse. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "contactUs": "Contact Us",
+    "followUs": "Follow Us"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "notFound": "Page not found",
+    "unauthorized": "You are not authorized to view this page.",
+    "validation": {
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordsDoNotMatch": "Passwords do not match"
+    }
+  },
+  "games_runtime": {
+    "level": "Level {n}",
+    "score": "Score: {n}",
+    "lives": "Lives",
+    "correct": "Correct!",
+    "wrong": "Wrong!",
+    "accuracy": "Accuracy: {percent}%",
+    "reactionTime": "Reaction: {ms}ms",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Resume",
+    "finish": "Finish",
+    "next": "Next",
+    "retry": "Try Again",
+    "results": {
+      "title": "Game Results",
+      "finalScore": "Final Score",
+      "accuracy": "Accuracy",
+      "avgReaction": "Average Reaction",
+      "bestStreak": "Best Streak",
+      "newRecord": "New Record!"
+    }
+  }
+}

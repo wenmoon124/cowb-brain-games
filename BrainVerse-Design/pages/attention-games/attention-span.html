@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BrainVerse 2.0 - Attention Span | CowB.cc</title>
+  <meta name="description" content="Train your sustained attention. Spot matching symbols on the conveyor belt.">
+  <meta name="theme-color" content="#06B6D4">
+  <link rel="manifest" href="../../manifest.json">
+  <link rel="stylesheet" href="../../styles/global.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       Attention Span - Game-Specific Styles
+       All colors use CSS custom properties from global.css
+       ============================================ */
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* ===== APP SHELL ===== */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      height: 100dvh;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* ===== FIXED TOP BAR (56px) ===== */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      height: 56px;
+      padding-top: env(safe-area-inset-top, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .top-bar::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--dim-attention), transparent);
+      opacity: 0.4;
+    }
+
+    .top-bar-left,
+    .top-bar-center,
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    .top-bar-left { flex: 1; min-width: 0; }
+    .top-bar-center { flex: 0 0 auto; }
+    .top-bar-right { flex: 1; justify-content: flex-end; min-width: 0; }
+
+    /* Back Button */
+    .btn-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .btn-back:hover { background: var(--card-hover); }
+    .btn-back:active { transform: scale(0.92); }
+    .btn-back svg { width: 20px; height: 20px; }
+
+    .game-name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-primary);
+    }
+
+    /* Level Pill */
+    .level-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      background: var(--dim-attention);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: #FFFFFF;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .level-pill svg { width: 12px; height: 12px; }
+
+    /* Score */
+    .score-display {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+    .score-display svg { width: 14px; height: 14px; color: var(--accent); }
+
+    /* Lives */
+    .lives-display { display: flex; align-items: center; gap: 2px; }
+    .heart { font-size: 14px; line-height: 1; transition: all var(--transition-normal); }
+    .heart.lost { opacity: 0.2; filter: grayscale(1); }
+
+    /* Accuracy Bar */
+    .accuracy-meter { display: flex; align-items: center; gap: 6px; }
+    .accuracy-label { font-size: 10px; font-weight: var(--font-weight-medium); color: var(--text-muted); text-transform: uppercase; }
+    .accuracy-bar { width: 48px; height: 4px; background: var(--bg-secondary); border-radius: var(--radius-full); overflow: hidden; }
+    .accuracy-bar-fill { height: 100%; background: linear-gradient(90deg, var(--dim-attention), var(--dim-attention-light)); border-radius: var(--radius-full); transition: width var(--transition-normal); }
+
+    /* ===== MAIN GAME AREA ===== */
+    .game-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: var(--z-base);
+      overflow: hidden;
+      padding: var(--spacing-lg);
+      padding-top: calc(56px + var(--spacing-lg) + env(safe-area-inset-top, 0px));
+      padding-bottom: calc(72px + var(--spacing-lg) + env(safe-area-inset-bottom, 0px));
+      background-image: radial-gradient(circle, var(--dim-attention-light) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Screen flash overlays */
+    .screen-flash {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .screen-flash.match-flash {
+      box-shadow: inset 0 0 80px 20px var(--dim-attention-light);
+      opacity: 1;
+    }
+    .screen-flash.hit-flash {
+      box-shadow: inset 0 0 60px 10px rgba(80, 200, 168, 0.25);
+      opacity: 1;
+    }
+    .screen-flash.miss-flash {
+      box-shadow: inset 0 0 60px 10px rgba(239, 68, 68, 0.25);
+      opacity: 1;
+    }
+
+    /* Floating ambient particles */
+    .ambient-particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .ambient-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--dim-attention);
+      opacity: 0.12;
+      animation: ambient-float linear infinite;
+    }
+    @keyframes ambient-float {
+      0% { transform: translateY(100%) scale(0); opacity: 0; }
+      10% { opacity: 0.12; }
+      90% { opacity: 0.12; }
+      100% { transform: translateY(-100%) scale(1); opacity: 0; }
+    }
+
+    /* ===== CONVEYOR BELT ===== */
+    .conveyor-container {
+      width: 100%;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-lg);
+    }
+
+    .conveyor-belt {
+      width: 100%;
+      height: 130px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Belt track lines */
+    .conveyor-belt::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 48px,
+        var(--border-light) 48px,
+        var(--border-light) 50px
+      );
+      opacity: 0.5;
+    }
+
+    /* Belt edge glow */
+    .conveyor-belt::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--dim-attention), transparent);
+      opacity: 0.3;
+    }
+
+    /* Active symbol */
+    .active-symbol {
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      animation: symbol-slide-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes symbol-slide-in {
+      0% { transform: translateX(80px) scale(0.6); opacity: 0; }
+      100% { transform: translateX(0) scale(1); opacity: 1; }
+    }
+    @keyframes symbol-slide-out {
+      0% { transform: translateX(0) scale(1); opacity: 1; }
+      100% { transform: translateX(-80px) scale(0.6); opacity: 0; }
+    }
+
+    .active-symbol svg {
+      width: 72px;
+      height: 72px;
+      filter: drop-shadow(0 0 12px var(--dim-attention-light));
+    }
+
+    /* Previous symbol (faded) */
+    .prev-symbol {
+      position: absolute;
+      left: 18%;
+      width: 40px;
+      height: 40px;
+      opacity: 0.15;
+      transform: scale(0.7);
+      z-index: 1;
+    }
+    .prev-symbol svg { width: 40px; height: 40px; }
+
+    /* Match glow on symbol */
+    .active-symbol.match-glow svg {
+      filter: drop-shadow(0 0 24px var(--dim-attention-light)) drop-shadow(0 0 48px var(--dim-attention-light));
+    }
+
+    /* Score popup */
+    .score-popup {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--success);
+      pointer-events: none;
+      animation: bounceUp 0.8s ease-out forwards;
+    }
+    @keyframes bounceUp {
+      0% { opacity: 0; transform: translateX(-50%) translateY(0) scale(0.5); }
+      30% { opacity: 1; transform: translateX(-50%) translateY(-10px) scale(1.1); }
+      60% { transform: translateX(-50%) translateY(-25px) scale(1); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-50px) scale(0.8); }
+    }
+
+    /* ===== INFO ROW ===== */
+    .info-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--spacing-md);
+    }
+
+    .speed-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+    .speed-indicator svg { width: 14px; height: 14px; color: var(--dim-attention); }
+
+    .combo-display {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255, 177, 74, 0.08);
+      border: 1px solid rgba(255, 177, 74, 0.2);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      animation: combo-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .combo-display svg { width: 14px; height: 14px; }
+
+    @keyframes combo-pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Instruction text */
+    .instruction-text {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--text-muted);
+      text-align: center;
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+    }
+    .instruction-text kbd {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--font-family);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--dim-attention);
+    }
+
+    /* Mobile TAP button */
+    .tap-button {
+      display: none;
+      width: 100%;
+      max-width: 320px;
+      height: 72px;
+      border: 2px solid var(--dim-attention);
+      border-radius: var(--radius-xl);
+      background: var(--dim-attention-light);
+      color: var(--dim-attention);
+      font-family: var(--font-family);
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-extrabold);
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: transform var(--transition-fast), background var(--transition-fast);
+      -webkit-tap-highlight-color: transparent;
+      align-items: center;
+      justify-content: center;
+    }
+    .tap-button:active {
+      transform: scale(0.95);
+      background: var(--dim-attention-light);
+      filter: brightness(1.2);
+    }
+
+    @media (max-width: 768px) {
+      .instruction-text.pc-only { display: none; }
+      .tap-button { display: flex; }
+    }
+    @media (min-width: 769px) {
+      .tap-button { display: none; }
+    }
+
+    /* ===== FIXED BOTTOM BAR (72px) ===== */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-sticky);
+      height: 72px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .bottom-bar::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--dim-attention), transparent);
+      opacity: 0.4;
+    }
+
+    .bottom-bar-left,
+    .bottom-bar-center,
+    .bottom-bar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    .bottom-bar-left { flex: 1; justify-content: flex-start; }
+    .bottom-bar-center { flex: 0 0 auto; }
+    .bottom-bar-right { flex: 1; justify-content: flex-end; }
+
+    .btn-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-control:hover { background: var(--card-hover); color: var(--text-primary); }
+    .btn-control:active { transform: scale(0.92); }
+    .btn-control svg { width: 20px; height: 20px; }
+
+    .btn-primary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      min-height: 44px;
+      padding: 0 var(--spacing-xl);
+      border: none;
+      border-radius: var(--radius-lg);
+      background: var(--dim-attention);
+      color: #FFFFFF;
+      font-family: var(--font-family);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      box-shadow: var(--shadow-glow-attention);
+      white-space: nowrap;
+    }
+    .btn-primary-action:hover { transform: translateY(-1px); box-shadow: 0 0 28px var(--dim-attention-light); }
+    .btn-primary-action:active { transform: translateY(0) scale(0.97); }
+    .btn-primary-action svg { width: 18px; height: 18px; }
+
+    .btn-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 44px;
+      padding: 0 var(--spacing-md);
+      border: none;
+      background: var(--accent-light);
+      border-radius: var(--radius-md);
+      color: var(--accent);
+      font-family: var(--font-family);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+    .btn-hint:hover { filter: brightness(1.1); }
+    .btn-hint:active { transform: scale(0.95); }
+    .btn-hint svg { width: 16px; height: 16px; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      .top-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+      .game-name { font-size: var(--font-size-xs); }
+      .level-pill { font-size: 10px; padding: 2px 8px; }
+      .score-display { font-size: var(--font-size-xs); }
+      .accuracy-meter { display: none; }
+      .game-area { padding: var(--spacing-md); padding-top: calc(56px + var(--spacing-md) + env(safe-area-inset-top, 0px)); padding-bottom: calc(72px + var(--spacing-md) + env(safe-area-inset-bottom, 0px)); }
+      .bottom-bar { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+      .btn-primary-action { min-height: 44px; padding: 0 var(--spacing-lg); font-size: var(--font-size-sm); }
+      .btn-hint span { display: none; }
+      .btn-hint { padding: 0; width: 44px; }
+      .conveyor-belt { height: 110px; }
+      .active-symbol { width: 56px; height: 56px; }
+      .active-symbol svg { width: 56px; height: 56px; }
+    }
+
+    @media (max-width: 380px) {
+      .combo-display { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- ===== TOP BAR ===== -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <a href="../game-hub/index.html" class="btn-back" aria-label="Go back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </a>
+        <span class="game-name">Attention Span</span>
+      </div>
+      <div class="top-bar-center">
+        <div class="level-pill">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+          </svg>
+          Level 3
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="score-display">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+          </svg>
+          1,280
+        </div>
+        <div class="lives-display">
+          <span class="heart">&#10084;&#65039;</span>
+          <span class="heart">&#10084;&#65039;</span>
+          <span class="heart">&#10084;&#65039;</span>
+        </div>
+        <div class="accuracy-meter">
+          <span class="accuracy-label">ACC</span>
+          <div class="accuracy-bar">
+            <div class="accuracy-bar-fill" style="width: 85%"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== GAME AREA ===== -->
+    <main class="game-area">
+
+      <!-- Screen flash overlay -->
+      <div class="screen-flash" id="screenFlash"></div>
+
+      <!-- Floating ambient particles -->
+      <div class="ambient-particles" id="ambientParticles"></div>
+
+      <!-- Conveyor Belt Game -->
+      <div class="conveyor-container">
+        <div class="conveyor-belt" id="conveyorBelt">
+          <!-- Previous symbol (faded) -->
+          <div class="prev-symbol" id="prevSymbol">
+            <svg viewBox="0 0 64 64" fill="none" stroke="var(--dim-attention)" stroke-width="2">
+              <polygon points="32,8 56,52 8,52"/>
+            </svg>
+          </div>
+          <!-- Active symbol -->
+          <div class="active-symbol" id="activeSymbol">
+            <svg viewBox="0 0 64 64" fill="none" stroke="var(--dim-attention)" stroke-width="2.5">
+              <polygon points="32,8 56,52 8,52"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Info Row -->
+        <div class="info-row">
+          <div class="speed-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+            Speed: 450ms
+          </div>
+          <div class="combo-display">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            x3
+          </div>
+        </div>
+
+        <!-- PC instruction -->
+        <div class="instruction-text pc-only">
+          Press <kbd>SPACE</kbd> when you see a match!
+        </div>
+
+        <!-- Mobile TAP button -->
+        <button class="tap-button" id="tapButton">TAP!</button>
+      </div>
+
+    </main>
+
+    <!-- ===== BOTTOM BAR ===== -->
+    <footer class="bottom-bar">
+      <div class="bottom-bar-left">
+        <button class="btn-control" aria-label="Pause game">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16" rx="1"/>
+            <rect x="14" y="4" width="4" height="16" rx="1"/>
+          </svg>
+        </button>
+      </div>
+      <div class="bottom-bar-center">
+        <button class="btn-primary-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          Next
+        </button>
+      </div>
+      <div class="bottom-bar-right">
+        <button class="btn-hint" aria-label="Get hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Hint</span>
+        </button>
+        <button class="btn-control" aria-label="Toggle sound">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Generate floating ambient particles
+    (function() {
+      const container = document.getElementById('ambientParticles');
+      for (let i = 0; i < 15; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'ambient-dot';
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.animationDuration = (10 + Math.random() * 15) + 's';
+        dot.style.animationDelay = (Math.random() * 10) + 's';
+        const size = (2 + Math.random() * 3) + 'px';
+        dot.style.width = size;
+        dot.style.height = size;
+        container.appendChild(dot);
+      }
+    })();
+
+    // Shape SVG definitions using CSS variable colors
+    const shapes = [
+      { name: 'circle', svg: '<svg viewBox="0 0 64 64" fill="none" stroke="var(--dim-attention)" stroke-width="2.5"><circle cx="32" cy="32" r="24"/></svg>' },
+      { name: 'triangle', svg: '<svg viewBox="0 0 64 64" fill="none" stroke="var(--dim-attention)" stroke-width="2.5"><polygon points="32,8 56,52 8,52"/></svg>' },
+      { name: 'square', svg: '<svg viewBox="0 0 64 64" fill="none" stroke="var(--dim-attention)" stroke-width="2.5"><rect x="10" y="10" width="44" height="44" rx="4"/></svg>' },
+      { name: 'star', svg: '<svg viewBox="0 0 64 64" fill="none" stroke="var(--dim-attention)" stroke-width="2.5"><polygon points="32,6 39,24 58,24 43,36 49,54 32,44 15,54 21,36 6,24 25,24"/></svg>' },
+      { name: 'diamond', svg: '<svg viewBox="0 0 64 64" fill="none" stroke="var(--dim-attention)" stroke-width="2.5"><polygon points="32,6 56,32 32,58 8,32"/></svg>' }
+    ];
+
+    // Sound toggle
+    const soundBtn = document.querySelector('.btn-control[aria-label="Toggle sound"]');
+    let soundOn = true;
+    soundBtn.addEventListener('click', () => {
+      soundOn = !soundOn;
+      soundBtn.innerHTML = soundOn
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+    });
+  </script>
+</body>
+</html>
