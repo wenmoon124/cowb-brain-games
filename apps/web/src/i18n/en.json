@@ -450,6 +450,8 @@
       "title": "Sign In",
       "subtitle": "Welcome back to CowB.cc",
       "email": "Email",
+      "emailOrUsername": "Email or Username",
+      "emailOrUsernamePlaceholder": "Enter your email or username",
       "password": "Password",
       "forgotPassword": "Forgot password?",
       "submit": "Sign In",

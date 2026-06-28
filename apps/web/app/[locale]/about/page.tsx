@@ -1,10 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { isValidLocale, type Locale } from '@/i18n/config'
 import { getTranslations } from '@/i18n/translations'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Brain, Code2, FlaskConical, Rocket, ArrowRight } from 'lucide-react'
+import { Brain, Code2, FlaskConical, Rocket } from 'lucide-react'
 
 export async function generateMetadata({
   params,
@@ -85,19 +83,19 @@ export default async function AboutPage({
         {/* Pillars */}
         <div className="grid grid-cols-1 gap-lg md:grid-cols-3">
           {pillars.map((pillar) => (
-            <Card key={pillar.title}>
+            <Card key={pillar.title} className="card-lift border-primary-light">
               <CardHeader>
                 <div
-                  className={`mb-md flex h-10 w-10 items-center justify-center rounded-md ${pillar.accent}`}
+                  className={`mb-md flex h-16 w-16 items-center justify-center rounded-full ${pillar.accent}`}
                 >
-                  <pillar.icon className="h-5 w-5" />
+                  <pillar.icon className="h-8 w-8" />
                 </div>
-                <CardTitle className="text-text-primary">
+                <CardTitle className="text-text-primary text-lg">
                   {pillar.title}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-text-secondary">
+                <p className="text-sm text-text-secondary leading-relaxed">
                   {pillar.description}
                 </p>
               </CardContent>
@@ -106,9 +104,9 @@ export default async function AboutPage({
         </div>
 
         {/* Story Card */}
-        <Card className="mt-xl border-primary-light bg-card">
-          <CardContent className="p-xl">
-            <h2 className="text-xl font-semibold text-text-primary mb-md">
+        <Card className="mt-2xl border-2 border-primary-light bg-card card-lift">
+          <CardContent className="p-2xl">
+            <h2 className="text-2xl font-bold text-text-primary mb-lg">
               {t('pages.about.story')}
             </h2>
             <p className="text-md text-text-secondary leading-relaxed">
@@ -116,16 +114,6 @@ export default async function AboutPage({
             </p>
           </CardContent>
         </Card>
-
-        {/* CTA */}
-        <div className="mt-3xl text-center">
-          <Button variant="primary" size="lg" asChild>
-            <Link href={`/${locale}/games`}>
-              {t('games.title')}
-              <ArrowRight className="ml-xs h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
       </div>
     </div>
   )

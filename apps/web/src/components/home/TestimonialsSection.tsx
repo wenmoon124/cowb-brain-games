@@ -105,25 +105,25 @@ export function TestimonialsSection({ locale }: TestimonialsSectionProps) {
         {/* 用户评价 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-lg">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="relative">
-              <CardContent className="pt-xl">
+            <Card key={index} className="relative flex flex-col h-full min-h-[360px]">
+              <CardContent className="flex flex-col flex-1 p-xl pt-xl">
                 {/* 评分星星 */}
                 <div className="flex gap-0.5 mb-md">
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
                     <Star
                       key={i}
-                      className="h-4 w-4 fill-accent text-accent"
+                      className="h-5 w-5 fill-accent text-accent"
                     />
                   ))}
                 </div>
 
                 {/* 评价内容 */}
-                <p className="text-text-secondary mb-lg leading-relaxed">
+                <p className="text-sm text-text-secondary mb-md leading-relaxed line-clamp-6 flex-1">
                   {t(testimonial.content)}
                 </p>
 
                 {/* 用户信息 */}
-                <div className="flex items-center gap-md">
+                <div className="flex items-center gap-md mt-auto">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-lg">
                       {t(testimonial.name).charAt(0)}

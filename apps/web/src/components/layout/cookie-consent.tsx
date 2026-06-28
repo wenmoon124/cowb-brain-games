@@ -138,7 +138,7 @@ export function CookieConsent({ locale }: CookieConsentProps) {
       {prefsOpen && (
         <>
           <div
-            className="fixed inset-0 z-overlay bg-black/30 backdrop-blur-sm"
+            className="fixed inset-0 z-overlay bg-primary/30 backdrop-blur-sm"
             onClick={() => setPrefsOpen(false)}
             aria-hidden="true"
           />

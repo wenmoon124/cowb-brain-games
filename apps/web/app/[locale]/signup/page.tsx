@@ -69,7 +69,14 @@ export default function SignupPage({ params }: SignupPageProps) {
         return
       }
 
-      router.push(`/${locale}/dashboard`)
+      // Set localStorage session flag for client-side auth check
+      try {
+        localStorage.setItem('cowbcc_session', 'true')
+      } catch {
+        // localStorage may be unavailable
+      }
+
+      router.push(`/${locale}/brain-age`)
     } catch {
       setError(t('errors.network'))
     } finally {
@@ -78,25 +85,27 @@ export default function SignupPage({ params }: SignupPageProps) {
   }
 
   return (
-    <div className="bg-gradient-hero px-md py-3xl md:py-5xl">
-      <div className="mx-auto max-w-md">
+    <div className="bg-gradient-hero px-md py-3xl md:py-5xl min-h-[calc(100vh-3.5rem)] flex items-center">
+      <div className="mx-auto max-w-md w-full">
         <div className="mb-2xl text-center">
-          <div className="mx-auto mb-md flex h-14 w-14 items-center justify-center rounded-full bg-secondary-light">
-            <Brain className="h-7 w-7 text-secondary" />
+          <div className="mx-auto mb-lg flex h-16 w-16 items-center justify-center rounded-full bg-secondary-light">
+            <Brain className="h-8 w-8 text-secondary" />
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-xs">
+          <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-sm">
             {t('auth.signUp.title')}
           </h1>
-          <p className="text-sm text-text-secondary">
+          <p className="text-md text-text-secondary">
             {t('auth.signUp.subtitle')}
           </p>
         </div>
 
-        <Card>
-          <CardContent className="p-xl">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-md" noValidate>
+        <Card className="border-2 border-secondary-light card-lift bg-background">
+          <CardContent className="p-2xl">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-lg" noValidate>
               <div className="flex flex-col gap-sm">
-                <Label htmlFor="nickname">{t('auth.signUp.nickname')}</Label>
+                <Label htmlFor="nickname" className="text-sm font-semibold">
+                  {t('auth.signUp.nickname')}
+                </Label>
                 <Input
                   id="nickname"
                   type="text"
@@ -105,11 +114,14 @@ export default function SignupPage({ params }: SignupPageProps) {
                   onChange={(e) => setNickname(e.target.value)}
                   required
                   disabled={isSubmitting}
+                  className="h-12 bg-background-secondary"
                 />
               </div>
 
               <div className="flex flex-col gap-sm">
-                <Label htmlFor="email">{t('auth.signUp.email')}</Label>
+                <Label htmlFor="email" className="text-sm font-semibold">
+                  {t('auth.signUp.email')}
+                </Label>
                 <Input
                   id="email"
                   type="email"
@@ -119,11 +131,14 @@ export default function SignupPage({ params }: SignupPageProps) {
                   placeholder="you@example.com"
                   required
                   disabled={isSubmitting}
+                  className="h-12 bg-background-secondary"
                 />
               </div>
 
               <div className="flex flex-col gap-sm">
-                <Label htmlFor="password">{t('auth.signUp.password')}</Label>
+                <Label htmlFor="password" className="text-sm font-semibold">
+                  {t('auth.signUp.password')}
+                </Label>
                 <Input
                   id="password"
                   type="password"
@@ -132,11 +147,12 @@ export default function SignupPage({ params }: SignupPageProps) {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={isSubmitting}
+                  className="h-12 bg-background-secondary"
                 />
               </div>
 
               <div className="flex flex-col gap-sm">
-                <Label htmlFor="confirmPassword">
+                <Label htmlFor="confirmPassword" className="text-sm font-semibold">
                   {t('auth.signUp.confirmPassword')}
                 </Label>
                 <Input
@@ -147,6 +163,7 @@ export default function SignupPage({ params }: SignupPageProps) {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   disabled={isSubmitting}
+                  className="h-12 bg-background-secondary"
                 />
               </div>
 
@@ -165,20 +182,20 @@ export default function SignupPage({ params }: SignupPageProps) {
                 variant="primary"
                 size="lg"
                 disabled={isSubmitting}
-                className="mt-sm w-full"
+                className="mt-sm w-full h-12"
               >
                 {isSubmitting ? (
-                  <Loader2 className="mr-xs h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-xs h-5 w-5 animate-spin" />
                 ) : (
-                  <UserPlus className="mr-xs h-4 w-4" />
+                  <UserPlus className="mr-xs h-5 w-5" />
                 )}
-                {t('auth.signUp.submit')}
+                <span className="text-md">{t('auth.signUp.submit')}</span>
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        <p className="mt-lg text-center text-sm text-text-secondary">
+        <p className="mt-xl text-center text-md text-text-secondary">
           {t('auth.signUp.hasAccount')}{' '}
           <Link
             href={`/${locale}/signin`}

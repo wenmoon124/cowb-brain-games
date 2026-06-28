@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import Link from 'next/link'
-import { Calendar, Clock, Target, ArrowRight } from 'lucide-react'
+import { Calendar, Clock, Target, ArrowRight, CheckCircle2 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -87,7 +87,7 @@ export function DailyRecommendation({ locale }: DailyRecommendationProps) {
                   const arr = Array.isArray(objectives) ? objectives : []
                   return arr.slice(0, 3).map((objective: string, index: number) => (
                     <li key={index} className="flex items-start gap-sm">
-                      <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                       <span className="text-text-secondary text-sm leading-relaxed">
                         {objective}
                       </span>

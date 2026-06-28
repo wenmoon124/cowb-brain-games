@@ -31,9 +31,9 @@ export function Logo({ locale, size = 'md' }: LogoProps) {
       >
         <defs>
           <linearGradient id="cowb-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#F59E0B" />
-            <stop offset="50%" stopColor="#FBBF24" />
-            <stop offset="100%" stopColor="#FCD34D" />
+            <stop offset="0%" stopColor="#D97706" />
+            <stop offset="50%" stopColor="#F59E0B" />
+            <stop offset="100%" stopColor="#FBBF24" />
           </linearGradient>
         </defs>
         
@@ -71,10 +71,10 @@ export function Logo({ locale, size = 'md' }: LogoProps) {
       </svg>
       
       <div className="flex items-baseline gap-0.5">
-        <span className={`${currentSize.text} bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent font-extrabold tracking-tight`}>
+        <span className={`${currentSize.text} bg-gradient-to-r from-amber-700 via-amber-600 to-amber-500 bg-clip-text text-transparent font-extrabold tracking-tight`}>
           CowB
         </span>
-        <span className={`${currentSize.text} text-text-secondary font-bold`}>
+        <span className={`${currentSize.text} text-amber-700 font-bold`}>
           .cc
         </span>
       </div>

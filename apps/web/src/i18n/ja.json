@@ -450,6 +450,8 @@
       "title": "ログイン",
       "subtitle": "CowB.cc へおかえりなさい",
       "email": "メールアドレス",
+      "emailOrUsername": "メールアドレスまたはユーザー名",
+      "emailOrUsernamePlaceholder": "メールアドレスまたはユーザー名を入力",
       "password": "パスワード",
       "forgotPassword": "パスワードをお忘れですか？",
       "submit": "ログイン",

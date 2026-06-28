@@ -450,6 +450,8 @@
       "title": "登录",
       "subtitle": "欢迎回到 CowB.cc",
       "email": "邮箱",
+      "emailOrUsername": "邮箱或用户名",
+      "emailOrUsernamePlaceholder": "输入邮箱或用户名",
       "password": "密码",
       "forgotPassword": "忘记密码？",
       "submit": "登录",

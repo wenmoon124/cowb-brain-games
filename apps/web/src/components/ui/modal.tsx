@@ -20,7 +20,7 @@ const ModalOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-overlay bg-black/50 backdrop-blur-sm data-[state=open]:animate-fade-in data-[state=closed]:opacity-0',
+      'fixed inset-0 z-overlay bg-primary/50 backdrop-blur-sm data-[state=open]:animate-fade-in data-[state=closed]:opacity-0',
       className
     )}
     {...props}

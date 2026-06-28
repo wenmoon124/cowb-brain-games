@@ -74,7 +74,7 @@ export default async function LocaleLayout({
   return (
     <div lang={LOCALE_HTML_LANG[locale]} data-locale={locale}>
       <Navbar locale={locale} />
-      <main className="min-h-screen pt-14 pb-20 md:pb-0">{children}</main>
+      <main className="min-h-[calc(100vh-3.5rem)] pt-14 pb-20 md:pb-0">{children}</main>
       <Footer locale={locale} />
       <BottomNav locale={locale} />
       <CookieConsent locale={locale} />

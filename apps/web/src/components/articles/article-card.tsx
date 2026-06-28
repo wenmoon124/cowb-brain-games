@@ -24,26 +24,28 @@ export function ArticleCard({ article, locale }: ArticleCardProps) {
       href={`/${locale}/articles/${article.slug}`}
       className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg"
     >
-      <Card className="h-full card-lift border-border">
-        <CardHeader>
-          <div className="mb-sm flex items-center gap-xs">
+      <Card className="h-full card-lift border-2 border-primary-light flex flex-col bg-white/90 backdrop-blur-sm hover:shadow-glow-primary">
+        <CardHeader className="pb-md">
+          {/* 标题 - 第一位 */}
+          <CardTitle className="text-lg font-bold text-text-primary line-clamp-2 mb-md group-hover:text-primary transition-colors">
+            {content.title}
+          </CardTitle>
+          {/* 标签和阅读时间 - 第二行 */}
+          <div className="flex items-center gap-sm flex-wrap">
             <Badge variant={config.variant} className={config.className}>
               {t(`articles.categoryLabels.${article.category}`)}
             </Badge>
-          </div>
-          <CardTitle className="text-text-primary line-clamp-2">
-            {content.title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-text-secondary line-clamp-2 mb-md">
-            {content.excerpt}
-          </p>
-          <div className="flex items-center gap-md text-xs text-text-muted">
-            <span className="flex items-center gap-xs">
+            <span className="flex items-center gap-xs text-xs text-text-muted ml-auto">
               <Clock className="h-3 w-3" />
               {article.readingTime} {t('articles.pageText.readingTime')}
             </span>
+          </div>
+        </CardHeader>
+        <CardContent className="flex flex-col flex-1 pt-0">
+          <p className="text-sm text-text-secondary line-clamp-3 mb-md flex-1 leading-relaxed">
+            {content.excerpt}
+          </p>
+          <div className="flex items-center gap-xs text-xs text-text-muted pt-md border-t border-border-light">
             <span className="flex items-center gap-xs">
               <Calendar className="h-3 w-3" />
               {formatDate(article.date, locale)}

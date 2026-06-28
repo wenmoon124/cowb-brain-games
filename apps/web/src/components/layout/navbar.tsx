@@ -43,7 +43,7 @@ export function Navbar({ locale }: NavbarProps) {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-sticky h-14 border-b border-border bg-card/80 backdrop-blur-glass">
+    <header className="fixed top-0 left-0 right-0 z-sticky h-14 border-b-2 border-primary/20 bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50/98 backdrop-blur-glass shadow-sm">
       <nav className="mx-auto flex h-full max-w-6xl items-center justify-between px-md">
         {/* Logo */}
         <Logo locale={locale} size="md" />

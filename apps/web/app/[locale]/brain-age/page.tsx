@@ -18,6 +18,7 @@ import {
   Clock,
   Target,
   Sparkles,
+  TrendingUp,
 } from 'lucide-react'
 
 type DimensionEntry = {
@@ -64,6 +65,17 @@ const PROCESS_STEPS = [
   { icon: Brain, step: 1, titleKey: 'step1Title', descKey: 'step1Desc' },
   { icon: Target, step: 2, titleKey: 'step2Title', descKey: 'step2Desc' },
   { icon: CheckCircle, step: 3, titleKey: 'step3Title', descKey: 'step3Desc' },
+] as const
+
+const BENEFITS = [
+  { key: 'improvedMemory', icon: Brain },
+  { key: 'betterFocus', icon: Focus },
+  { key: 'fasterReaction', icon: Zap },
+  { key: 'enhancedProblemSolving', icon: Layers },
+  { key: 'reducedStress', icon: Wind },
+  { key: 'betterSleep', icon: Sparkles },
+  { key: 'increasedProductivity', icon: TrendingUp },
+  { key: 'sharperMind', icon: Target },
 ] as const
 
 export async function generateMetadata({
@@ -137,45 +149,49 @@ export default async function BrainAgePage({
       </section>
 
       {/* Five Dimensions Section */}
-      <section className="px-md py-3xl">
+      <section className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 px-md py-3xl">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-2xl text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-md">
+          <div className="mb-3xl text-center">
+            <Badge variant="info" className="mb-md">
+              <Sparkles className="mr-xs h-3 w-3" />
+              {t('brainAge.dimensionsBadge')}
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold gradient-text mb-md">
               {t('brainAge.dimensionsSectionTitle')}
             </h2>
-            <p className="text-sm md:text-md text-text-secondary max-w-2xl mx-auto">
+            <p className="text-md text-text-secondary max-w-2xl mx-auto">
               {t('brainAge.dimensionsSectionSubtitle')}
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-lg">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-xl">
             {DIMENSIONS.map((dim) => {
               const count = getGamesByDimension(dim.key).length
               const Icon = dim.icon
               return (
                 <Card
                   key={dim.key}
-                  className="border-primary-light flex flex-col"
+                  className="border-2 border-primary-light flex flex-col card-lift hover:shadow-glow-primary bg-white/90 backdrop-blur-sm"
                 >
-                  <CardHeader>
-                    <div className="mb-md flex h-10 w-10 items-center justify-center rounded-md bg-primary-light">
-                      <Icon className="h-5 w-5 text-primary" />
+                  <CardHeader className="text-center">
+                    <div className={`mx-auto mb-lg flex h-40 w-40 items-center justify-center rounded-full ${dim.bgClass} shadow-lg`}>
+                      <Icon className={`h-20 w-20 ${dim.textClass}`} />
                     </div>
-                    <Badge variant={dim.key} className="mb-xs w-fit">
+                    <Badge variant={dim.key} className="mb-sm w-fit mx-auto">
                       {t(`games.dimensions.${dim.key}`)}
                     </Badge>
-                    <CardTitle className="text-text-primary">
+                    <CardTitle className="text-text-primary text-xl font-bold">
                       {t(`games.dimensions.${dim.key}`)}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex flex-1 flex-col gap-md">
-                    <p className="text-sm text-text-secondary flex-1">
+                    <p className="text-sm text-text-secondary flex-1 text-center leading-relaxed">
                       {t(`brainAge.dimensionDescriptions.${dim.key}`)}
                     </p>
                     <div
                       className={`flex items-center gap-xs rounded-md ${dim.bgClass} px-md py-sm`}
                     >
-                      <Clock className={`h-3 w-3 ${dim.textClass}`} />
-                      <span className={`text-xs font-medium ${dim.textClass}`}>
+                      <Clock className={`h-4 w-4 ${dim.textClass}`} />
+                      <span className={`text-sm font-semibold ${dim.textClass}`}>
                         {t('brainAge.gamesLabel', { count })}
                       </span>
                     </div>
@@ -187,7 +203,7 @@ export default async function BrainAgePage({
                     >
                       <Link href={`/${locale}/games?dimension=${dim.key}`}>
                         {t('brainAge.exploreLabel')}
-                        <ArrowRight className="ml-xs h-3 w-3" />
+                        <ArrowRight className="ml-xs h-4 w-4" />
                       </Link>
                     </Button>
                   </CardContent>
@@ -199,35 +215,102 @@ export default async function BrainAgePage({
       </section>
 
       {/* Assessment Process Section */}
-      <section className="bg-background-secondary px-md py-3xl">
+      <section className="px-md py-3xl">
         <div className="mx-auto max-w-5xl">
-          <div className="mb-2xl text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-md">
+          <div className="mb-3xl text-center">
+            <Badge variant="info" className="mb-md">
+              <Target className="mr-xs h-3 w-3" />
+              {t('brainAge.processBadge')}
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold gradient-text mb-md">
               {t('brainAge.processTitle')}
             </h2>
-            <p className="text-sm md:text-md text-text-secondary max-w-2xl mx-auto">
+            <p className="text-md text-text-secondary max-w-2xl mx-auto">
               {t('brainAge.processSubtitle')}
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-lg">
-            {PROCESS_STEPS.map((step) => {
+          <div className="relative">
+            {/* Vertical connecting line with gradient */}
+            <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-secondary to-accent md:left-1/2 md:-translate-x-1/2 rounded-full" />
+
+            {PROCESS_STEPS.map((step, index) => {
               const Icon = step.icon
+              const isEven = index % 2 === 0
               return (
-                <Card key={step.step} className="border-primary-light text-center">
-                  <CardHeader>
-                    <div className="mx-auto mb-md flex h-12 w-12 items-center justify-center rounded-full bg-primary-light">
-                      <Icon className="h-6 w-6 text-primary" />
+                <div
+                  key={step.step}
+                  className={`relative mb-2xl last:mb-0 md:flex md:items-center ${
+                    isEven ? 'md:flex-row' : 'md:flex-row-reverse'
+                  }`}
+                >
+                  {/* Step circle with glow */}
+                  <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 z-10">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white font-bold text-2xl shadow-glow-primary animate-warm-glow">
+                      <Icon className="h-10 w-10" />
                     </div>
-                    <div className="mx-auto mb-xs flex h-7 w-7 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
-                      {step.step}
+                  </div>
+
+                  {/* Content card */}
+                  <div
+                    className={`ml-28 md:ml-0 md:w-1/2 ${
+                      isEven ? 'md:pr-3xl' : 'md:pl-3xl'
+                    }`}
+                  >
+                    <Card className="border-2 border-primary-light card-lift bg-white/90 backdrop-blur-sm shadow-lg hover:shadow-glow-primary">
+                      <CardContent className="p-xl">
+                        <div className="flex items-center gap-md mb-md">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-secondary to-accent text-lg font-bold text-text-primary shadow-md">
+                            {step.step}
+                          </div>
+                          <h3 className="text-xl font-bold gradient-text">
+                            {t(`brainAge.${step.titleKey}`)}
+                          </h3>
+                        </div>
+                        <p className="text-md text-text-secondary leading-relaxed">
+                          {t(`brainAge.${step.descKey}`)}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 px-md py-3xl">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-3xl text-center">
+            <Badge variant="info" className="mb-md">
+              <TrendingUp className="mr-xs h-3 w-3" />
+              {t('brainAge.benefitsBadge')}
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold gradient-text mb-md">
+              {t('brainAge.benefitsTitle')}
+            </h2>
+            <p className="text-md text-text-secondary max-w-2xl mx-auto">
+              {t('brainAge.benefitsSubtitle')}
+            </p>
+          </div>
+          <div className="flex gap-xl overflow-x-auto pb-xl snap-x snap-mandatory scrollbar-thin scrollbar-thumb-primary scrollbar-track-background-secondary">
+            {BENEFITS.map((benefit) => {
+              const Icon = benefit.icon
+              return (
+                <Card
+                  key={benefit.key}
+                  className="flex-shrink-0 w-[320px] snap-start card-lift border-2 border-primary-light bg-white/90 backdrop-blur-sm hover:shadow-glow-primary"
+                >
+                  <CardContent className="p-xl">
+                    <div className="mb-lg flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 shadow-md">
+                      <Icon className="h-10 w-10 text-primary" />
                     </div>
-                    <CardTitle className="text-text-primary">
-                      {t(`brainAge.${step.titleKey}`)}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-text-secondary">
-                      {t(`brainAge.${step.descKey}`)}
+                    <h3 className="text-xl font-bold gradient-text mb-md">
+                      {t(`brainAge.benefits.${benefit.key}.title`)}
+                    </h3>
+                    <p className="text-md text-text-secondary leading-relaxed">
+                      {t(`brainAge.benefits.${benefit.key}.description`)}
                     </p>
                   </CardContent>
                 </Card>

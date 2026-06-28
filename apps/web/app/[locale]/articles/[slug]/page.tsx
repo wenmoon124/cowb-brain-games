@@ -231,24 +231,27 @@ export default async function ArticleDetailPage({
                     href={`/${locale}/articles/${relatedArticle.slug}`}
                     className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg group"
                   >
-                    <Card className="h-full border-l-4 border-l-primary border-border bg-gradient-to-r from-card to-card/50 transition-all duration-300 hover:shadow-lg hover:border-l-primary-hover hover:-translate-x-1">
-                      <CardContent className="flex flex-col gap-sm p-lg">
-                        <div className="flex items-center justify-between">
+                    <Card className="h-full border-2 border-primary-light bg-white/90 backdrop-blur-sm transition-all duration-300 hover:shadow-glow-primary hover:-translate-y-1">
+                      <CardContent className="flex flex-col gap-md p-xl">
+                        {/* 标题 - 第一位 */}
+                        <h3 className="text-lg font-bold text-text-primary line-clamp-2 group-hover:text-primary transition-colors">
+                          {relatedContent.title}
+                        </h3>
+                        {/* 标签和阅读时间 - 第二行，确保有边距 */}
+                        <div className="flex items-center gap-sm flex-wrap">
                           <Badge
                             variant={relatedConfig.variant}
                             className={relatedConfig.className}
                           >
                             {t(`articles.categoryLabels.${relatedArticle.category}`)}
                           </Badge>
-                          <span className="flex items-center gap-xs text-xs text-text-muted">
+                          <span className="flex items-center gap-xs text-xs text-text-muted ml-auto">
                             <Clock className="h-3 w-3" />
                             {relatedArticle.readingTime} {t('articles.pageText.readingTime')}
                           </span>
                         </div>
-                        <h3 className="text-lg font-semibold text-text-primary line-clamp-2 group-hover:text-primary transition-colors">
-                          {relatedContent.title}
-                        </h3>
-                        <p className="text-sm text-text-secondary line-clamp-2">
+                        {/* 摘要 */}
+                        <p className="text-sm text-text-secondary line-clamp-2 leading-relaxed">
                           {relatedContent.excerpt}
                         </p>
                       </CardContent>

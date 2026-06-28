@@ -21,7 +21,7 @@ export default function SigninPage({ params }: SigninPageProps) {
   const { t } = useTranslation(locale)
   const router = useRouter()
 
-  const [email, setEmail] = useState('')
+  const [loginId, setLoginId] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -30,17 +30,23 @@ export default function SigninPage({ params }: SigninPageProps) {
     event.preventDefault()
     setError(null)
 
-    if (!email || !password) {
+    if (!loginId || !password) {
       setError(t('errors.validation.required'))
       return
     }
 
     setIsSubmitting(true)
     try {
+      // Determine if loginId is email or username
+      const isEmail = loginId.includes('@')
+      const payload = isEmail
+        ? { email: loginId, password }
+        : { username: loginId, password }
+
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(payload),
       })
 
       if (!response.ok) {
@@ -48,7 +54,14 @@ export default function SigninPage({ params }: SigninPageProps) {
         return
       }
 
-      router.push(`/${locale}/dashboard`)
+      // Set localStorage session flag for client-side auth check
+      try {
+        localStorage.setItem('cowbcc_session', 'true')
+      } catch {
+        // localStorage may be unavailable
+      }
+
+      router.push(`/${locale}/brain-age`)
     } catch {
       setError(t('errors.network'))
     } finally {
@@ -57,39 +70,44 @@ export default function SigninPage({ params }: SigninPageProps) {
   }
 
   return (
-    <div className="bg-gradient-hero px-md py-3xl md:py-5xl">
-      <div className="mx-auto max-w-md">
+    <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 px-md py-3xl md:py-5xl min-h-[calc(100vh-3.5rem)] flex items-center">
+      <div className="mx-auto max-w-md w-full">
         <div className="mb-2xl text-center">
-          <div className="mx-auto mb-md flex h-14 w-14 items-center justify-center rounded-full bg-primary-light">
-            <Brain className="h-7 w-7 text-primary" />
+          <div className="mx-auto mb-lg flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
+            <Brain className="h-8 w-8 text-amber-600" />
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-xs">
+          <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-sm">
             {t('auth.signIn.title')}
           </h1>
-          <p className="text-sm text-text-secondary">
+          <p className="text-md text-text-secondary">
             {t('auth.signIn.subtitle')}
           </p>
         </div>
 
-        <Card>
-          <CardContent className="p-xl">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-md" noValidate>
+        <Card className="border-2 border-amber-200 card-lift bg-white/80 backdrop-blur-sm shadow-xl">
+          <CardContent className="p-2xl">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-lg" noValidate>
               <div className="flex flex-col gap-sm">
-                <Label htmlFor="email">{t('auth.signIn.email')}</Label>
+                <Label htmlFor="loginId" className="text-sm font-semibold text-text-primary">
+                  {t('auth.signIn.emailOrUsername')}
+                </Label>
                 <Input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  id="loginId"
+                  type="text"
+                  autoComplete="username"
+                  value={loginId}
+                  onChange={(e) => setLoginId(e.target.value)}
+                  placeholder={t('auth.signIn.emailOrUsernamePlaceholder')}
                   required
                   disabled={isSubmitting}
+                  className="h-12 bg-white border-amber-300 focus:border-amber-500 focus:ring-amber-500"
                 />
               </div>
 
               <div className="flex flex-col gap-sm">
-                <Label htmlFor="password">{t('auth.signIn.password')}</Label>
+                <Label htmlFor="password" className="text-sm font-semibold text-text-primary">
+                  {t('auth.signIn.password')}
+                </Label>
                 <Input
                   id="password"
                   type="password"
@@ -98,6 +116,7 @@ export default function SigninPage({ params }: SigninPageProps) {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={isSubmitting}
+                  className="h-12 bg-white border-amber-300 focus:border-amber-500 focus:ring-amber-500"
                 />
               </div>
 
@@ -116,20 +135,20 @@ export default function SigninPage({ params }: SigninPageProps) {
                 variant="primary"
                 size="lg"
                 disabled={isSubmitting}
-                className="mt-sm w-full"
+                className="mt-sm w-full h-12"
               >
                 {isSubmitting ? (
-                  <Loader2 className="mr-xs h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-xs h-5 w-5 animate-spin" />
                 ) : (
-                  <LogIn className="mr-xs h-4 w-4" />
+                  <LogIn className="mr-xs h-5 w-5" />
                 )}
-                {t('auth.signIn.submit')}
+                <span className="text-md">{t('auth.signIn.submit')}</span>
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        <p className="mt-lg text-center text-sm text-text-secondary">
+        <p className="mt-xl text-center text-md text-text-secondary">
           {t('auth.signIn.noAccount')}{' '}
           <Link
             href={`/${locale}/signup`}
