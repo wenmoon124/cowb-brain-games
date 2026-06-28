@@ -166,7 +166,7 @@ function parseGenerateStaticParamsSlugs() {
 }
 
 function main() {
-  console.log('BrainVerse Article Verification (10 Dimensions)')
+  console.log('CowB.cc Article Verification (10 Dimensions)')
   console.log('='.repeat(60))
 
   if (!existsSync(ARTICLES_FILE)) {

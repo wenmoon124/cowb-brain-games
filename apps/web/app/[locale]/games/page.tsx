@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { isValidLocale, type Locale } from '@/i18n/config'
 import { getTranslations } from '@/i18n/translations'
 import { GamesExplorer } from '@/components/games/GamesExplorer'
+import { PageHeader } from '@/components/layout/page-header'
 
 export async function generateMetadata({
   params,
@@ -45,15 +46,10 @@ export default async function GamesPage({
   return (
     <div className="bg-gradient-hero px-md py-3xl md:py-5xl">
       <div className="mx-auto max-w-6xl">
-        {/* Header */}
-        <header className="mb-3xl text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-md">
-            {t('games.title')}
-          </h1>
-          <p className="text-md md:text-lg text-text-secondary max-w-2xl mx-auto">
-            {t('games.description')}
-          </p>
-        </header>
+        <PageHeader
+          title={t('games.title')}
+          description={t('games.description')}
+        />
 
         {/* Games Explorer with dimension filter */}
         <GamesExplorer locale={locale} />

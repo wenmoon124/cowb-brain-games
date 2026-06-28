@@ -11,13 +11,12 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://cowb.cc'),
   title: {
-    default: 'BrainVerse',
-    template: '%s | BrainVerse',
+    default: 'CowB.cc',
+    template: '%s | CowB.cc',
   },
   description:
-    'BrainVerse — Science-based brain training to sharpen memory, focus, and cognition. Discover your brain age and train across 5 cognitive dimensions.',
+    'CowB.cc — Science-based brain training to sharpen memory, focus, and cognition. Discover your brain age and train across 5 cognitive dimensions.',
   keywords: [
     'brain training',
     'brain age',
@@ -28,12 +27,12 @@ export const metadata: Metadata = {
     'executive function',
     'relaxation',
     'brain games',
-    'BrainVerse',
+    'CowB.cc',
   ],
-  authors: [{ name: 'BrainVerse' }],
-  creator: 'BrainVerse',
-  publisher: 'BrainVerse',
-  applicationName: 'BrainVerse',
+  authors: [{ name: 'CowB.cc' }],
+  creator: 'CowB.cc',
+  publisher: 'CowB.cc',
+  applicationName: 'CowB.cc',
   robots: {
     index: true,
     follow: true,
@@ -46,7 +45,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    siteName: 'BrainVerse',
+    siteName: 'CowB.cc',
     locale: 'en_US',
     alternateLocale: ['zh_CN', 'ja_JP'],
     images: [
@@ -54,13 +53,13 @@ export const metadata: Metadata = {
         url: '/og-image.svg',
         width: 1200,
         height: 630,
-        alt: 'BrainVerse — Train Your Brain, Lower Your Brain Age',
+        alt: 'CowB.cc — Train Your Brain, Lower Your Brain Age',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BrainVerse',
+    title: 'CowB.cc',
     description:
       'Science-based brain training to sharpen memory, focus, and cognition.',
     images: ['/og-image.svg'],

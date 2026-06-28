@@ -14,6 +14,7 @@ import {
   getArticleBySlug,
   getRelatedArticles,
 } from '@/data/articles'
+import { AdSlot } from '@/components/layout/ad-slot'
 
 function renderContent(content: string) {
   const sections = content.split('\n## ').filter(Boolean)
@@ -138,7 +139,6 @@ export default async function ArticleDetailPage({
   }
 
   const content = article[locale]
-  const config = CATEGORY_BADGE_CONFIG[article.category]
   const related = getRelatedArticles(article.slug, article.category, 3)
   const faqs = extractFaqs(content.content)
 
@@ -155,10 +155,29 @@ export default async function ArticleDetailPage({
 
         {/* Article Header */}
         <header className="mb-2xl">
-          <div className="mb-md flex items-center gap-sm">
-            <Badge variant={config.variant} className={config.className}>
-              {t(`articles.categoryLabels.${article.category}`)}
-            </Badge>
+          <div className="mb-md flex flex-wrap items-center gap-sm">
+            {article.tags.map((tag) => {
+              const tagConfig = CATEGORY_BADGE_CONFIG[tag]
+              const isPrimary = tag === article.category
+              return (
+                <Link
+                  key={tag}
+                  href={`/${locale}/articles?tags=${tag}`}
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
+                >
+                  <Badge
+                    variant={tagConfig.variant}
+                    className={`${tagConfig.className} cursor-pointer transition-all ${
+                      isPrimary
+                        ? 'ring-2 ring-primary ring-offset-2'
+                        : 'opacity-80 hover:opacity-100'
+                    }`}
+                  >
+                    {t(`articles.categoryLabels.${tag}`)}
+                  </Badge>
+                </Link>
+              )
+            })}
           </div>
           <h1 className="text-2xl md:text-4xl font-bold text-text-primary mb-md leading-tight">
             {content.title}
@@ -184,6 +203,9 @@ export default async function ArticleDetailPage({
           {renderContent(content.content)}
         </article>
 
+        {/* Ad Slot after Article */}
+        <AdSlot size="rectangle" className="my-3xl" />
+
         {/* CTA */}
         <div className="mt-3xl text-center">
           <Button variant="primary" size="lg" asChild>
@@ -199,7 +221,7 @@ export default async function ArticleDetailPage({
             <h2 className="text-xl font-semibold text-text-primary mb-lg">
               {t('articles.pageText.relatedArticles')}
             </h2>
-            <div className="grid grid-cols-1 gap-md sm:grid-cols-2 lg:grid-cols-3">
+            <div className="flex flex-col gap-md">
               {related.map((relatedArticle) => {
                 const relatedContent = relatedArticle[locale]
                 const relatedConfig = CATEGORY_BADGE_CONFIG[relatedArticle.category]
@@ -207,26 +229,28 @@ export default async function ArticleDetailPage({
                   <Link
                     key={relatedArticle.slug}
                     href={`/${locale}/articles/${relatedArticle.slug}`}
-                    className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg"
+                    className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg group"
                   >
-                    <Card className="h-full border-primary-light transition-transform hover:-translate-y-1">
+                    <Card className="h-full border-l-4 border-l-primary border-border bg-gradient-to-r from-card to-card/50 transition-all duration-300 hover:shadow-lg hover:border-l-primary-hover hover:-translate-x-1">
                       <CardContent className="flex flex-col gap-sm p-lg">
-                        <Badge
-                          variant={relatedConfig.variant}
-                          className={relatedConfig.className}
-                        >
-                          {t(`articles.categoryLabels.${relatedArticle.category}`)}
-                        </Badge>
-                        <h3 className="text-md font-semibold text-text-primary line-clamp-2">
+                        <div className="flex items-center justify-between">
+                          <Badge
+                            variant={relatedConfig.variant}
+                            className={relatedConfig.className}
+                          >
+                            {t(`articles.categoryLabels.${relatedArticle.category}`)}
+                          </Badge>
+                          <span className="flex items-center gap-xs text-xs text-text-muted">
+                            <Clock className="h-3 w-3" />
+                            {relatedArticle.readingTime} {t('articles.pageText.readingTime')}
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-text-primary line-clamp-2 group-hover:text-primary transition-colors">
                           {relatedContent.title}
                         </h3>
-                        <p className="text-xs text-text-secondary line-clamp-2">
+                        <p className="text-sm text-text-secondary line-clamp-2">
                           {relatedContent.excerpt}
                         </p>
-                        <span className="mt-xs flex items-center gap-xs text-xs text-text-secondary">
-                          <Clock className="h-3 w-3" />
-                          {relatedArticle.readingTime} {t('articles.pageText.readingTime')}
-                        </span>
                       </CardContent>
                     </Card>
                   </Link>

@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "BrainVerse",
+    "appName": "CowB.cc",
     "tagline": "Train Your Brain, Lower Your Brain Age",
     "languageSwitcher": "Switch language",
     "loading": "Loading...",
@@ -28,7 +28,8 @@
     "achievements": "Achievements",
     "about": "About",
     "contact": "Contact",
-    "articles": "Articles"
+    "articles": "Articles",
+    "settings": "Settings"
   },
   "landing": {
     "hero": {
@@ -37,7 +38,7 @@
       "cta": "Start Free Assessment"
     },
     "features": {
-      "title": "Why BrainVerse?",
+      "title": "Why CowB.cc?",
       "brainAge": {
         "title": "Brain Age Assessment",
         "description": "Measure your cognitive performance across 5 dimensions"
@@ -77,101 +78,206 @@
     },
     "visualSearch": {
       "title": "Visual Search",
-      "description": "Find targets among distractors"
+      "description": "Hunt for hidden targets in a sea of distractors! This classic attention task challenges you to spot specific shapes or colors among visual clutter. As you progress, the task gets harder with more distractions and tighter time limits. Used in psychology labs worldwide to measure selective attention and visual processing speed.",
+      "objectives": [
+        "Sharpen selective attention",
+        "Boost visual processing speed",
+        "Improve target detection accuracy"
+      ]
     },
     "digitSpan": {
       "title": "Digit Span",
-      "description": "Remember and recall number sequences"
+      "description": "Challenge your digital memory limits! A sequence of numbers flashes on screen — memorize and repeat it back perfectly. As you advance, sequences grow longer, pushing your working memory to its edge. This classic cognitive task is used in psychology labs worldwide to measure and train short-term memory capacity.",
+      "objectives": [
+        "Expand working memory capacity",
+        "Improve number recall accuracy",
+        "Strengthen short-term memory endurance"
+      ]
     },
     "reactionTraining": {
       "title": "Reaction Training",
-      "description": "Test your reflexes"
+      "description": "Test your reflexes and reaction speed! Respond to visual cues as fast as possible — tap, click, or press the moment you see the target. Track your improvement over time as you shave milliseconds off your response. Used by athletes and gamers to train split-second decision making.",
+      "objectives": [
+        "Reduce reaction time",
+        "Enhance motor response speed",
+        "Improve stimulus-response coordination"
+      ]
     },
     "stroopChallenge": {
       "title": "Stroop Challenge",
-      "description": "Resolve color-word conflicts"
+      "description": "Face the famous Stroop effect! You'll see color words printed in conflicting colors — your task is to name the ink color, not read the word. This cognitive conflict training strengthens your brain's ability to inhibit automatic responses and focus on relevant information. A cornerstone of executive function training.",
+      "objectives": [
+        "Strengthen inhibitory control",
+        "Improve cognitive flexibility",
+        "Enhance selective attention"
+      ]
     },
     "spatialMemory": {
       "title": "Spatial Memory",
-      "description": "Remember spatial patterns"
+      "description": "Remember and recreate spatial patterns! A grid of tiles will flash briefly — memorize their positions and tap them back in the exact same locations. As levels progress, patterns become more complex and grids expand. This task trains your brain's spatial working memory, crucial for navigation and visual-spatial reasoning.",
+      "objectives": [
+        "Enhance spatial working memory",
+        "Improve visual pattern recognition",
+        "Strengthen location recall ability"
+      ]
     },
     "breathingFlow": {
       "title": "Breathing Flow",
-      "description": "Guided breathing relaxation"
+      "description": "Calm your mind with guided breathing exercises! Follow the animated breathing guide — inhale, hold, exhale — synchronized with soothing visuals. This relaxation technique activates your parasympathetic nervous system, reducing stress and anxiety. Perfect for mindfulness practice and mental recovery between training sessions.",
+      "objectives": [
+        "Reduce stress and anxiety",
+        "Activate relaxation response",
+        "Improve breath awareness"
+      ]
     },
     "memoryMatrix": {
       "title": "Memory Matrix",
-      "description": "Memorize flashing tiles, then tap them back"
+      "description": "Test your visual memory with flashing patterns! A matrix of squares will light up in a sequence — watch carefully and repeat the pattern by tapping the squares in the same order. The challenge increases with longer sequences and larger grids. This task strengthens your visual-spatial sketchpad, a key component of working memory.",
+      "objectives": [
+        "Enhance visual memory capacity",
+        "Improve sequential pattern recall",
+        "Strengthen visual-spatial processing"
+      ]
     },
     "backwardDigitSpan": {
       "title": "Backward Digit Span",
-      "description": "Recall digits in reverse order"
+      "description": "Reverse the challenge! You'll hear a sequence of numbers — but this time, repeat them backwards. If you see 3-7-2, you respond 2-7-3. This advanced working memory task forces you to manipulate information mentally, not just store it. Used in cognitive psychology to measure central executive function and mental manipulation ability.",
+      "objectives": [
+        "Strengthen mental manipulation skills",
+        "Enhance working memory flexibility",
+        "Improve reverse recall ability"
+      ]
     },
     "spatialSequence": {
       "title": "Spatial Sequence",
-      "description": "Repeat the sequence of lit tiles in order"
+      "description": "Follow the sequence! Tiles will light up one by one in a specific order — your task is to repeat the exact sequence by tapping them in the same order. As you advance, sequences get longer and the grid expands. This task trains your sequential processing and spatial working memory, essential for tasks requiring step-by-step reasoning.",
+      "objectives": [
+        "Enhance sequential processing",
+        "Improve spatial order memory",
+        "Strengthen step-by-step reasoning"
+      ]
     },
     "patternMatch": {
       "title": "Pattern Match",
-      "description": "Spot what changed in the pattern"
+      "description": "Spot the difference! You'll see a pattern briefly, then it changes — can you identify what shifted? This task challenges your visual discrimination and attention to detail. As levels progress, changes become subtler and time limits tighter. Used in cognitive training to improve visual working memory and pattern recognition.",
+      "objectives": [
+        "Sharpen visual discrimination",
+        "Improve attention to detail",
+        "Enhance change detection ability"
+      ]
     },
     "attentionSpan": {
       "title": "Attention Span",
-      "description": "Tap only when you see the target"
+      "description": "Sustain your focus! Watch for target stimuli appearing at random intervals — tap only when you see the target, ignore everything else. This sustained attention task measures your ability to maintain vigilance over time. As the task continues, maintaining focus becomes harder, training your brain's endurance for prolonged concentration.",
+      "objectives": [
+        "Extend attention span",
+        "Improve sustained vigilance",
+        "Reduce attentional lapses"
+      ]
     },
     "eagleEye": {
       "title": "Eagle Eye",
-      "description": "Track moving targets among distractors"
+      "description": "Track the target like a hawk! A moving object will weave through distractors — keep your eyes on it and report its final position. This multiple object tracking task challenges your ability to maintain attention on moving targets while ignoring distractions. Used to train visual attention and tracking ability in athletes and professionals.",
+      "objectives": [
+        "Enhance visual tracking ability",
+        "Improve divided attention",
+        "Strengthen target maintenance"
+      ]
     },
     "distractionFilter": {
       "title": "Distraction Filter",
-      "description": "Ignore distractions, focus on the center"
+      "description": "Block out the noise! A central target requires your attention, but distracting stimuli surround it — focus on the center and ignore the periphery. This task trains your ability to filter out irrelevant information and maintain focus on what matters. Essential for improving concentration in noisy environments.",
+      "objectives": [
+        "Strengthen distraction filtering",
+        "Improve focused attention",
+        "Enhance noise resistance"
+      ]
     },
     "splitFocus": {
       "title": "Split Focus",
-      "description": "Monitor two zones simultaneously"
+      "description": "Divide and conquer! Monitor two separate zones simultaneously — respond to targets appearing in either location. This divided attention task challenges your brain's ability to process multiple information streams at once. As difficulty increases, the demands on your attentional resources grow, training true multitasking ability.",
+      "objectives": [
+        "Enhance divided attention",
+        "Improve multitasking ability",
+        "Strengthen parallel processing"
+      ]
     },
     "clickHorizon": {
       "title": "Click Horizon",
-      "description": "Tap drifting targets before they vanish"
+      "description": "Quick reflexes required! Targets drift across the screen — tap them before they vanish off the edge. This task combines reaction speed with spatial tracking, challenging you to respond rapidly to moving stimuli. As levels progress, targets move faster and appear more frequently, pushing your reflexes to the limit.",
+      "objectives": [
+        "Improve rapid response ability",
+        "Enhance spatial tracking speed",
+        "Strengthen reflex coordination"
+      ]
     },
     "towerOfLogic": {
       "title": "Tower of Logic",
-      "description": "Solve the disk tower puzzle in minimum moves"
+      "description": "Solve the classic Tower of Hanoi puzzle! Move the stack of disks from one peg to another, following the rules: only one disk at a time, and never place a larger disk on a smaller one. Plan your moves carefully to solve it in the minimum number of steps. This classic problem-solving task trains planning, foresight, and logical reasoning.",
+      "objectives": [
+        "Enhance planning ability",
+        "Improve logical reasoning",
+        "Strengthen problem-solving skills"
+      ]
     },
     "changeFlex": {
       "title": "Change Flex",
-      "description": "Switch between tasks rapidly"
+      "description": "Adapt and switch! You'll alternate between different tasks or rules — respond according to the current rule, then quickly adapt when it changes. This cognitive flexibility task challenges your brain's ability to switch between mental sets. Essential for improving adaptability and reducing cognitive rigidity.",
+      "objectives": [
+        "Enhance cognitive flexibility",
+        "Improve task-switching ability",
+        "Strengthen mental adaptability"
+      ]
     },
     "pathFinder": {
       "title": "Path Finder",
-      "description": "Navigate mazes of increasing complexity"
+      "description": "Navigate the maze! Find the correct path through increasingly complex mazes — plan your route, avoid dead ends, and reach the goal. This spatial reasoning task challenges your ability to mentally map environments and plan routes. As mazes grow more complex, your navigation skills will be pushed to their limits.",
+      "objectives": [
+        "Enhance spatial navigation",
+        "Improve route planning ability",
+        "Strengthen mental mapping skills"
+      ]
     },
     "matrixReasoning": {
       "title": "Matrix Reasoning",
-      "description": "Complete the visual logic pattern"
+      "description": "Complete the pattern! You'll see a matrix with a missing piece — identify the underlying rule and select the correct completion. This non-verbal reasoning task measures your ability to identify patterns, deduce rules, and apply logic. Used in intelligence testing to measure fluid intelligence and abstract reasoning ability.",
+      "objectives": [
+        "Enhance abstract reasoning",
+        "Improve pattern recognition",
+        "Strengthen deductive logic"
+      ]
     },
     "audioAlphaDiver": {
       "title": "Audio Alpha Diver",
-      "description": "Immersive sound-based relaxation dive"
+      "description": "Dive into relaxation with immersive soundscapes! Listen to carefully designed audio that promotes alpha brain wave activity — the frequency associated with relaxed alertness. Close your eyes, breathe deeply, and let the sounds wash over you. Perfect for stress relief, meditation practice, or mental recovery after intense training.",
+      "objectives": [
+        "Promote alpha brain waves",
+        "Reduce mental fatigue",
+        "Enhance relaxation response"
+      ]
     },
     "stressSandbox": {
       "title": "Stress Sandbox",
-      "description": "Tactile play to release tension"
+      "description": "Release tension through tactile interaction! Engage with satisfying visual and tactile feedback — pop bubbles, squish shapes, or manipulate objects in a stress-free environment. This sandbox-style relaxation activity provides immediate sensory feedback that helps release physical tension and calm the mind. No goals, no pressure — just pure relaxation.",
+      "objectives": [
+        "Release physical tension",
+        "Provide sensory relaxation",
+        "Reduce stress through play"
+      ]
     },
     "backToGames": "Back to Games"
   },
   "pages": {
     "about": {
-      "title": "About BrainVerse",
+      "title": "About CowB.cc",
       "mission": "Our Mission",
-      "missionDescription": "BrainVerse is dedicated to making science-based brain training accessible to everyone. We believe that cognitive health is a lifelong journey, and our mission is to help you understand and improve your brain's true potential.",
+      "missionDescription": "CowB.cc is dedicated to making science-based brain training accessible to everyone. We believe that cognitive health is a lifelong journey, and our mission is to help you understand and improve your brain's true potential.",
       "technology": "Technology",
       "technologyDescription": "Built on modern web technology with a serverless architecture on Cloudflare's global edge network. We use evidence-based cognitive paradigms to deliver effective training.",
       "science": "Science Foundation",
       "scienceDescription": "Our games are inspired by well-established cognitive paradigms including the Stroop test, digit span memory tasks, visual search experiments, and spatial memory research.",
       "story": "Our Story",
-      "storyDescription": "BrainVerse was created to bring lab-grade cognitive assessment to the browser. We combine rigorous science with delightful design to make brain training a daily habit."
+      "storyDescription": "CowB.cc was created to bring lab-grade cognitive assessment to the browser. We combine rigorous science with delightful design to make brain training a daily habit."
     },
     "contact": {
       "title": "Contact Us",
@@ -211,7 +317,7 @@
     "privacy": {
       "title": "Privacy Policy",
       "lastUpdated": "Last updated: June 2026",
-      "intro": "This Privacy Policy describes how BrainVerse (\u201cwe\u201d, \u201cus\u201d, or \u201cour\u201d) collects, uses, and protects your information when you use our website and services.",
+      "intro": "This Privacy Policy describes how CowB.cc (\u201cwe\u201d, \u201cus\u201d, or \u201cour\u201d) collects, uses, and protects your information when you use our website and services.",
       "dataWeCollect": "Information We Collect",
       "dataWeCollectDescription": "We collect the information you provide when creating an account, such as your email address and nickname, as well as gameplay data used to compute your brain age and progress.",
       "howWeUse": "How We Use Your Information",
@@ -228,19 +334,19 @@
     "terms": {
       "title": "Terms of Service",
       "lastUpdated": "Last updated: June 2026",
-      "intro": "These Terms of Service govern your use of the BrainVerse website and services. By using our services, you agree to these terms.",
+      "intro": "These Terms of Service govern your use of the CowB.cc website and services. By using our services, you agree to these terms.",
       "acceptance": "Acceptance of Terms",
-      "acceptanceDescription": "By accessing or using BrainVerse, you agree to be bound by these Terms. If you do not agree, please do not use our services.",
+      "acceptanceDescription": "By accessing or using CowB.cc, you agree to be bound by these Terms. If you do not agree, please do not use our services.",
       "useOfService": "Use of Service",
-      "useOfServiceDescription": "You agree to use BrainVerse only for lawful purposes and in a manner that does not infringe the rights of others or restrict their use of the service.",
+      "useOfServiceDescription": "You agree to use CowB.cc only for lawful purposes and in a manner that does not infringe the rights of others or restrict their use of the service.",
       "accounts": "Accounts",
       "accountsDescription": "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.",
       "intellectualProperty": "Intellectual Property",
-      "intellectualPropertyDescription": "All content on BrainVerse, including text, graphics, logos, and software, is the property of BrainVerse or its licensors and is protected by intellectual property laws.",
+      "intellectualPropertyDescription": "All content on CowB.cc, including text, graphics, logos, and software, is the property of CowB.cc or its licensors and is protected by intellectual property laws.",
       "disclaimer": "Disclaimer",
-      "disclaimerDescription": "BrainVerse provides brain training games for entertainment and educational purposes only. Our services are not a substitute for professional medical advice, diagnosis, or treatment.",
+      "disclaimerDescription": "CowB.cc provides brain training games for entertainment and educational purposes only. Our services are not a substitute for professional medical advice, diagnosis, or treatment.",
       "liability": "Limitation of Liability",
-      "liabilityDescription": "BrainVerse shall not be liable for any indirect, incidental, or consequential damages arising from your use of the service.",
+      "liabilityDescription": "CowB.cc shall not be liable for any indirect, incidental, or consequential damages arising from your use of the service.",
       "changes": "Changes to Terms",
       "changesDescription": "We may update these Terms from time to time. We will notify you of significant changes by posting the new Terms on this page."
     },
@@ -342,7 +448,7 @@
   "auth": {
     "signIn": {
       "title": "Sign In",
-      "subtitle": "Welcome back to BrainVerse",
+      "subtitle": "Welcome back to CowB.cc",
       "email": "Email",
       "password": "Password",
       "forgotPassword": "Forgot password?",
@@ -383,7 +489,7 @@
     "targetingAdsDescription": "These cookies are used to deliver relevant ads."
   },
   "footer": {
-    "copyright": "© {year} BrainVerse. All rights reserved.",
+    "copyright": "© {year} CowB.cc. All rights reserved.",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
     "contactUs": "Contact Us",
@@ -479,6 +585,113 @@
         "title": "Memory Novice",
         "description": "Score 60+ in any memory game."
       }
+    }
+  },
+  "home": {
+    "dailyRecommendation": {
+      "title": "Today's Recommended Game",
+      "duration": "{minutes} minutes",
+      "startTraining": "Start Training",
+      "trainingGoals": "Training Goals"
+    },
+    "featuredArticles": {
+      "title": "Featured Articles",
+      "viewAll": "View All Articles"
+    },
+    "testimonials": {
+      "title": "What Our Users Say",
+      "subtitle": "Join thousands of users who have improved their cognitive abilities",
+      "stats": {
+        "users": "10,000+",
+        "activeUsers": "Active Users",
+        "improvement": "23%",
+        "averageImprovement": "Average Improvement",
+        "games": "500,000+",
+        "gamesPlayed": "Games Played"
+      },
+      "testimonial1": {
+        "name": "Sarah Johnson",
+        "role": "Software Engineer",
+        "content": "After 3 months of daily training, I noticed significant improvements in my focus and memory at work. The games are engaging and scientifically designed."
+      },
+      "testimonial2": {
+        "name": "Michael Chen",
+        "role": "Student",
+        "content": "CowB.cc helped me improve my study efficiency. My memory and concentration have gotten much better, and my grades have improved as a result."
+      },
+      "testimonial3": {
+        "name": "Emily Rodriguez",
+        "role": "Teacher",
+        "content": "I recommend CowB.cc to my students. It's a fun and effective way to train the brain. The progress tracking feature is particularly helpful."
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account settings and preferences",
+    "tabs": {
+      "profile": "Profile",
+      "data": "Privacy & Data",
+      "about": "About"
+    },
+    "profile": {
+      "avatar": "Avatar",
+      "uploadAvatar": "Upload New Avatar",
+      "avatarHint": "JPG, PNG or GIF. Max 2MB.",
+      "basicInfo": "Basic Information",
+      "username": "Username",
+      "usernamePlaceholder": "Enter username",
+      "email": "Email",
+      "emailPlaceholder": "Enter email",
+      "saveChanges": "Save Changes",
+      "changePassword": "Change Password",
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter current password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "updatePassword": "Update Password"
+    },
+    "data": {
+      "exportTitle": "Export Your Data",
+      "exportDescription": "Download a copy of all your data in JSON format",
+      "exportButton": "Export Data",
+      "exportConfirmTitle": "Export Your Data",
+      "exportConfirmDescription": "This will download a JSON file containing all your profile information, game records, and achievements. This process may take a few moments.",
+      "clearGamesTitle": "Clear Game Records",
+      "clearGamesDescription": "Remove all your game play history and scores. This action cannot be undone.",
+      "clearGamesButton": "Clear Game Records",
+      "clearGamesConfirmTitle": "Clear Game Records",
+      "clearGamesConfirmDescription": "Are you sure you want to clear all your game records? This will remove all your play history, scores, and statistics. This action cannot be undone.",
+      "clearGamesConfirmButton": "Clear Records",
+      "clearAllTitle": "Clear All Data",
+      "clearAllDescription": "Remove all your data including profile, game records, and achievements. This action cannot be undone.",
+      "clearAllButton": "Clear All Data",
+      "clearAllConfirmTitle": "Clear All Data",
+      "clearAllConfirmDescription": "This will permanently delete all your data including:",
+      "clearAllConfirmItems": "Profile information,Game records and scores,Achievements and badges,All other account data",
+      "clearAllConfirmWarning": "This action cannot be undone.",
+      "clearAllConfirmButton": "Clear All Data",
+      "deleteAccountTitle": "Delete Account",
+      "deleteAccountDescription": "Permanently delete your account and all associated data. This action cannot be undone.",
+      "deleteAccountButton": "Delete Account",
+      "deleteAccountConfirmTitle": "Delete Account",
+      "deleteAccountConfirmDescription": "Are you absolutely sure you want to delete your account? This will:",
+      "deleteAccountConfirmItems": "Permanently delete your account,Remove all your data,Cancel any active subscriptions,Remove access to all services",
+      "deleteAccountConfirmWarning": "This action is permanent and cannot be undone.",
+      "deleteAccountConfirmButton": "Delete Account Permanently"
+    },
+    "about": {
+      "title": "About CowB.cc",
+      "version": "Version",
+      "build": "Build",
+      "description": "CowB.cc is a science-based brain training platform designed to help you improve cognitive abilities through engaging games and exercises.",
+      "legalTitle": "Legal & Privacy",
+      "privacyPolicy": "Privacy Policy",
+      "privacyPolicyDescription": "Learn how we protect and handle your data",
+      "termsOfService": "Terms of Service",
+      "termsOfServiceDescription": "Review our terms and conditions",
+      "contactTitle": "Contact Us",
+      "contactDescription": "Have questions or need support? We're here to help."
     }
   },
   "achievements": {

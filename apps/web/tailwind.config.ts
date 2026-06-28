@@ -14,58 +14,76 @@ const config: Config = {
     },
     extend: {
       colors: {
-        // 暖色调改造: primary 蓝色 → 活力橙红
+        // 金黄琥珀系
         primary: {
-          DEFAULT: '#FF6B35',
-          hover: '#E55A2B',
-          light: '#FF6B3520',
-          bg: '#FF6B3508',
+          DEFAULT: '#F59E0B',
+          hover: '#D97706',
+          light: '#F59E0B20',
+          bg: '#F59E0B08',
         },
-        // secondary 绿色 → 温暖橙金
+        // 日落金
         secondary: {
-          DEFAULT: '#FFB14A',
-          hover: '#FFA030',
-          light: '#FFB14A20',
+          DEFAULT: '#FBBF24',
+          hover: '#F59E0B',
+          light: '#FBBF2420',
         },
-        // accent 橙色 → 明亮金
+        // 暖沙金
         accent: {
-          DEFAULT: '#FFD700',
-          hover: '#FFC700',
-          light: '#FFD70020',
+          DEFAULT: '#FCD34D',
+          hover: '#FBBF24',
+          light: '#FCD34D20',
         },
-        // 背景保持不变 (用户硬约束: keep existing background color)
+        // 暖象牙白/奶油白背景
         background: {
-          DEFAULT: '#F7F9FC',
-          secondary: '#EEF1F6',
+          DEFAULT: '#FFFBEB',
+          secondary: '#FEF3C7',
         },
-        card: '#FFFFFF',
+        card: '#FFFBEB',
+        // 深琥珀/焦糖棕文字
         text: {
-          primary: '#1A1108',
-          secondary: '#4A3528',
-          muted: '#7A6458',
+          primary: '#78350F',
+          secondary: '#92400E',
+          muted: '#B45309',
         },
+        // 暖金色调边框
         border: {
-          DEFAULT: '#E2E8F0',
-          light: '#F1F5F9',
+          DEFAULT: '#FDE68A',
+          light: '#FEF3C7',
         },
-        // 语义色: success 绿色 → 暖橙
-        success: '#FFB14A',
-        warning: '#FFD700',
+        // 暖色扩展色
+        peach: {
+          DEFAULT: '#FBBF24',
+          light: '#FBBF2420',
+        },
+        coral: {
+          DEFAULT: '#F59E0B',
+          light: '#F59E0B20',
+        },
+        caramel: '#92400E',
+        // 语义色金黄琥珀系
+        success: '#F59E0B',
+        warning: '#FBBF24',
         error: '#EF4444',
-        info: '#FF6B35',
-        // 维度色全部暖色化 (移除所有蓝/绿/紫/青)
+        info: '#F59E0B',
+        // 维度色更暖的色调
         dim: {
-          memory: '#EC4899',       // 热情粉 (背景/边框用)
-          attention: '#F97316',    // 暖橙 (背景/边框用)
-          reaction: '#FBBF24',     // 暖黄 (背景/边框用)
-          executive: '#F472B6',    // 玫粉 (背景/边框用)
-          relaxation: '#FB7185',   // 珊瑚红 (背景/边框用)
+          memory: '#E91E63',       // 热情玫红
+          attention: '#FF5722',    // 暖橙红
+          reaction: '#FF9800',     // 暖橙
+          executive: '#E91E63',    // 玫红
+          relaxation: '#F44336',   // 珊瑚红
           // 文字专用色：加深至 WCAG AA ≥ 4.5:1
-          memoryText: '#9D174D',
-          attentionText: '#9A3412',
-          reactionText: '#92400E',
-          executiveText: '#831843',
-          relaxationText: '#9F1239',
+          memoryText: '#880E4F',
+          attentionText: '#BF360C',
+          reactionText: '#E65100',
+          executiveText: '#880E4F',
+          relaxationText: '#C62828',
+          // 更深色文字：用于 Badge 文字确保高对比度
+          memoryDark: '#880E4F',
+          attentionDark: '#BF360C',
+          reactionDark: '#E65100',
+          executiveDark: '#880E4F',
+          relaxationDark: '#C62828',
         },
       },
       borderRadius: {
@@ -100,21 +118,23 @@ const config: Config = {
         md: '0 4px 12px rgba(0,0,0,0.08)',
         lg: '0 8px 24px rgba(0,0,0,0.12)',
         xl: '0 16px 48px rgba(0,0,0,0.16)',
-        'glow-primary': '0 0 20px #FF6B3540',
-        'glow-secondary': '0 0 20px #FFB14A40',
-        'glow-accent': '0 0 20px #FFD70040',
-        'glow-memory': '0 0 20px #EC489940',
-        'glow-attention': '0 0 20px #F9731640',
+        'glow-primary': '0 0 20px #F59E0B40',
+        'glow-secondary': '0 0 20px #FBBF2440',
+        'glow-accent': '0 0 20px #FCD34D40',
+        'glow-memory': '0 0 20px #E91E6340',
+        'glow-attention': '0 0 20px #FF572240',
         'glow-reaction': '0 0 20px #FBBF2440',
-        'glow-executive': '0 0 20px #F472B640',
-        'glow-relaxation': '0 0 20px #FB718540',
+        'glow-executive': '0 0 20px #E91E6340',
+        'glow-relaxation': '0 0 20px #F4433640',
       },
       backgroundImage: {
-        // 渐变全部暖色化
-        'gradient-primary': 'linear-gradient(135deg, #FF6B35, #EC4899)',
-        'gradient-secondary': 'linear-gradient(135deg, #FFB14A, #F472B6)',
-        'gradient-accent': 'linear-gradient(135deg, #FFD700, #FF8C00)',
-        'gradient-hero': 'linear-gradient(180deg, #F7F9FC 0%, #EEF1F6 100%)',
+        // 金黄琥珀系渐变
+        'gradient-primary': 'linear-gradient(135deg, #F59E0B, #FBBF24)',
+        'gradient-secondary': 'linear-gradient(135deg, #FBBF24, #FCD34D)',
+        'gradient-accent': 'linear-gradient(135deg, #FCD34D, #FDE68A)',
+        'gradient-hero': 'linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%)',
+        'gradient-warm': 'linear-gradient(135deg, #F59E0B, #FBBF24, #FCD34D)',
+        'gradient-sunset': 'linear-gradient(135deg, #D97706, #F59E0B, #FBBF24)',
       },
       transitionDuration: {
         fast: '150ms',
@@ -199,12 +219,24 @@ const config: Config = {
           '20%, 40%, 60%, 80%': { transform: 'translateX(4px)' },
         },
         glow: {
-          '0%, 100%': { boxShadow: '0 0 5px #FF6B3520' },
-          '50%': { boxShadow: '0 0 20px #FF6B3540, 0 0 40px #FF6B3520' },
+          '0%, 100%': { boxShadow: '0 0 5px #F59E0B20' },
+          '50%': { boxShadow: '0 0 20px #F59E0B40, 0 0 40px #F59E0B20' },
         },
         spin: {
           from: { transform: 'rotate(0deg)' },
           to: { transform: 'rotate(360deg)' },
+        },
+        gradientFlow: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        warmGlow: {
+          '0%, 100%': { boxShadow: '0 0 20px #F59E0B40' },
+          '50%': { boxShadow: '0 0 40px #F59E0B60, 0 0 60px #FBBF2440' },
+        },
+        shimmerBorder: {
+          '0%': { backgroundPosition: '-200% center' },
+          '100%': { backgroundPosition: '200% center' },
         },
       },
       animation: {
@@ -222,6 +254,9 @@ const config: Config = {
         shake: 'shake 0.5s ease-in-out',
         glow: 'glow 2s ease-in-out infinite',
         spin: 'spin 1s linear infinite',
+        'gradient-flow': 'gradientFlow 8s ease infinite',
+        'warm-glow': 'warmGlow 3s ease-in-out infinite',
+        'shimmer-border': 'shimmerBorder 3s linear infinite',
       },
       zIndex: {
         base: '1',

@@ -23,7 +23,7 @@ export function OrganizationJsonLd() {
       data={{
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        name: 'BrainVerse',
+        name: 'CowB.cc',
         url: 'https://cowb.cc',
         logo: 'https://cowb.cc/og-image.svg',
         description:
@@ -41,7 +41,7 @@ export function WebSiteJsonLd() {
       data={{
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        name: 'BrainVerse',
+        name: 'CowB.cc',
         url: 'https://cowb.cc',
         potentialAction: {
           '@type': 'SearchAction',
@@ -139,7 +139,7 @@ export function ArticleJsonLd({ article }: { article: ArticleData }) {
         },
         publisher: {
           '@type': 'Organization',
-          name: 'BrainVerse',
+          name: 'CowB.cc',
           logo: {
             '@type': 'ImageObject',
             url: 'https://cowb.cc/og-image.svg',

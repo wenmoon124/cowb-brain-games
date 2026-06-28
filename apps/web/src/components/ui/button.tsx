@@ -16,6 +16,10 @@ const buttonVariants = cva(
           'bg-accent text-white shadow-sm hover:bg-accent-hover hover:shadow-glow-accent hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm',
         ghost:
           'bg-transparent text-text-secondary hover:text-text-primary hover:bg-primary-bg',
+        outline:
+          'bg-transparent text-text-primary border-2 border-border hover:bg-primary-bg hover:border-primary',
+        destructive:
+          'bg-error text-white shadow-sm hover:bg-error/90 hover:-translate-y-0.5 active:translate-y-0',
       },
       size: {
         sm: 'h-8 px-md text-xs rounded-sm',

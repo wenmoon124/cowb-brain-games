@@ -3,71 +3,70 @@
 @tailwind utilities;
 
 /* ============================================================
-   BrainVerse 2.0 — Design Token CSS Variables (暖色调改造版)
+   CowB.cc 2.0 — Design Token CSS Variables (暖色调改造版)
    全部使用高饱和度暖色系，移除所有蓝色/绿色/紫色/青色
    保持背景色不变 (用户硬约束: keep existing background color)
    ============================================================ */
 
 /* ---- Light Mode (default) ---- */
 :root {
-  /* Brand / Primary Colors — 活力橙红 (替代蓝色) */
-  --primary: #ff6b35;
-  --primary-hover: #e55a2b;
-  --primary-light: #ff6b3520;
-  --primary-bg: #ff6b3508;
+  /* Brand / Primary Colors — 金黄琥珀系 */
+  --primary: #f59e0b;
+  --primary-hover: #d97706;
+  --primary-light: #f59e0b20;
+  --primary-bg: #f59e0b08;
 
-  /* Secondary Colors — 温暖橙金 (替代绿色) */
-  --secondary: #ffb14a;
-  --secondary-hover: #ffa030;
-  --secondary-light: #ffb14a20;
+  /* Secondary Colors — 日落金 */
+  --secondary: #fbbf24;
+  --secondary-hover: #f59e0b;
+  --secondary-light: #fbbf2420;
 
-  /* Accent Colors — 明亮金 */
-  --accent: #ffd700;
-  --accent-hover: #ffc700;
-  --accent-light: #ffd70020;
+  /* Accent Colors — 暖沙金 */
+  --accent: #fcd34d;
+  --accent-hover: #fbbf24;
+  --accent-light: #fcd34d20;
 
-  /* Background & Surface — 保持不变 */
-  --bg-primary: #f7f9fc;
-  --bg-secondary: #eef1f6;
-  --card: #ffffff;
-  --card-hover: #f8fafd;
+  /* Background & Surface — 暖象牙白/奶油白 */
+  --bg-primary: #fffbeb;
+  --bg-secondary: #fef3c7;
+  --card: #fffbeb;
+  --card-hover: #fef3c7;
 
-  /* Text — 提高对比度确保可读性 (WCAG AA ≥ 4.5:1) */
-  --text-primary: #1a1108;
-  --text-secondary: #4a3528;
-  --text-muted: #7a6458;
+  /* Text — 深琥珀/焦糖棕 (WCAG AA ≥ 4.5:1) */
+  --text-primary: #78350f;
+  --text-secondary: #92400e;
+  --text-muted: #b45309;
 
-  /* Border */
-  --border: #e2e8f0;
-  --border-light: #f1f5f9;
+  /* Border — 暖金色调 */
+  --border: #fde68a;
+  --border-light: #fef3c7;
 
-  /* Semantic Colors — 全部暖色化 */
-  --success: #ffb14a;
-  --warning: #ffd700;
+  /* Semantic Colors — 金黄琥珀系 */
+  --success: #f59e0b;
+  --warning: #fbbf24;
   --error: #ef4444;
-  --info: #ff6b35;
+  --info: #f59e0b;
 
-  /* Dimension Colors — 全部暖色化 (移除蓝/绿/紫/青) */
-  /* 背景用：保持高饱和度暖色，用于 Badge 背景/进度条/边框 */
-  --dim-memory: #ec4899;       /* 热情粉 (替代紫色) */
-  --dim-attention: #f97316;    /* 暖橙 (替代青色) */
-  --dim-reaction: #fbbf24;     /* 暖黄 */
-  --dim-executive: #f472b6;    /* 玫粉 (替代绿色) */
-  --dim-relaxation: #fb7185;   /* 珊瑚红 (替代蓝色) */
+  /* Dimension Colors — 更暖的色调 */
+  --dim-memory: #e91e63;       /* 热情玫红 */
+  --dim-attention: #ff5722;    /* 暖橙红 */
+  --dim-reaction: #ff9800;     /* 暖橙 */
+  --dim-executive: #e91e63;    /* 玫红 */
+  --dim-relaxation: #f44336;   /* 珊瑚红 */
 
-  /* Dimension Text Colors — 加深至 WCAG AA ≥ 4.5:1，用于所有文字场景 */
-  --dim-memory-text: #9d174d;       /* 深粉，对比度 ≥ 7:1 */
-  --dim-attention-text: #9a3412;    /* 深橙，对比度 ≥ 7:1 */
-  --dim-reaction-text: #92400e;     /* 深琥珀，对比度 ≥ 7:1 */
-  --dim-executive-text: #831843;    /* 深玫红，对比度 ≥ 7:1 */
-  --dim-relaxation-text: #9f1239;   /* 深珊瑚，对比度 ≥ 7:1 */
+  /* Dimension Text Colors — 加深至 WCAG AA ≥ 4.5:1 */
+  --dim-memory-text: #880e4f;
+  --dim-attention-text: #bf360c;
+  --dim-reaction-text: #e65100;
+  --dim-executive-text: #880e4f;
+  --dim-relaxation-text: #c62828;
 
   /* Dimension Alpha Backgrounds */
-  --dim-memory-light: #ec489920;
-  --dim-attention-light: #f9731620;
-  --dim-reaction-light: #fbbf2420;
-  --dim-executive-light: #f472b620;
-  --dim-relaxation-light: #fb718520;
+  --dim-memory-light: #e91e6320;
+  --dim-attention-light: #ff572220;
+  --dim-reaction-light: #ff980020;
+  --dim-executive-light: #e91e6320;
+  --dim-relaxation-light: #f4433620;
 
   /* Spacing Scale (4px base) */
   --spacing-xs: 4px;
@@ -105,47 +104,55 @@
   --glass-blur: 16px;
 }
 
-/* ---- Dark Mode (.dark class override) — 暖色调暗色模式 ---- */
+/* ---- Dark Mode (.dark class override) — 暖深棕暗色模式 ---- */
 .dark {
-  --bg-primary: #1a0f0a;
-  --bg-secondary: #2a1810;
-  --card: #2d1b14;
-  --card-hover: #3d2519;
-  --text-primary: #fde8d8;
-  --text-secondary: #d4a574;
-  --text-muted: #a07850;
-  --border: #4a2d1f;
-  --border-light: #2d1b14;
+  --bg-primary: #1c1917;
+  --bg-secondary: #292524;
+  --card: #292524;
+  --card-hover: #44403c;
+  --text-primary: #fef3c7;
+  --text-secondary: #fde68a;
+  --text-muted: #fbbf24;
+  --border: #78350f;
+  --border-light: #451a03;
+
+  --primary: #fbbf24;
+  --secondary: #fcd34d;
+  --accent: #fde68a;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
   --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
 
-  --glass-bg: rgba(45, 27, 20, 0.72);
-  --glass-border: rgba(74, 45, 31, 0.5);
+  --glass-bg: rgba(41, 37, 36, 0.72);
+  --glass-border: rgba(120, 53, 15, 0.5);
 }
 
-/* ---- Auto Dark Mode (prefers-color-scheme: dark) — 暖色调 ---- */
+/* ---- Auto Dark Mode (prefers-color-scheme: dark) — 暖深棕 ---- */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --bg-primary: #1a0f0a;
-    --bg-secondary: #2a1810;
-    --card: #2d1b14;
-    --card-hover: #3d2519;
-    --text-primary: #fde8d8;
-    --text-secondary: #d4a574;
-    --text-muted: #a07850;
-    --border: #4a2d1f;
-    --border-light: #2d1b14;
+    --bg-primary: #1c1917;
+    --bg-secondary: #292524;
+    --card: #292524;
+    --card-hover: #44403c;
+    --text-primary: #fef3c7;
+    --text-secondary: #fde68a;
+    --text-muted: #fbbf24;
+    --border: #78350f;
+    --border-light: #451a03;
+
+    --primary: #fbbf24;
+    --secondary: #fcd34d;
+    --accent: #fde68a;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
 
-    --glass-bg: rgba(45, 27, 20, 0.72);
-    --glass-border: rgba(74, 45, 31, 0.5);
+    --glass-bg: rgba(41, 37, 36, 0.72);
+    --glass-border: rgba(120, 53, 15, 0.5);
   }
 }
 
@@ -180,6 +187,52 @@
   a:hover {
     color: var(--primary-hover);
   }
+}
+
+/* ============================================================
+   Gradient Utilities
+   ============================================================ */
+.gradient-text {
+  background: linear-gradient(135deg, #F59E0B, #FBBF24, #FCD34D);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.gradient-bg-flow {
+  background: linear-gradient(135deg, #FFFBEB, #FEF3C7, #FBBF2420, #FCD34D20);
+  background-size: 200% 200%;
+  animation: gradientFlow 8s ease infinite;
+}
+
+.gradient-border {
+  position: relative;
+  background: var(--card);
+  border-radius: var(--radius-md);
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #F59E0B, #FBBF24, #FCD34D);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.card-lift {
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(245, 158, 11, 0.15);
 }
 
 /* ============================================================

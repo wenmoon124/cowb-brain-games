@@ -28,7 +28,7 @@ export function RequireAuth({ locale, pageKey, children }: RequireAuthProps) {
 
   useEffect(() => {
     try {
-      const flag = localStorage.getItem('brainverse_session')
+      const flag = localStorage.getItem('cowbcc_session')
       setAuthState(flag ? 'user' : 'guest')
     } catch {
       // localStorage may be unavailable (private mode); treat as guest

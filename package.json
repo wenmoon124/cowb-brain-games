@@ -7,12 +7,12 @@
     "pnpm": ">=9"
   },
   "scripts": {
-    "dev": "pnpm --filter @brainverse/web dev",
-    "build": "pnpm --filter @brainverse/web build",
-    "typecheck": "pnpm --filter @brainverse/web typecheck",
-    "lint": "pnpm --filter @brainverse/web lint",
+    "dev": "pnpm --filter @cowbcc/web dev",
+    "build": "pnpm --filter @cowbcc/web build",
+    "typecheck": "pnpm --filter @cowbcc/web typecheck",
+    "lint": "pnpm --filter @cowbcc/web lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "deploy:web": "pnpm --filter @brainverse/web deploy"
+    "deploy:web": "pnpm --filter @cowbcc/web deploy"
   },
   "devDependencies": {
     "typescript": "^5.4.0",

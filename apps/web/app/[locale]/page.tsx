@@ -12,6 +12,10 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { DailyRecommendation } from '@/components/home/DailyRecommendation'
+import { FeaturedArticles } from '@/components/home/FeaturedArticles'
+import { TestimonialsSection } from '@/components/home/TestimonialsSection'
+import { ARTICLES } from '@/data/articles'
 
 export async function generateMetadata({
   params,
@@ -45,20 +49,20 @@ export default async function HomePage({
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="bg-gradient-hero px-md py-3xl md:py-5xl">
+      <section className="gradient-bg-flow px-md py-3xl md:py-5xl">
         <div className="mx-auto max-w-4xl text-center">
-          <Badge variant="info" className="mb-lg">
+          <Badge variant="info" className="mb-lg animate-float">
             <Sparkles className="mr-xs h-3 w-3" />
             {t('common.tagline')}
           </Badge>
-          <h1 className="text-3xl md:text-5xl font-bold text-text-primary mb-lg leading-tight">
+          <h1 className="text-3xl md:text-5xl font-bold gradient-text mb-lg leading-tight">
             {t('landing.hero.title')}
           </h1>
           <p className="text-md md:text-lg text-text-secondary mb-2xl max-w-2xl mx-auto">
             {t('landing.hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-md justify-center">
-            <Button variant="primary" size="lg" asChild>
+            <Button variant="primary" size="lg" className="animate-warm-glow" asChild>
               <Link href={`/${locale}/brain-age`}>
                 {t('landing.hero.cta')}
                 <ArrowRight className="ml-xs h-4 w-4" />
@@ -80,7 +84,7 @@ export default async function HomePage({
             {t('landing.features.title')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-lg">
-            <Card className="text-center">
+            <Card className="text-center card-lift">
               <CardHeader>
                 <div className="mx-auto mb-md flex h-12 w-12 items-center justify-center rounded-md bg-primary-light">
                   <Brain className="h-6 w-6 text-primary" />
@@ -94,7 +98,7 @@ export default async function HomePage({
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center card-lift">
               <CardHeader>
                 <div className="mx-auto mb-md flex h-12 w-12 items-center justify-center rounded-md bg-secondary-light">
                   <Gamepad2 className="h-6 w-6 text-secondary" />
@@ -108,7 +112,7 @@ export default async function HomePage({
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center card-lift">
               <CardHeader>
                 <div className="mx-auto mb-md flex h-12 w-12 items-center justify-center rounded-md bg-accent-light">
                   <TrendingUp className="h-6 w-6 text-accent" />
@@ -158,6 +162,15 @@ export default async function HomePage({
           </div>
         </div>
       </section>
+
+      {/* Daily Recommendation */}
+      <DailyRecommendation locale={locale} />
+
+      {/* Featured Articles */}
+      <FeaturedArticles locale={locale} articles={ARTICLES} />
+
+      {/* Testimonials */}
+      <TestimonialsSection locale={locale} />
 
       {/* CTA Section */}
       <section className="px-md py-3xl">

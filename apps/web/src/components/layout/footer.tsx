@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { Brain, Twitter, Github, Mail } from 'lucide-react'
+import { Twitter, Github, Mail } from 'lucide-react'
 import { type Locale } from '@/i18n/config'
 import { useTranslation } from '@/i18n/client'
+import { Logo } from './logo'
 
 interface FooterProps {
   locale: Locale
@@ -14,6 +15,10 @@ export function Footer({ locale }: FooterProps) {
   const year = new Date().getFullYear()
 
   const links = [
+    {
+      href: `/${locale}/about`,
+      label: t('nav.about'),
+    },
     {
       href: `/${locale}/privacy`,
       label: t('footer.privacyPolicy'),
@@ -40,13 +45,7 @@ export function Footer({ locale }: FooterProps) {
         <div className="flex flex-col items-center gap-lg md:flex-row md:justify-between">
           {/* Brand */}
           <div className="flex flex-col items-center gap-sm md:items-start">
-            <Link
-              href={`/${locale}`}
-              className="flex items-center gap-sm font-bold text-text-primary"
-            >
-              <Brain className="h-5 w-5 text-primary" />
-              <span>{t('common.appName')}</span>
-            </Link>
+            <Logo locale={locale} size="md" />
             <p className="text-sm text-text-muted">{t('common.tagline')}</p>
           </div>
 

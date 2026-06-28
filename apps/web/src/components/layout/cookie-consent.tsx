@@ -21,7 +21,7 @@ interface CookieConsentPayload {
 }
 
 const CONSENT_VERSION = '2.0'
-const STORAGE_KEY = 'brainverse-cookie-consent'
+const STORAGE_KEY = 'cowbcc-cookie-consent'
 
 export function CookieConsent({ locale }: CookieConsentProps) {
   const { t } = useTranslation(locale)

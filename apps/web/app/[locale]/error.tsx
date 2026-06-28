@@ -22,6 +22,7 @@ export default function Error({
   const { t } = useTranslation(locale)
 
   useEffect(() => {
+    // eslint-disable-next-line no-console
     console.error(error)
   }, [error])
 

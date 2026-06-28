@@ -14,7 +14,7 @@ export default async function NotFound() {
           className="flex items-center gap-sm font-bold text-text-primary"
         >
           <Brain className="h-7 w-7 text-primary" />
-          <span className="text-lg">BrainVerse</span>
+          <span className="text-lg">CowB.cc</span>
         </Link>
 
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary-light">

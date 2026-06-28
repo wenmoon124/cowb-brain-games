@@ -1,16 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { GAMES, gameHref, type GameDimension } from '@/lib/games'
-import { ArrowRight } from 'lucide-react'
+import { GAMES, type GameDimension } from '@/lib/games'
 import { useTranslation } from '@/i18n/client'
 import type { Locale } from '@/i18n/config'
-
-type BadgeVariant = GameDimension
+import { GameCard } from './game-card'
 
 const DIMENSIONS: Array<GameDimension | 'all'> = [
   'all',
@@ -65,35 +59,7 @@ export function GamesExplorer({ locale }: GamesExplorerProps) {
       {/* Games Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-lg">
         {filteredGames.map((game) => (
-          <Card
-            key={game.slug}
-            className="flex flex-col transition-transform hover:-translate-y-1 hover:shadow-glow-primary"
-          >
-            <CardContent className="flex flex-col gap-md p-xl">
-              <div className="flex items-start justify-between gap-md">
-                <h2 className="text-xl font-semibold text-text-primary">
-                  {t(game.titleKey)}
-                </h2>
-                <Badge variant={game.dimension as BadgeVariant}>
-                  {t(`games.dimensions.${game.dimension}`)}
-                </Badge>
-              </div>
-              <p className="text-sm text-text-secondary">
-                {t(game.descriptionKey)}
-              </p>
-              <Button
-                variant="primary"
-                size="md"
-                className="mt-sm w-full sm:w-auto sm:self-start"
-                asChild
-              >
-                <Link href={gameHref(locale, game.slug)}>
-                  {t('games.playNow')}
-                  <ArrowRight className="ml-xs h-4 w-4" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+          <GameCard key={game.slug} game={game} locale={locale} />
         ))}
       </div>
     </>

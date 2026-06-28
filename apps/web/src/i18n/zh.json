@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "BrainVerse",
+    "appName": "CowB.cc",
     "tagline": "训练大脑，降低脑龄",
     "languageSwitcher": "切换语言",
     "loading": "加载中...",
@@ -28,7 +28,8 @@
     "achievements": "成就",
     "about": "关于",
     "contact": "联系我们",
-    "articles": "文章"
+    "articles": "文章",
+    "settings": "设置"
   },
   "landing": {
     "hero": {
@@ -37,7 +38,7 @@
       "cta": "开始免费评估"
     },
     "features": {
-      "title": "为什么选择 BrainVerse？",
+      "title": "为什么选择 CowB.cc？",
       "brainAge": {
         "title": "脑力年龄评估",
         "description": "从 5 个维度衡量你的认知表现"
@@ -77,101 +78,206 @@
     },
     "visualSearch": {
       "title": "视觉搜索",
-      "description": "在干扰项中找到目标"
+      "description": "在干扰的海洋中寻找隐藏目标！这个经典的注意力任务挑战你在视觉混乱中识别特定形状或颜色。随着进度推进，任务会变得更难——更多干扰项、更紧的时间限制。全球心理学实验室用它来测量选择性注意力和视觉处理速度。",
+      "objectives": [
+        "提升选择性注意力",
+        "加快视觉处理速度",
+        "提高目标检测准确率"
+      ]
     },
     "digitSpan": {
       "title": "数字广度",
-      "description": "记忆并复述数字序列"
+      "description": "挑战你的数字记忆极限！一串数字会在屏幕上闪现——记住并准确复述。随着关卡推进，序列会越来越长，将你的工作记忆推向极限。这个经典认知任务在全球心理学实验室中用于测量和训练短期记忆容量。",
+      "objectives": [
+        "扩展工作记忆容量",
+        "提高数字回忆准确率",
+        "增强短期记忆耐力"
+      ]
     },
     "reactionTraining": {
       "title": "反应训练",
-      "description": "测试你的反应速度"
+      "description": "测试你的反应速度和反射能力！看到视觉提示时尽快做出反应——点击、敲击或按下。追踪你随时间的进步，不断缩短反应时间。运动员和电竞选手用它来训练瞬间决策能力。",
+      "objectives": [
+        "缩短反应时间",
+        "提升运动反应速度",
+        "增强刺激-反应协调"
+      ]
     },
     "stroopChallenge": {
       "title": "Stroop 挑战",
-      "description": "解决颜色与文字的冲突"
+      "description": "面对著名的 Stroop 效应！你会看到用冲突颜色打印的颜色词——你的任务是说出墨水颜色，而不是读文字。这种认知冲突训练强化了你大脑抑制自动反应、专注于相关信息的能力。这是执行功能训练的基石。",
+      "objectives": [
+        "增强抑制控制能力",
+        "提升认知灵活性",
+        "加强选择性注意力"
+      ]
     },
     "spatialMemory": {
       "title": "空间记忆",
-      "description": "记住空间图案"
+      "description": "记住并重现空间图案！一组格子会短暂闪现——记住它们的位置，然后在完全相同的位置点击。随着关卡推进，图案变得更复杂，网格也会扩大。这个任务训练你大脑的空间工作记忆，对导航和视觉空间推理至关重要。",
+      "objectives": [
+        "增强空间工作记忆",
+        "提高视觉模式识别",
+        "加强位置回忆能力"
+      ]
     },
     "breathingFlow": {
       "title": "呼吸律动",
-      "description": "引导式呼吸放松"
+      "description": "通过引导式呼吸练习平静你的心灵！跟随动画呼吸指南——吸气、屏气、呼气——与舒缓的视觉效果同步。这种放松技巧激活你的副交感神经系统，减轻压力和焦虑。非常适合正念练习和训练间隙的精神恢复。",
+      "objectives": [
+        "减轻压力和焦虑",
+        "激活放松反应",
+        "提高呼吸觉察能力"
+      ]
     },
     "memoryMatrix": {
       "title": "记忆矩阵",
-      "description": "记住闪亮的格子后还原"
+      "description": "用闪烁的图案测试你的视觉记忆！一组方格会按顺序亮起——仔细观察，然后按相同顺序点击方格重现图案。随着序列变长、网格扩大，挑战也会增加。这个任务强化你的视觉空间画板，这是工作记忆的关键组成部分。",
+      "objectives": [
+        "增强视觉记忆容量",
+        "提高顺序模式回忆",
+        "加强视觉空间处理"
+      ]
     },
     "backwardDigitSpan": {
       "title": "倒序数字广度",
-      "description": "将数字倒序输入"
+      "description": "反向挑战！你会听到一串数字——但这次要倒着重复。如果看到 3-7-2，你要回答 2-7-3。这个高级工作记忆任务要求你在心理上操作信息，而不仅仅是存储。认知心理学用它来测量中央执行功能和心理操作能力。",
+      "objectives": [
+        "增强心理操作技能",
+        "提升工作记忆灵活性",
+        "提高倒序回忆能力"
+      ]
     },
     "spatialSequence": {
       "title": "空间序列",
-      "description": "按顺序重复亮起的格子"
+      "description": "跟随序列！格子会按特定顺序逐个亮起——你的任务是按相同顺序点击重现序列。随着关卡推进，序列变长，网格扩大。这个任务训练你的顺序处理和空间工作记忆，对需要逐步推理的任务至关重要。",
+      "objectives": [
+        "增强顺序处理能力",
+        "提高空间顺序记忆",
+        "加强逐步推理能力"
+      ]
     },
     "patternMatch": {
       "title": "图案匹配",
-      "description": "找出图案中的变化"
+      "description": "找出不同！你会短暂看到一个图案，然后它发生变化——你能识别出什么改变了吗？这个任务挑战你的视觉辨别力和对细节的关注。随着关卡推进，变化变得更微妙，时间限制更紧。认知训练用它来提高视觉工作记忆和模式识别能力。",
+      "objectives": [
+        "提升视觉辨别力",
+        "提高细节关注度",
+        "增强变化检测能力"
+      ]
     },
     "attentionSpan": {
       "title": "持续注意",
-      "description": "仅在看到目标时点击"
+      "description": "保持专注！注意在随机间隔出现的目标刺激——只在看到目标时点击，忽略其他一切。这个持续注意力任务测量你长时间保持警觉的能力。随着任务继续，保持专注会变得更难，训练你大脑长时间集中注意力的耐力。",
+      "objectives": [
+        "延长注意力持续时间",
+        "提高持续警觉能力",
+        "减少注意力失误"
+      ]
     },
     "eagleEye": {
       "title": "鹰眼",
-      "description": "在干扰中追踪移动目标"
+      "description": "像鹰一样追踪目标！一个移动物体会在干扰项中穿梭——紧盯它并报告它的最终位置。这个多目标追踪任务挑战你在忽略干扰的同时保持对移动目标的注意力。用于训练运动员和专业人士的视觉注意力和追踪能力。",
+      "objectives": [
+        "增强视觉追踪能力",
+        "提高分配性注意力",
+        "加强目标维持能力"
+      ]
     },
     "distractionFilter": {
       "title": "干扰过滤",
-      "description": "忽略干扰，专注中心目标"
+      "description": "屏蔽噪音！中心目标需要你的注意力，但周围有干扰刺激——专注于中心，忽略外围。这个任务训练你过滤无关信息、专注于重要事物的能力。对于提高在嘈杂环境中的注意力至关重要。",
+      "objectives": [
+        "增强干扰过滤能力",
+        "提高专注注意力",
+        "加强抗噪能力"
+      ]
     },
     "splitFocus": {
       "title": "分散专注",
-      "description": "同时监控两个区域"
+      "description": "分而治之！同时监控两个独立区域——对任一位置出现的目标做出反应。这个分配性注意力任务挑战你大脑同时处理多个信息流的能力。随着难度增加，对注意力资源的需求增长，训练真正的多任务处理能力。",
+      "objectives": [
+        "增强分配性注意力",
+        "提高多任务处理能力",
+        "加强并行处理能力"
+      ]
     },
     "clickHorizon": {
       "title": "点击地平线",
-      "description": "在目标消失前点击它们"
+      "description": "需要快速反应！目标在屏幕上漂移——在它们消失在边缘前点击。这个任务结合反应速度和空间追踪，挑战你快速响应移动刺激的能力。随着关卡推进，目标移动更快、出现更频繁，将你的反射推向极限。",
+      "objectives": [
+        "提高快速反应能力",
+        "增强空间追踪速度",
+        "加强反射协调"
+      ]
     },
     "towerOfLogic": {
       "title": "逻辑之塔",
-      "description": "用最少步数解决圆盘塔谜题"
+      "description": "解决经典的汉诺塔谜题！将圆盘堆从一个柱子移到另一个，遵循规则：每次只能移动一个圆盘，大盘不能放在小盘上。仔细规划你的步骤，用最少的移动次数解决。这个经典问题解决任务训练规划、远见和逻辑推理能力。",
+      "objectives": [
+        "增强规划能力",
+        "提高逻辑推理",
+        "加强问题解决技能"
+      ]
     },
     "changeFlex": {
       "title": "灵活切换",
-      "description": "在任务间快速切换"
+      "description": "适应并切换！你会在不同任务或规则间交替——根据当前规则做出反应，然后在规则变化时快速适应。这个认知灵活性任务挑战你大脑在不同心理定势间切换的能力。对于提高适应性和减少认知僵化至关重要。",
+      "objectives": [
+        "增强认知灵活性",
+        "提高任务切换能力",
+        "加强心理适应性"
+      ]
     },
     "pathFinder": {
       "title": "路径探索",
-      "description": "穿越复杂度递增的迷宫"
+      "description": "穿越迷宫！在越来越复杂的迷宫中找到正确路径——规划路线、避开死胡同、到达目标。这个空间推理任务挑战你心理上映射环境和规划路线的能力。随着迷宫变得更复杂，你的导航技能将被推向极限。",
+      "objectives": [
+        "增强空间导航能力",
+        "提高路线规划能力",
+        "加强心理地图技能"
+      ]
     },
     "matrixReasoning": {
       "title": "矩阵推理",
-      "description": "补全视觉逻辑图案"
+      "description": "完成图案！你会看到一个有缺失部分的矩阵——识别潜在规则并选择正确的补全。这个非语言推理任务测量你识别模式、推导规则和应用逻辑的能力。智力测试中用它来测量流体智力和抽象推理能力。",
+      "objectives": [
+        "增强抽象推理",
+        "提高模式识别",
+        "加强演绎逻辑"
+      ]
     },
     "audioAlphaDiver": {
       "title": "声波潜行",
-      "description": "沉浸式声音放松体验"
+      "description": "沉浸在音景中放松！聆听精心设计的音频，促进 Alpha 脑波活动——与放松警觉相关的频率。闭上眼睛，深呼吸，让声音包围你。非常适合压力缓解、冥想练习或高强度训练后的精神恢复。",
+      "objectives": [
+        "促进 Alpha 脑波",
+        "减轻精神疲劳",
+        "增强放松反应"
+      ]
     },
     "stressSandbox": {
       "title": "减压沙盒",
-      "description": "触觉互动释放压力"
+      "description": "通过触觉互动释放压力！参与令人满意的视觉和触觉反馈——在零压力的环境中戳泡泡、挤压形状或操作物体。这个沙盒式放松活动提供即时感官反馈，帮助释放身体紧张和平静心灵。没有目标，没有压力——只有纯粹的放松。",
+      "objectives": [
+        "释放身体紧张",
+        "提供感官放松",
+        "通过游戏减轻压力"
+      ]
     },
     "backToGames": "返回游戏"
   },
   "pages": {
     "about": {
-      "title": "关于 BrainVerse",
+      "title": "关于 CowB.cc",
       "mission": "我们的使命",
-      "missionDescription": "BrainVerse 致力于让基于科学的脑力训练惠及每个人。我们相信认知健康是一段终生的旅程，我们的使命是帮助你理解和提升大脑的真正潜力。",
+      "missionDescription": "CowB.cc 致力于让基于科学的脑力训练惠及每个人。我们相信认知健康是一段终生的旅程，我们的使命是帮助你理解和提升大脑的真正潜力。",
       "technology": "技术",
       "technologyDescription": "基于现代 Web 技术与 Cloudflare 全球边缘网络的 Serverless 架构构建。我们采用经过验证的认知范式提供高效的训练。",
       "science": "科学基础",
       "scienceDescription": "我们的游戏灵感来自成熟的认知范式，包括 Stroop 测试、数字广度记忆任务、视觉搜索实验和空间记忆研究。",
       "story": "我们的故事",
-      "storyDescription": "BrainVerse 诞生于将实验室级认知评估带入浏览器的愿景。我们融合严谨科学与愉悦设计，让脑力训练成为每日习惯。"
+      "storyDescription": "CowB.cc 诞生于将实验室级认知评估带入浏览器的愿景。我们融合严谨科学与愉悦设计，让脑力训练成为每日习惯。"
     },
     "contact": {
       "title": "联系我们",
@@ -211,7 +317,7 @@
     "privacy": {
       "title": "隐私政策",
       "lastUpdated": "最后更新：2026 年 6 月",
-      "intro": "本隐私政策描述了 BrainVerse（以下简称\u201c我们\u201d）在你使用我们的网站与服务时，如何收集、使用和保护你的信息。",
+      "intro": "本隐私政策描述了 CowB.cc（以下简称\u201c我们\u201d）在你使用我们的网站与服务时，如何收集、使用和保护你的信息。",
       "dataWeCollect": "我们收集的信息",
       "dataWeCollectDescription": "我们收集你创建账户时提供的信息，例如邮箱地址和昵称，以及用于计算脑力年龄和进步的游戏数据。",
       "howWeUse": "我们如何使用你的信息",
@@ -228,19 +334,19 @@
     "terms": {
       "title": "服务条款",
       "lastUpdated": "最后更新：2026 年 6 月",
-      "intro": "本服务条款约束你对 BrainVerse 网站和服务的使用。使用我们的服务即表示你同意这些条款。",
+      "intro": "本服务条款约束你对 CowB.cc 网站和服务的使用。使用我们的服务即表示你同意这些条款。",
       "acceptance": "条款接受",
-      "acceptanceDescription": "访问或使用 BrainVerse 即表示你同意受本条款约束。如果你不同意，请不要使用我们的服务。",
+      "acceptanceDescription": "访问或使用 CowB.cc 即表示你同意受本条款约束。如果你不同意，请不要使用我们的服务。",
       "useOfService": "服务使用",
-      "useOfServiceDescription": "你同意仅出于合法目的使用 BrainVerse，且不得侵犯他人权利或限制他人使用本服务。",
+      "useOfServiceDescription": "你同意仅出于合法目的使用 CowB.cc，且不得侵犯他人权利或限制他人使用本服务。",
       "accounts": "账户",
       "accountsDescription": "你有责任保管好账户凭证的机密性，并对账户下发生的所有活动负责。",
       "intellectualProperty": "知识产权",
-      "intellectualPropertyDescription": "BrainVerse 上的所有内容，包括文本、图形、标识和软件，均为 BrainVerse 或其许可方的财产，受知识产权法保护。",
+      "intellectualPropertyDescription": "CowB.cc 上的所有内容，包括文本、图形、标识和软件，均为 CowB.cc 或其许可方的财产，受知识产权法保护。",
       "disclaimer": "免责声明",
-      "disclaimerDescription": "BrainVerse 提供的脑力训练游戏仅用于娱乐和教育目的。我们的服务不能替代专业的医疗建议、诊断或治疗。",
+      "disclaimerDescription": "CowB.cc 提供的脑力训练游戏仅用于娱乐和教育目的。我们的服务不能替代专业的医疗建议、诊断或治疗。",
       "liability": "责任限制",
-      "liabilityDescription": "对于因你使用本服务而产生的任何间接、附带或后果性损害，BrainVerse 概不负责。",
+      "liabilityDescription": "对于因你使用本服务而产生的任何间接、附带或后果性损害，CowB.cc 概不负责。",
       "changes": "条款变更",
       "changesDescription": "我们可能会不时更新本条款。如有重大变更，我们将通过在此页面发布新条款的方式通知你。"
     },
@@ -342,7 +448,7 @@
   "auth": {
     "signIn": {
       "title": "登录",
-      "subtitle": "欢迎回到 BrainVerse",
+      "subtitle": "欢迎回到 CowB.cc",
       "email": "邮箱",
       "password": "密码",
       "forgotPassword": "忘记密码？",
@@ -383,7 +489,7 @@
     "targetingAdsDescription": "这些 Cookie 用于投放相关广告。"
   },
   "footer": {
-    "copyright": "© {year} BrainVerse. 保留所有权利。",
+    "copyright": "© {year} CowB.cc. 保留所有权利。",
     "privacyPolicy": "隐私政策",
     "termsOfService": "服务条款",
     "contactUs": "联系我们",
@@ -479,6 +585,113 @@
         "title": "记忆新手",
         "description": "在任意记忆游戏中获得 60 分以上。"
       }
+    }
+  },
+  "home": {
+    "dailyRecommendation": {
+      "title": "今日推荐游戏",
+      "duration": "{minutes} 分钟",
+      "startTraining": "开始训练",
+      "trainingGoals": "训练目标"
+    },
+    "featuredArticles": {
+      "title": "精选文章",
+      "viewAll": "查看全部文章"
+    },
+    "testimonials": {
+      "title": "用户评价",
+      "subtitle": "加入数千名已经提升认知能力的用户",
+      "stats": {
+        "users": "10,000+",
+        "activeUsers": "活跃用户",
+        "improvement": "23%",
+        "averageImprovement": "平均提升",
+        "games": "500,000+",
+        "gamesPlayed": "游戏次数"
+      },
+      "testimonial1": {
+        "name": "Sarah Johnson",
+        "role": "软件工程师",
+        "content": "经过3个月的每日训练，我在工作中的专注力和记忆力有了显著提升。游戏很有趣，而且设计科学。"
+      },
+      "testimonial2": {
+        "name": "Michael Chen",
+        "role": "学生",
+        "content": "CowB.cc 帮助我提高了学习效率。我的记忆力和注意力都变好了，成绩也因此提升了。"
+      },
+      "testimonial3": {
+        "name": "Emily Rodriguez",
+        "role": "教师",
+        "content": "我向学生们推荐 CowB.cc。这是一种有趣且有效的脑力训练方式。进度追踪功能特别有帮助。"
+      }
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "description": "管理您的账户设置和偏好",
+    "tabs": {
+      "profile": "个人资料",
+      "data": "隐私与数据",
+      "about": "关于"
+    },
+    "profile": {
+      "avatar": "头像",
+      "uploadAvatar": "上传新头像",
+      "avatarHint": "JPG、PNG 或 GIF。最大 2MB。",
+      "basicInfo": "基本信息",
+      "username": "用户名",
+      "usernamePlaceholder": "输入用户名",
+      "email": "邮箱",
+      "emailPlaceholder": "输入邮箱",
+      "saveChanges": "保存更改",
+      "changePassword": "修改密码",
+      "currentPassword": "当前密码",
+      "currentPasswordPlaceholder": "输入当前密码",
+      "newPassword": "新密码",
+      "newPasswordPlaceholder": "输入新密码",
+      "updatePassword": "更新密码"
+    },
+    "data": {
+      "exportTitle": "导出您的数据",
+      "exportDescription": "下载您所有数据的 JSON 格式副本",
+      "exportButton": "导出数据",
+      "exportConfirmTitle": "导出您的数据",
+      "exportConfirmDescription": "这将下载一个包含您所有个人资料信息、游戏记录和成就的 JSON 文件。此过程可能需要一些时间。",
+      "clearGamesTitle": "清除游戏记录",
+      "clearGamesDescription": "删除您的所有游戏历史和分数。此操作无法撤销。",
+      "clearGamesButton": "清除游戏记录",
+      "clearGamesConfirmTitle": "清除游戏记录",
+      "clearGamesConfirmDescription": "您确定要清除所有游戏记录吗？这将删除您的所有游戏历史、分数和统计数据。此操作无法撤销。",
+      "clearGamesConfirmButton": "清除记录",
+      "clearAllTitle": "清除所有数据",
+      "clearAllDescription": "删除您的所有数据，包括个人资料、游戏记录和成就。此操作无法撤销。",
+      "clearAllButton": "清除所有数据",
+      "clearAllConfirmTitle": "清除所有数据",
+      "clearAllConfirmDescription": "这将永久删除您的所有数据，包括：",
+      "clearAllConfirmItems": "个人资料信息,游戏记录和分数,成就和徽章,所有其他账户数据",
+      "clearAllConfirmWarning": "此操作无法撤销。",
+      "clearAllConfirmButton": "清除所有数据",
+      "deleteAccountTitle": "删除账户",
+      "deleteAccountDescription": "永久删除您的账户和所有关联数据。此操作无法撤销。",
+      "deleteAccountButton": "删除账户",
+      "deleteAccountConfirmTitle": "删除账户",
+      "deleteAccountConfirmDescription": "您绝对确定要删除您的账户吗？这将：",
+      "deleteAccountConfirmItems": "永久删除您的账户,删除您的所有数据,取消任何活跃订阅,删除对所有服务的访问权限",
+      "deleteAccountConfirmWarning": "此操作是永久性的，无法撤销。",
+      "deleteAccountConfirmButton": "永久删除账户"
+    },
+    "about": {
+      "title": "关于 CowB.cc",
+      "version": "版本",
+      "build": "构建",
+      "description": "CowB.cc 是一个基于科学的脑力训练平台，旨在通过引人入胜的游戏和练习帮助您提高认知能力。",
+      "legalTitle": "法律与隐私",
+      "privacyPolicy": "隐私政策",
+      "privacyPolicyDescription": "了解我们如何保护和处理您的数据",
+      "termsOfService": "服务条款",
+      "termsOfServiceDescription": "查看我们的条款和条件",
+      "contactTitle": "联系我们",
+      "contactDescription": "有问题或需要支持？我们随时为您提供帮助。"
     }
   },
   "achievements": {
