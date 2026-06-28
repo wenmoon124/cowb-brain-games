@@ -31,12 +31,12 @@ const JSONLD_FILE = join(ROOT, 'src', 'components', 'seo', 'JsonLd.tsx')
 const GAMES_FILE = join(ROOT, 'src', 'lib', 'games.ts')
 
 const LOCALES = ['en', 'zh', 'ja']
-const EXPECTED_ARTICLE_COUNT = 10
+const EXPECTED_ARTICLE_COUNT = 70
 const SEO_KEYWORDS = [
   'brain', 'memory', 'attention', 'reaction', 'executive',
   'focus', 'relaxation', 'stress', 'age', 'training',
   'cognitive', 'decline', 'technique', 'improvement', 'function',
-  'concentration', 'routine', 'working',
+  'concentration', 'routine', 'working', 'sleep', 'nutrition',
 ]
 
 let totalPass = 0

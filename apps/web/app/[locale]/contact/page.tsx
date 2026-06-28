@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { isValidLocale, type Locale } from '@/i18n/config'
 import { getTranslations } from '@/i18n/translations'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Mail, Clock, MessageCircle } from 'lucide-react'
+import { ContactForm } from '@/components/contact/ContactForm'
 
 const CONTACT_EMAIL = 'wenmoon124@gmail.com'
 
@@ -111,26 +112,8 @@ export default async function ContactPage({
           ))}
         </div>
 
-        {/* Email Card */}
-        <Card className="mt-xl border-primary-light bg-card">
-          <CardHeader>
-            <CardTitle className="text-text-primary">
-              {t('pages.contact.email')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="inline-flex items-center gap-sm rounded-md bg-primary-bg px-md py-sm text-md font-medium text-primary transition-colors hover:bg-primary-light"
-            >
-              <Mail className="h-4 w-4" />
-              {CONTACT_EMAIL}
-            </a>
-            <p className="mt-md text-sm text-text-secondary">
-              {t('pages.contact.responseTime')}
-            </p>
-          </CardContent>
-        </Card>
+        {/* Contact Form (client component with mailto submission) */}
+        <ContactForm locale={locale as Locale} />
       </div>
     </div>
   )

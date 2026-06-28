@@ -5,6 +5,7 @@ import { getTranslations } from '@/i18n/translations'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { RequireAuth } from '@/components/auth/RequireAuth'
 import type { LucideIcon } from 'lucide-react'
 import {
   User,
@@ -107,8 +108,9 @@ export default async function ProfilePage({
   ]
 
   return (
-    <div className="flex flex-col">
-      {/* Header */}
+    <RequireAuth locale={locale as Locale} pageKey="profile">
+      <div className="flex flex-col">
+        {/* Header */}
       <section className="bg-gradient-hero px-md py-3xl md:py-4xl">
         <div className="mx-auto max-w-4xl">
           <Badge variant="info" className="mb-md w-fit">
@@ -255,40 +257,7 @@ export default async function ProfilePage({
         </div>
       </section>
 
-      {/* Account Actions */}
-      <section className="px-md py-3xl">
-        <div className="mx-auto max-w-2xl">
-          <Card className="border-primary-light">
-            <CardContent className="flex flex-col items-center gap-lg p-xl text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-light">
-                <LogIn className="h-7 w-7 text-primary" />
-              </div>
-              <div className="flex flex-col gap-sm">
-                <h2 className="text-xl md:text-2xl font-bold text-text-primary">
-                  {t('profile.accountActionsTitle')}
-                </h2>
-                <p className="text-md text-text-secondary max-w-md">
-                  {t('profile.accountActionsDesc')}
-                </p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-md w-full sm:w-auto">
-                <Button variant="primary" size="lg" asChild>
-                  <Link href={`/${locale}/signin`}>
-                    <LogIn className="mr-xs h-4 w-4" />
-                    {t('profile.signInCta')}
-                  </Link>
-                </Button>
-                <Button variant="secondary" size="lg" asChild>
-                  <Link href={`/${locale}/signup`}>
-                    {t('profile.signUpCta')}
-                    <ArrowRight className="ml-xs h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-    </div>
+      </div>
+    </RequireAuth>
   )
 }

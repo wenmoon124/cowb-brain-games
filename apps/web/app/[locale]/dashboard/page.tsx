@@ -4,17 +4,15 @@ import { isValidLocale, type Locale } from '@/i18n/config'
 import { getTranslations } from '@/i18n/translations'
 import { gameHref, type GameDimension } from '@/lib/games'
 import { formatDate } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { RequireAuth } from '@/components/auth/RequireAuth'
 import type { LucideIcon } from 'lucide-react'
 import {
   Gamepad2,
   Trophy,
   Flame,
   Brain,
-  ArrowRight,
-  LogIn,
   Calendar,
 } from 'lucide-react'
 
@@ -168,21 +166,22 @@ export default async function DashboardPage({
   const t = await getTranslations(locale as Locale)
 
   return (
-    <div className="flex flex-col">
-      {/* Header */}
-      <section className="bg-gradient-hero px-md py-3xl md:py-4xl">
-        <div className="mx-auto max-w-5xl">
-          <Badge variant="info" className="mb-md w-fit">
-            {t('dashboard.demoBadge')}
-          </Badge>
-          <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-md">
-            {t('dashboard.title')}
-          </h1>
-          <p className="text-md text-text-secondary max-w-2xl">
-            {t('dashboard.subtitle')}
-          </p>
-        </div>
-      </section>
+    <RequireAuth locale={locale as Locale} pageKey="dashboard">
+      <div className="flex flex-col">
+        {/* Header */}
+        <section className="bg-gradient-hero px-md py-3xl md:py-4xl">
+          <div className="mx-auto max-w-5xl">
+            <Badge variant="info" className="mb-md w-fit">
+              {t('dashboard.demoBadge')}
+            </Badge>
+            <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-md">
+              {t('dashboard.title')}
+            </h1>
+            <p className="text-md text-text-secondary max-w-2xl">
+              {t('dashboard.subtitle')}
+            </p>
+          </div>
+        </section>
 
       {/* Stats Overview */}
       <section className="px-md py-3xl">
@@ -323,33 +322,7 @@ export default async function DashboardPage({
           </Card>
         </div>
       </section>
-
-      {/* Login Prompt */}
-      <section className="bg-gradient-hero px-md py-3xl">
-        <div className="mx-auto max-w-3xl">
-          <Card className="border-primary-light">
-            <CardContent className="flex flex-col items-center gap-lg p-xl text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-light">
-                <LogIn className="h-7 w-7 text-primary" />
-              </div>
-              <div className="flex flex-col gap-sm">
-                <h2 className="text-xl md:text-2xl font-bold text-text-primary">
-                  {t('dashboard.loginPromptTitle')}
-                </h2>
-                <p className="text-md text-text-secondary max-w-md">
-                  {t('dashboard.loginPromptDesc')}
-                </p>
-              </div>
-              <Button variant="primary" size="lg" asChild>
-                <Link href={`/${locale}/signin`}>
-                  {t('dashboard.signInButton')}
-                  <ArrowRight className="ml-xs h-4 w-4" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-    </div>
+      </div>
+    </RequireAuth>
   )
 }

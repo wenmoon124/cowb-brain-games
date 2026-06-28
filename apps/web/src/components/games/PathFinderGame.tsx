@@ -32,13 +32,14 @@ interface Texts {
   timeout: string
   reset: string
   levelsCleared: string
+  timeouts: string
 }
 
 const TEXTS: Record<Locale, Texts> = {
   en: {
     title: 'Path Finder',
     description:
-      'Trace the shortest route from start to end across a walled grid. 5 levels, 60s each.',
+      'Trace the shortest route from start to end across a walled grid. 5 levels, 60s each, 3 timeouts allowed.',
     dimensionLabel: 'Executive',
     start: 'Start',
     level: 'Level',
@@ -49,6 +50,7 @@ const TEXTS: Record<Locale, Texts> = {
       'Click a cell already in your path to backtrack to it.',
       'Walls are blocked — you cannot cross them.',
       'Reach the goal cell before the 60s timer runs out.',
+      '3 timeouts end the game immediately.',
     ],
     scoring: [
       'Level score = max(100, (optimal − steps + 10) × 50).',
@@ -64,10 +66,11 @@ const TEXTS: Record<Locale, Texts> = {
     timeout: 'Time Up!',
     reset: 'Reset Path',
     levelsCleared: 'Levels Cleared',
+    timeouts: 'Timeouts',
   },
   zh: {
     title: '寻路者',
-    description: '在带墙网格中从起点到终点描绘最短路径。共 5 关，每关 60 秒。',
+    description: '在带墙网格中从起点到终点描绘最短路径。共 5 关，每关 60 秒，3 次超时即结束。',
     dimensionLabel: '执行',
     start: '开始',
     level: '关卡',
@@ -78,6 +81,7 @@ const TEXTS: Record<Locale, Texts> = {
       '点击已在路径中的格子可回退到该处。',
       '墙体不可穿越。',
       '在 60 秒内到达终点。',
+      '3 次超时将立即结束游戏。',
     ],
     scoring: [
       '关卡分 = max(100, (最优 − 步数 + 10) × 50)。',
@@ -90,10 +94,11 @@ const TEXTS: Record<Locale, Texts> = {
     timeout: '时间到！',
     reset: '重置路径',
     levelsCleared: '已过关卡',
+    timeouts: '超时',
   },
   ja: {
     title: 'パスファインダー',
-    description: '壁のあるグリッドで最短経路を描く。全5レベル、各60秒。',
+    description: '壁のあるグリッドで最短経路を描く。全5レベル、各60秒、タイムアウト3回で終了。',
     dimensionLabel: '実行',
     start: '開始',
     level: 'レベル',
@@ -104,6 +109,7 @@ const TEXTS: Record<Locale, Texts> = {
       '経路内のマスをクリックでそこまで戻る。',
       '壁は通過できない。',
       '60秒以内にゴールマスに到達。',
+      'タイムアウト3回で即終了。',
     ],
     scoring: [
       'レベルスコア = max(100, (最適 − 歩数 + 10) × 50)。',
@@ -116,11 +122,13 @@ const TEXTS: Record<Locale, Texts> = {
     timeout: '時間切れ！',
     reset: '経路リセット',
     levelsCleared: 'クリア数',
+    timeouts: 'タイムアウト',
   },
 }
 
 const TOTAL_LEVELS = 5
 const LEVEL_TIME_MS = 60000
+const MAX_TIMEOUTS = 3
 const WALL_DENSITY = 0.28
 
 function gridSizeForLevel(level: number): number {
@@ -228,8 +236,10 @@ export function PathFinderGame({ locale }: PathFinderGameProps) {
     'none'
   )
   const [levelsCleared, setLevelsCleared] = useState(0)
+  const [timeouts, setTimeouts] = useState(0)
 
   const levelStartRef = useRef(0)
+  const timeoutsRef = useRef(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const finishedRef = useRef(false)
@@ -278,12 +288,18 @@ export function PathFinderGame({ locale }: PathFinderGameProps) {
         if (remaining <= 0) {
           setTimeLeft(0)
           clearTimers()
+          timeoutsRef.current += 1
+          setTimeouts(timeoutsRef.current)
           setFeedback('timeout')
-          // 0 score for this level
-          advanceTimerRef.current = setTimeout(
-            () => advanceLevel(nextLevel + 1, 0),
-            1000
-          )
+          // 0 score for this level; 3 timeouts end the game
+          if (timeoutsRef.current >= MAX_TIMEOUTS) {
+            advanceTimerRef.current = setTimeout(() => finishGame(), 1000)
+          } else {
+            advanceTimerRef.current = setTimeout(
+              () => advanceLevel(nextLevel + 1, 0),
+              1000
+            )
+          }
         } else {
           setTimeLeft(remaining)
         }
@@ -296,6 +312,8 @@ export function PathFinderGame({ locale }: PathFinderGameProps) {
     finishedRef.current = false
     setScore(0)
     setLevelsCleared(0)
+    timeoutsRef.current = 0
+    setTimeouts(0)
     setStatus('playing')
     advanceLevel(1, 0)
   }, [advanceLevel])
@@ -373,6 +391,7 @@ export function PathFinderGame({ locale }: PathFinderGameProps) {
         onRetry={startGame}
         stats={[
           { label: t.levelsCleared, value: `${levelsCleared}/${TOTAL_LEVELS}` },
+          { label: t.timeouts, value: `${timeouts}/${MAX_TIMEOUTS}` },
           { label: t.level, value: level },
         ]}
       />
@@ -399,6 +418,12 @@ export function PathFinderGame({ locale }: PathFinderGameProps) {
             </span>
             <span className="text-xs text-text-muted">
               / {t.optimal} {optimal}
+            </span>
+          </div>
+          <div className="flex items-center gap-sm">
+            <span className="text-xs text-text-muted">{t.timeouts}</span>
+            <span className="text-md font-bold text-error">
+              {timeouts}/{MAX_TIMEOUTS}
             </span>
           </div>
         </div>

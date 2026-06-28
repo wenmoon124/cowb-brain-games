@@ -16,4 +16,6 @@ export const CATEGORY_BADGE_CONFIG: Record<ArticleCategory, CategoryBadgeConfig>
   relaxation: { variant: 'relaxation' },
   'brain-age': { variant: 'info' },
   focus: { variant: 'info', className: 'bg-accent-light text-accent' },
+  sleep: { variant: 'info', className: 'bg-primary-light text-primary' },
+  nutrition: { variant: 'info', className: 'bg-secondary-light text-secondary' },
 }

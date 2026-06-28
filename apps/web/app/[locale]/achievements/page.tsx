@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { RequireAuth } from '@/components/auth/RequireAuth'
 import type { GameDimension } from '@/lib/games'
 import type { LucideIcon } from 'lucide-react'
 import {
@@ -348,8 +349,9 @@ export default async function AchievementsPage({
   ]
 
   return (
-    <div className="flex flex-col">
-      {/* Header */}
+    <RequireAuth locale={locale as Locale} pageKey="achievements">
+      <div className="flex flex-col">
+        {/* Header */}
       <section className="bg-gradient-hero px-md py-3xl md:py-4xl">
         <div className="mx-auto max-w-5xl">
           <Badge variant="info" className="mb-md w-fit">
@@ -493,6 +495,7 @@ export default async function AchievementsPage({
           </Button>
         </div>
       </section>
-    </div>
+      </div>
+    </RequireAuth>
   )
 }

@@ -178,7 +178,22 @@
       "description": "ご質問、ご提案、またはただ挨拶したいだけでも構いません。お便りをお待ちしております。",
       "email": "メール",
       "emailDescription": "お問い合わせは下記のメールアドレスまでお願いします。",
-      "responseTime": "通常 1〜2 営業日以内に返信いたします。"
+      "responseTime": "通常 1〜2 営業日以内に返信いたします。",
+      "formTitle": "メッセージを送信",
+      "formDescription": "以下のフォームに記入すると、メールクライアントが開きメッセージが事前入力されます。",
+      "name": "お名前",
+      "namePlaceholder": "山田太郎",
+      "emailField": "メールアドレス",
+      "emailPlaceholder": "taro@example.com",
+      "message": "メッセージ",
+      "messagePlaceholder": "お気持ちをお聞かせください...",
+      "submit": "メッセージを送信",
+      "submitting": "メールクライアントを開いています...",
+      "nameRequired": "お名前を入力してください",
+      "emailRequired": "メールアドレスを入力してください",
+      "emailInvalid": "有効なメールアドレスを入力してください",
+      "messageRequired": "メッセージを入力してください",
+      "messageTooShort": "メッセージは10文字以上で入力してください"
     },
     "dashboard": {
       "loginRequired": "ダッシュボードを表示するにはログインしてください",
@@ -276,7 +291,9 @@
       "reaction": "反応",
       "executive": "実行機能",
       "focus": "フォーカス",
-      "relaxation": "リラクゼーション"
+      "relaxation": "リラクゼーション",
+      "sleep": "睡眠",
+      "nutrition": "栄養"
     },
     "pageText": {
       "title": "記事",

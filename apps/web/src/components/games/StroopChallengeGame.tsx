@@ -33,6 +33,8 @@ interface Texts {
   gameover: string
   playAgain: string
   accuracy: string
+  errors: string
+  avgReaction: string
 }
 
 const COLOR_MAP: Record<Locale, Record<ColorKey, ColorDef>> = {
@@ -74,6 +76,8 @@ const TEXTS: Record<Locale, Texts> = {
     gameover: 'Game Over',
     playAgain: 'Play Again',
     accuracy: 'Accuracy',
+    errors: 'Errors',
+    avgReaction: 'Avg. Reaction',
   },
   zh: {
     title: 'Stroop 挑战',
@@ -88,6 +92,8 @@ const TEXTS: Record<Locale, Texts> = {
     gameover: '游戏结束',
     playAgain: '再来一局',
     accuracy: '准确率',
+    errors: '错误',
+    avgReaction: '平均反应',
   },
   ja: {
     title: 'ストループチャレンジ',
@@ -102,6 +108,8 @@ const TEXTS: Record<Locale, Texts> = {
     gameover: 'ゲームオーバー',
     playAgain: 'もう一度',
     accuracy: '正確率',
+    errors: 'エラー',
+    avgReaction: '平均反応',
   },
 }
 
@@ -192,6 +200,7 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
   const [correctCount, setCorrectCount] = useState(0)
   const [answeredCount, setAnsweredCount] = useState(0)
   const [errors, setErrors] = useState(0)
+  const [reactionTimes, setReactionTimes] = useState<number[]>([])
   const [feedback, setFeedback] = useState<
     'none' | 'correct' | 'wrong' | 'timeout'
   >('none')
@@ -279,6 +288,7 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
     setCorrectCount(0)
     setAnsweredCount(0)
     setErrors(0)
+    setReactionTimes([])
     setQuestionNumber(1)
     setStatus('playing')
     nextQuestion(1)
@@ -300,6 +310,7 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
       )
       setScore((s) => s + qScore)
       setCorrectCount((c) => c + 1)
+      setReactionTimes((prev) => [...prev, rt])
       setFeedback('correct')
     } else {
       const newLives = livesRef.current - 1
@@ -324,6 +335,12 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
 
   const accuracy =
     answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0
+  const avgReaction =
+    reactionTimes.length > 0
+      ? Math.round(
+          reactionTimes.reduce((sum, r) => sum + r, 0) / reactionTimes.length
+        )
+      : 0
   // Final = max(0, Σ question scores − errors × 80)
   const finalScore = Math.max(0, score - errors * 80)
 
@@ -360,7 +377,12 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
         accuracy={accuracy}
         dimension="executive"
         onRetry={startGame}
-        stats={[{ label: t.lives, value: `${lives}/${MAX_LIVES}` }]}
+        stats={[
+          { label: t.lives, value: `${lives}/${MAX_LIVES}` },
+          { label: t.accuracy, value: `${accuracy}%` },
+          { label: t.errors, value: errors },
+          { label: t.avgReaction, value: `${avgReaction}ms` },
+        ]}
       />
     )
   }

@@ -32,6 +32,21 @@ let total = 0
 for (const [locale, htmlLang] of Object.entries(LOCALE_MAP)) {
   const count = walkHtml(path.join(OUT_DIR, locale), htmlLang)
   total += count
-  console.log(`[fix-html-lang] ${locale} -> lang="${htmlLang}" (${count} files)`)
+  console.log(`[fix-html-lang] ${locale}/ -> lang="${htmlLang}" (${count} files)`)
 }
+
+// Also fix root-level {locale}.html files (Next.js static export places homepage at out/{locale}.html)
+for (const [locale, htmlLang] of Object.entries(LOCALE_MAP)) {
+  const rootFile = path.join(OUT_DIR, `${locale}.html`)
+  if (fs.existsSync(rootFile)) {
+    const content = fs.readFileSync(rootFile, 'utf8')
+    const fixed = content.replace(/<html\s+lang="en"/g, `<html lang="${htmlLang}"`)
+    if (fixed !== content) {
+      fs.writeFileSync(rootFile, fixed)
+      total++
+      console.log(`[fix-html-lang] ${locale}.html -> lang="${htmlLang}"`)
+    }
+  }
+}
+
 console.log(`[fix-html-lang] Done. ${total} files updated.`)

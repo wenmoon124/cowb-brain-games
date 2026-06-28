@@ -178,7 +178,22 @@
       "description": "有问题、建议，或只是想说声你好？我们很乐意收到你的来信。",
       "email": "邮箱",
       "emailDescription": "请通过下方邮箱地址联系我们。",
-      "responseTime": "我们通常在 1-2 个工作日内回复。"
+      "responseTime": "我们通常在 1-2 个工作日内回复。",
+      "formTitle": "给我们留言",
+      "formDescription": "填写下方表单，你的邮件客户端将打开并预填消息。",
+      "name": "你的姓名",
+      "namePlaceholder": "张三",
+      "emailField": "你的邮箱",
+      "emailPlaceholder": "zhang@example.com",
+      "message": "留言内容",
+      "messagePlaceholder": "告诉我们你的想法...",
+      "submit": "发送留言",
+      "submitting": "正在打开邮件客户端...",
+      "nameRequired": "请输入姓名",
+      "emailRequired": "请输入邮箱",
+      "emailInvalid": "请输入有效的邮箱地址",
+      "messageRequired": "请输入留言内容",
+      "messageTooShort": "留言内容至少需要 10 个字符"
     },
     "dashboard": {
       "loginRequired": "请登录后查看你的仪表盘",
@@ -276,7 +291,9 @@
       "reaction": "反应",
       "executive": "执行功能",
       "focus": "专注",
-      "relaxation": "放松"
+      "relaxation": "放松",
+      "sleep": "睡眠",
+      "nutrition": "营养"
     },
     "pageText": {
       "title": "文章",

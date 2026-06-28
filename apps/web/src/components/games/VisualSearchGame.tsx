@@ -18,6 +18,7 @@ interface Texts {
   score: string
   round: string
   misses: string
+  lives: string
   findTarget: string
   gameover: string
   playAgain: string
@@ -28,11 +29,12 @@ interface Texts {
 const TEXTS: Record<Locale, Texts> = {
   en: {
     title: 'Visual Search',
-    description: 'Find the ★ target among distractors. 20 rounds, 3s each.',
+    description: 'Find the ★ target among distractors. 20 rounds, 3s each, 3 lives.',
     start: 'Start',
     score: 'Score',
     round: 'Round',
     misses: 'Misses',
+    lives: 'Lives',
     findTarget: 'Tap the ★',
     gameover: 'Game Over',
     playAgain: 'Play Again',
@@ -41,11 +43,12 @@ const TEXTS: Record<Locale, Texts> = {
   },
   zh: {
     title: '视觉搜索',
-    description: '在干扰符号中找到 ★ 目标。共 20 轮，每轮 3 秒。',
+    description: '在干扰符号中找到 ★ 目标。共 20 轮，每轮 3 秒，3 条命。',
     start: '开始',
     score: '得分',
     round: '轮次',
     misses: '错过',
+    lives: '生命',
     findTarget: '点击 ★',
     gameover: '游戏结束',
     playAgain: '再来一局',
@@ -54,11 +57,12 @@ const TEXTS: Record<Locale, Texts> = {
   },
   ja: {
     title: 'ビジュアルサーチ',
-    description: '妨害の中から ★ 目標を見つけよう。全20ラウンド、各3秒。',
+    description: '妨害の中から ★ 目標を見つけよう。全20ラウンド、各3秒、ライフ3。',
     start: '開始',
     score: 'スコア',
     round: 'ラウンド',
     misses: 'ミス',
+    lives: 'ライフ',
     findTarget: '★ をタップ',
     gameover: 'ゲームオーバー',
     playAgain: 'もう一度',
@@ -69,6 +73,7 @@ const TEXTS: Record<Locale, Texts> = {
 
 const TOTAL_ROUNDS = 20
 const ROUND_LIMIT_MS = 3000
+const MAX_LIVES = 3
 const TARGET_SYMBOL = '★'
 const DISTRACTORS = ['●', '▲', '■', '◆', '✦', '◯', '△', '▢', '♦'] as const
 
@@ -133,6 +138,7 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
   const [score, setScore] = useState(0)
   const [misses, setMisses] = useState(0)
   const [hits, setHits] = useState(0)
+  const [lives, setLives] = useState(MAX_LIVES)
   const [roundData, setRoundData] = useState<RoundData | null>(null)
   const [timeLeft, setTimeLeft] = useState(ROUND_LIMIT_MS)
   const [feedback, setFeedback] = useState<'none' | 'correct' | 'wrong'>('none')
@@ -142,6 +148,16 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const finishedRef = useRef(false)
+  const livesRef = useRef(MAX_LIVES)
+
+  const loseLife = useCallback(() => {
+    livesRef.current -= 1
+    setLives(livesRef.current)
+    if (livesRef.current <= 0) {
+      return true
+    }
+    return false
+  }, [])
 
   const clearTimers = useCallback(() => {
     if (timeoutRef.current !== null) {
@@ -190,13 +206,18 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
         setFeedback('wrong')
         timeoutRef.current = null
         clearTimers()
+        const dead = loseLife()
+        if (dead) {
+          setTimeout(() => finishGame(), 600)
+          return
+        }
         const advance = setTimeout(() => {
           startRound(nextRound + 1)
         }, 600)
         timeoutRef.current = advance
       }, ROUND_LIMIT_MS)
     },
-    [clearTimers, finishGame]
+    [clearTimers, finishGame, loseLife]
   )
 
   const startGame = useCallback(() => {
@@ -204,6 +225,8 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
     setScore(0)
     setMisses(0)
     setHits(0)
+    setLives(MAX_LIVES)
+    livesRef.current = MAX_LIVES
     setReactionTimes([])
     setRound(1)
     setStatus('playing')
@@ -233,6 +256,13 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
     } else {
       setMisses((m) => m + 1)
       setFeedback('wrong')
+      const dead = loseLife()
+      if (dead) {
+        timeoutRef.current = setTimeout(() => {
+          finishGame()
+        }, 600)
+        return
+      }
     }
 
     timeoutRef.current = setTimeout(() => {
@@ -292,6 +322,7 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
         dimension="attention"
         onRetry={startGame}
         stats={[
+          { label: t.lives, value: `${lives}/${MAX_LIVES}` },
           { label: t.avgReaction, value: `${avgReaction}ms` },
           { label: t.misses, value: misses },
         ]}
@@ -318,6 +349,12 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
           <div className="flex items-center gap-sm">
             <span className="text-xs text-text-muted">{t.misses}</span>
             <span className="text-md font-bold text-error">{misses}</span>
+          </div>
+          <div className="flex items-center gap-sm">
+            <span className="text-xs text-text-muted">{t.lives}</span>
+            <span className="text-md font-bold text-dim-attention-text">
+              {lives}/{MAX_LIVES}
+            </span>
           </div>
         </div>
 

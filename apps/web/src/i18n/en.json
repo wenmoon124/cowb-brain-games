@@ -178,7 +178,22 @@
       "description": "Have a question, suggestion, or just want to say hello? We'd love to hear from you.",
       "email": "Email",
       "emailDescription": "Reach us at the address below for any inquiries.",
-      "responseTime": "We typically respond within 1-2 business days."
+      "responseTime": "We typically respond within 1-2 business days.",
+      "formTitle": "Send Us a Message",
+      "formDescription": "Fill out the form below and your email client will open with the message pre-filled.",
+      "name": "Your Name",
+      "namePlaceholder": "John Doe",
+      "emailField": "Your Email",
+      "emailPlaceholder": "john@example.com",
+      "message": "Message",
+      "messagePlaceholder": "Tell us what's on your mind...",
+      "submit": "Send Message",
+      "submitting": "Opening email client...",
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "messageRequired": "Message is required",
+      "messageTooShort": "Message must be at least 10 characters"
     },
     "dashboard": {
       "loginRequired": "Please sign in to view your dashboard",
@@ -276,7 +291,9 @@
       "reaction": "Reaction",
       "executive": "Executive Function",
       "focus": "Focus",
-      "relaxation": "Relaxation"
+      "relaxation": "Relaxation",
+      "sleep": "Sleep",
+      "nutrition": "Nutrition"
     },
     "pageText": {
       "title": "Articles",
