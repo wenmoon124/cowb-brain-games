@@ -11,6 +11,7 @@ import { getTranslations } from '@/i18n/translations'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { BreadcrumbJsonLd, VideoGameJsonLd } from '@/components/seo/JsonLd'
 import { GAMES, GAME_SLUGS, getGameBySlug, type GameDimension } from '@/lib/games'
 import { ArrowLeft } from 'lucide-react'
 // Memory games
@@ -43,7 +44,7 @@ import { StressSandboxGame } from '@/components/games/StressSandboxGame'
 type BadgeVariant = GameDimension
 
 interface GameComponentProps {
-  locale: string
+  locale: Locale
 }
 
 const GAME_COMPONENTS: Record<string, ComponentType<GameComponentProps>> = {
@@ -136,6 +137,22 @@ export default async function GameDetailPage({
 
   return (
     <div className="bg-gradient-hero px-md py-3xl md:py-5xl">
+      <BreadcrumbJsonLd
+        items={[
+          { name: t('nav.home'), url: `https://cowb.cc/${locale}` },
+          { name: t('games.title'), url: `https://cowb.cc/${locale}/games` },
+          { name: t(game.titleKey), url: `https://cowb.cc/${locale}/games/${game.slug}` },
+        ]}
+      />
+      <VideoGameJsonLd
+        game={{
+          name: t(game.titleKey),
+          description: t(game.descriptionKey),
+          genre: t(`games.dimensions.${game.dimension}`),
+          url: `https://cowb.cc/${locale}/games/${game.slug}`,
+          dimension: game.dimension,
+        }}
+      />
       <div className="mx-auto max-w-4xl">
         {/* Back Button */}
         <Button variant="ghost" size="sm" className="mb-lg" asChild>

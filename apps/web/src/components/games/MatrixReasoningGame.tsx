@@ -5,13 +5,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { GameTimer } from '@/components/games/GameTimer'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 import { GameRules } from '@/components/games/GameRules'
 import { Play } from 'lucide-react'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 type Shape = 'circle' | 'square' | 'triangle'
 type PatternType = 'color' | 'shape' | 'count' | 'rotation' | 'combination'
-type Locale = 'en' | 'zh' | 'ja'
 
 interface MCell {
   shape: Shape
@@ -121,7 +122,7 @@ const MAX_ERRORS = 3
 const SHAPES: readonly Shape[] = ['circle', 'square', 'triangle']
 const COLORS: readonly string[] = ['#FF6B35', '#FFB14A', '#F472B6']
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -310,10 +311,11 @@ function ShapeSvg({ cell, size = 60 }: { cell: MCell; size?: number }) {
 }
 
 export interface MatrixReasoningGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function MatrixReasoningGame({ locale }: MatrixReasoningGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -468,6 +470,7 @@ export function MatrixReasoningGame({ locale }: MatrixReasoningGameProps) {
   if (status === 'idle') {
     return (
       <GameRules
+        t={tt}
         title={t.title}
         dimension="executive"
         dimensionLabel={t.dimensionLabel}
@@ -486,6 +489,7 @@ export function MatrixReasoningGame({ locale }: MatrixReasoningGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={score}
         accuracy={accuracy}
         dimension="executive"

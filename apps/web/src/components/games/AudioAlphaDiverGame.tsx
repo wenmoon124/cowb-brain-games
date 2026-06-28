@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 import { GameRules } from '@/components/games/GameRules'
 import { Waves, Play, Square } from 'lucide-react'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -149,7 +150,7 @@ interface AudioNodes {
   gain: GainNode
 }
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -207,10 +208,11 @@ function createAmbient(): AudioNodes | null {
 }
 
 export interface AudioAlphaDiverGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function AudioAlphaDiverGame({ locale }: AudioAlphaDiverGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -327,6 +329,7 @@ export function AudioAlphaDiverGame({ locale }: AudioAlphaDiverGameProps) {
   if (status === 'idle') {
     return (
       <GameRules
+        t={tt}
         title={t.title}
         dimension="relaxation"
         dimensionLabel={t.dimensionLabel}
@@ -414,6 +417,7 @@ export function AudioAlphaDiverGame({ locale }: AudioAlphaDiverGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         dimension="relaxation"
         onRetry={reset}

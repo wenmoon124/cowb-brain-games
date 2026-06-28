@@ -10,14 +10,13 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Brain, UserPlus, AlertCircle, Loader2 } from 'lucide-react'
+import { API_BASE_URL } from '@/lib/config'
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 interface SignupPageProps {
   params: { locale: string }
 }
-
-const API_BASE = 'https://cowb-brain-games-api.wenmoon124.workers.dev'
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function SignupPage({ params }: SignupPageProps) {
   const locale: Locale = isValidLocale(params.locale) ? params.locale : 'en'
@@ -59,7 +58,7 @@ export default function SignupPage({ params }: SignupPageProps) {
 
     setIsSubmitting(true)
     try {
-      const response = await fetch(`${API_BASE}/api/auth/signup`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nickname, email, password }),

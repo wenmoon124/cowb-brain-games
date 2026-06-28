@@ -3,105 +3,17 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Clock, Calendar } from 'lucide-react'
 import { LOCALES, isValidLocale, type Locale } from '@/i18n/config'
+import { getTranslations } from '@/i18n/translations'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ArticleJsonLd } from '@/components/seo/JsonLd'
+import { ArticleJsonLd, BreadcrumbJsonLd, FaqPageJsonLd } from '@/components/seo/JsonLd'
+import { CATEGORY_BADGE_CONFIG, formatDate } from '@/lib/article-utils'
 import {
-  ARTICLES,
   ARTICLE_SLUGS,
   getArticleBySlug,
   getRelatedArticles,
-  type ArticleCategory,
 } from '@/data/articles'
-
-interface CategoryBadgeConfig {
-  variant: 'memory' | 'attention' | 'reaction' | 'executive' | 'relaxation' | 'info'
-  className?: string
-}
-
-const CATEGORY_BADGE_CONFIG: Record<ArticleCategory, CategoryBadgeConfig> = {
-  memory: { variant: 'memory' },
-  attention: { variant: 'attention' },
-  reaction: { variant: 'reaction' },
-  executive: { variant: 'executive' },
-  relaxation: { variant: 'relaxation' },
-  'brain-age': { variant: 'info' },
-  focus: { variant: 'info', className: 'bg-accent-light text-accent' },
-}
-
-const CATEGORY_LABELS: Record<Locale, Record<ArticleCategory, string>> = {
-  en: {
-    memory: 'Memory',
-    attention: 'Attention',
-    reaction: 'Reaction',
-    executive: 'Executive',
-    relaxation: 'Relaxation',
-    'brain-age': 'Brain Age',
-    focus: 'Focus',
-  },
-  zh: {
-    memory: '记忆',
-    attention: '注意力',
-    reaction: '反应',
-    executive: '执行功能',
-    relaxation: '放松',
-    'brain-age': '大脑年龄',
-    focus: '专注',
-  },
-  ja: {
-    memory: '記憶',
-    attention: '注意力',
-    reaction: '反応',
-    executive: '実行機能',
-    relaxation: 'リラクゼーション',
-    'brain-age': '脳年齢',
-    focus: 'フォーカス',
-  },
-}
-
-const PAGE_TEXT: Record<
-  Locale,
-  {
-    backToArticles: string
-    readingTime: string
-    relatedArticles: string
-    tryGames: string
-  }
-> = {
-  en: {
-    backToArticles: 'Back to Articles',
-    readingTime: 'min read',
-    relatedArticles: 'Related Articles',
-    tryGames: 'Try Related Games',
-  },
-  zh: {
-    backToArticles: '返回文章列表',
-    readingTime: '分钟阅读',
-    relatedArticles: '相关文章',
-    tryGames: '尝试相关游戏',
-  },
-  ja: {
-    backToArticles: '記事一覧に戻る',
-    readingTime: '分で読了',
-    relatedArticles: '関連記事',
-    tryGames: '関連ゲームを試す',
-  },
-}
-
-function formatDate(isoDate: string, locale: Locale): string {
-  const date = new Date(isoDate)
-  const localeMap: Record<Locale, string> = {
-    en: 'en-US',
-    zh: 'zh-CN',
-    ja: 'ja-JP',
-  }
-  return date.toLocaleDateString(localeMap[locale], {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-}
 
 function renderContent(content: string) {
   const sections = content.split('\n## ').filter(Boolean)
@@ -127,6 +39,32 @@ function renderContent(content: string) {
   })
 }
 
+/**
+ * 从文章内容中提取 FAQ 问答对。
+ * 识别 `## Frequently Asked Questions` / `## 常见问题` / `## よくある質問` / `## FAQ` 标题，
+ * 提取后续段落中的 `**Q: ...**` / `**问：...**` / `**Q：...**` 模式。
+ */
+function extractFaqs(content: string): Array<{ question: string; answer: string }> {
+  const faqSectionPattern =
+    /##\s+(?:Frequently Asked Questions|常见问题|よくある質問|FAQ)\s*\n([\s\S]*?)(?=\n##\s|$)/
+  const match = content.match(faqSectionPattern)
+  if (!match || !match[1]) return []
+
+  const faqBody = match[1]
+  const faqs: Array<{ question: string; answer: string }> = []
+  // 匹配 **Q: question** 或 **问：question** 或 **Q：question** 后跟答案段落
+  const qaPattern = /\*\*(?:Q[:：]|问[:：])\s*(.+?)\*\*\s*\n\n([\s\S]*?)(?=\n\n\*\*(?:Q[:：]|问[:：])\*\*|$)/g
+  let qaMatch: RegExpExecArray | null
+  while ((qaMatch = qaPattern.exec(faqBody)) !== null) {
+    const question = qaMatch[1]?.trim()
+    const answer = qaMatch[2]?.trim()
+    if (question && answer) {
+      faqs.push({ question, answer })
+    }
+  }
+  return faqs
+}
+
 export function generateStaticParams() {
   const params: { locale: string; slug: string }[] = []
   for (const locale of LOCALES) {
@@ -143,12 +81,13 @@ export async function generateMetadata({
   params: { locale: string; slug: string }
 }): Promise<Metadata> {
   const locale = isValidLocale(params.locale) ? params.locale : 'en'
+  const t = await getTranslations(locale as Locale)
   const article = getArticleBySlug(params.slug)
 
   if (!article) {
     return {
-      title: 'Article',
-      description: 'Brain training article',
+      title: t('articles.pageText.title'),
+      description: t('articles.pageText.subtitle'),
     }
   }
 
@@ -172,8 +111,15 @@ export async function generateMetadata({
       description: content.excerpt,
       url: `https://cowb.cc${pathPrefix}`,
       type: 'article',
+      images: ['/og-image.svg'],
       publishedTime: article.date,
       authors: [article.author],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: content.title,
+      description: content.excerpt,
+      images: ['/og-image.svg'],
     },
   }
 }
@@ -183,9 +129,8 @@ export default async function ArticleDetailPage({
 }: {
   params: { locale: string; slug: string }
 }) {
-  const locale = isValidLocale(params.locale) ? params.locale : 'en' as Locale
-  const text = PAGE_TEXT[locale]
-  const categoryLabels = CATEGORY_LABELS[locale]
+  const locale = isValidLocale(params.locale) ? (params.locale as Locale) : 'en'
+  const t = await getTranslations(locale)
   const article = getArticleBySlug(params.slug)
 
   if (!article) {
@@ -195,6 +140,7 @@ export default async function ArticleDetailPage({
   const content = article[locale]
   const config = CATEGORY_BADGE_CONFIG[article.category]
   const related = getRelatedArticles(article.slug, article.category, 3)
+  const faqs = extractFaqs(content.content)
 
   return (
     <div className="bg-gradient-hero px-md py-3xl md:py-5xl">
@@ -203,7 +149,7 @@ export default async function ArticleDetailPage({
         <Button variant="ghost" size="sm" className="mb-lg" asChild>
           <Link href={`/${locale}/articles`}>
             <ArrowLeft className="mr-xs h-4 w-4" />
-            {text.backToArticles}
+            {t('articles.pageText.backToArticles')}
           </Link>
         </Button>
 
@@ -211,7 +157,7 @@ export default async function ArticleDetailPage({
         <header className="mb-2xl">
           <div className="mb-md flex items-center gap-sm">
             <Badge variant={config.variant} className={config.className}>
-              {categoryLabels[article.category]}
+              {t(`articles.categoryLabels.${article.category}`)}
             </Badge>
           </div>
           <h1 className="text-2xl md:text-4xl font-bold text-text-primary mb-md leading-tight">
@@ -228,7 +174,7 @@ export default async function ArticleDetailPage({
             </span>
             <span className="flex items-center gap-xs">
               <Clock className="h-4 w-4" />
-              {article.readingTime} {text.readingTime}
+              {article.readingTime} {t('articles.pageText.readingTime')}
             </span>
           </div>
         </header>
@@ -242,7 +188,7 @@ export default async function ArticleDetailPage({
         <div className="mt-3xl text-center">
           <Button variant="primary" size="lg" asChild>
             <Link href={`/${locale}/games`}>
-              {text.tryGames}
+              {t('articles.pageText.tryGames')}
             </Link>
           </Button>
         </div>
@@ -251,7 +197,7 @@ export default async function ArticleDetailPage({
         {related.length > 0 && (
           <section className="mt-3xl">
             <h2 className="text-xl font-semibold text-text-primary mb-lg">
-              {text.relatedArticles}
+              {t('articles.pageText.relatedArticles')}
             </h2>
             <div className="grid grid-cols-1 gap-md sm:grid-cols-2 lg:grid-cols-3">
               {related.map((relatedArticle) => {
@@ -269,7 +215,7 @@ export default async function ArticleDetailPage({
                           variant={relatedConfig.variant}
                           className={relatedConfig.className}
                         >
-                          {categoryLabels[relatedArticle.category]}
+                          {t(`articles.categoryLabels.${relatedArticle.category}`)}
                         </Badge>
                         <h3 className="text-md font-semibold text-text-primary line-clamp-2">
                           {relatedContent.title}
@@ -279,7 +225,7 @@ export default async function ArticleDetailPage({
                         </p>
                         <span className="mt-xs flex items-center gap-xs text-xs text-text-secondary">
                           <Clock className="h-3 w-3" />
-                          {relatedArticle.readingTime} {text.readingTime}
+                          {relatedArticle.readingTime} {t('articles.pageText.readingTime')}
                         </span>
                       </CardContent>
                     </Card>
@@ -301,6 +247,14 @@ export default async function ArticleDetailPage({
           author: article.author,
         }}
       />
+      <BreadcrumbJsonLd
+        items={[
+          { name: t('nav.home'), url: `https://cowb.cc/${locale}` },
+          { name: t('articles.pageText.title'), url: `https://cowb.cc/${locale}/articles` },
+          { name: content.title, url: `https://cowb.cc/${locale}/articles/${article.slug}` },
+        ]}
+      />
+      {faqs.length > 0 && <FaqPageJsonLd faqs={faqs} />}
     </div>
   )
 }

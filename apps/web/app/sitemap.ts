@@ -4,7 +4,7 @@ import { ARTICLES } from '@/data/articles'
 
 const BASE_URL = 'https://cowb.cc'
 const LOCALES = ['en', 'zh', 'ja'] as const
-const LAST_MODIFIED = new Date('2026-06-27T00:00:00.000Z')
+const BUILD_TIME = new Date()
 
 /** 静态路由路径（不含 locale 前缀） */
 const STATIC_PATHS = [
@@ -36,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }
       entries.push({
         url,
-        lastModified: LAST_MODIFIED,
+        lastModified: BUILD_TIME,
         changeFrequency: path === '' ? 'daily' : 'weekly',
         priority: path === '' ? 1.0 : path === '/games' ? 0.9 : 0.7,
         alternates: {
@@ -55,7 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }
       entries.push({
         url,
-        lastModified: LAST_MODIFIED,
+        lastModified: BUILD_TIME,
         changeFrequency: 'weekly',
         priority: 0.8,
         alternates: {
@@ -74,7 +74,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }
       entries.push({
         url,
-        lastModified: LAST_MODIFIED,
+        lastModified: new Date(article.date),
         changeFrequency: 'monthly',
         priority: 0.6,
         alternates: {

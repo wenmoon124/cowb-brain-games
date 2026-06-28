@@ -46,7 +46,7 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
         type="button"
         onClick={() => setOpen(!open)}
         className="flex items-center gap-xs rounded-md px-sm py-sm text-sm font-medium text-text-secondary transition-colors hover:bg-primary-bg hover:text-text-primary"
-        aria-label={t('nav.about')}
+        aria-label={t('common.languageSwitcher')}
         aria-expanded={open}
       >
         <Globe className="h-4 w-4" />

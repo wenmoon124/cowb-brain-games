@@ -6,11 +6,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Brain, Play, Delete } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 type Phase = 'flashing' | 'input' | 'feedback'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -90,7 +90,7 @@ const INITIAL_LENGTH = 3
 const DIGIT_SHOW_MS = 1000
 const DIGIT_GAP_MS = 200
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -103,10 +103,11 @@ function generateSequence(length: number): number[] {
 }
 
 export interface DigitSpanGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function DigitSpanGame({ locale }: DigitSpanGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -264,6 +265,7 @@ export function DigitSpanGame({ locale }: DigitSpanGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         accuracy={accuracyPercent}
         dimension="memory"

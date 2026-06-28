@@ -2,6 +2,8 @@
   "common": {
     "appName": "BrainVerse",
     "tagline": "Train Your Brain, Lower Your Brain Age",
+    "languageSwitcher": "Switch language",
+    "loading": "Loading...",
     "buttons": {
       "start": "Start",
       "continue": "Continue",
@@ -13,7 +15,9 @@
       "save": "Save",
       "delete": "Delete",
       "confirm": "Confirm"
-    }
+    },
+    "toggleMenu": "Toggle menu",
+    "close": "Close"
   },
   "nav": {
     "home": "Home",
@@ -54,11 +58,17 @@
     "playNow": "Play Now",
     "viewResults": "View Results",
     "dimensions": {
+      "all": "All",
       "memory": "Memory",
       "attention": "Attention",
       "reaction": "Reaction",
       "executive": "Executive Function",
       "relaxation": "Relaxation"
+    },
+    "rules": {
+      "howToPlay": "How to Play",
+      "scoring": "Scoring",
+      "tips": "Tips"
     },
     "difficulty": {
       "easy": "Easy",
@@ -149,7 +159,6 @@
       "title": "Stress Sandbox",
       "description": "Tactile play to release tension"
     },
-    "comingSoon": "Coming Soon",
     "backToGames": "Back to Games"
   },
   "pages": {
@@ -233,7 +242,85 @@
     "streak": "Current Streak",
     "achievements": "Recent Achievements",
     "recentGames": "Recent Games",
-    "noData": "No data yet. Start your first game!"
+    "noData": "No data yet. Start your first game!",
+    "title": "Your Dashboard",
+    "subtitle": "A snapshot of your training progress, dimension scores, and recent activity.",
+    "statsSectionTitle": "Overview",
+    "dimensionsSectionTitle": "Dimension progress",
+    "dimensionsSectionSubtitle": "Your normalized score (0–100) for each cognitive dimension.",
+    "recentActivityTitle": "Recent activity",
+    "recentActivitySubtitle": "Your latest training sessions.",
+    "scoreLabel": "Score",
+    "loginPromptTitle": "Sign in to sync your progress",
+    "loginPromptDesc": "Create an account or sign in to keep your brain age, streaks, and history across devices.",
+    "signInButton": "Sign In",
+    "demoBadge": "Demo data",
+    "statsLabels": {
+      "gamesPlayed": "Games Played",
+      "bestScore": "Best Score",
+      "currentStreak": "Current Streak",
+      "brainAge": "Brain Age"
+    },
+    "statsValues": {
+      "gamesPlayed": "47",
+      "bestScore": "3,250",
+      "currentStreak": "12 days",
+      "brainAge": "28"
+    }
+  },
+  "articles": {
+    "categoryLabels": {
+      "brain-age": "Brain Age",
+      "memory": "Memory",
+      "attention": "Attention",
+      "reaction": "Reaction",
+      "executive": "Executive Function",
+      "focus": "Focus",
+      "relaxation": "Relaxation"
+    },
+    "pageText": {
+      "title": "Articles",
+      "subtitle": "Science-based insights on brain training",
+      "backToArticles": "Back to Articles",
+      "readingTime": "min read",
+      "relatedArticles": "Related Articles",
+      "tryGames": "Try Related Games",
+      "faqTitle": "FAQ",
+      "publishedOn": "Published on",
+      "allCategories": "All Categories",
+      "articlesCount": "{count} articles"
+    }
+  },
+  "brainAge": {
+    "heroBadge": "Science-based assessment",
+    "title": "Brain Age Assessment",
+    "subtitle": "Measure your cognitive fitness across five core dimensions and discover your brain age — a single number that reflects how sharp your mind is today.",
+    "heroCta": "Explore dimensions",
+    "dimensionsSectionTitle": "Five cognitive dimensions",
+    "dimensionsSectionSubtitle": "Your brain age is computed from performance across the five pillars below. Each dimension is trained by dedicated games.",
+    "gamesLabel": "{count} games",
+    "exploreLabel": "Explore games",
+    "processTitle": "How assessment works",
+    "processSubtitle": "Three simple steps from play to insight.",
+    "step1Title": "Play games",
+    "step1Desc": "Train across the five dimensions. Every session contributes to your assessment.",
+    "step2Title": "Collect scores",
+    "step2Desc": "Your performance in each dimension is normalized into a 0–100 score.",
+    "step3Title": "See your brain age",
+    "step3Desc": "Scores are combined into a brain age, calibrated against your peer group.",
+    "scienceTitle": "The science behind brain age",
+    "scienceBody": "Brain age is a composite estimate of cognitive performance relative to a population baseline. It draws on decades of research showing that fluid intelligence, processing speed, and working memory change with age and respond to training. We combine your normalized dimension scores into a single, easy-to-track number.",
+    "scienceCitation": "Synthesized from cognitive aging research (Salthouse, 2009; Park et al., 2002).",
+    "finalCtaTitle": "Start your assessment",
+    "finalCtaSubtitle": "Play a few games across each dimension to unlock your first brain age.",
+    "startButton": "Start training",
+    "dimensionDescriptions": {
+      "memory": "Recall and retain information across short and long intervals.",
+      "attention": "Sustain focus and filter out distractions.",
+      "reaction": "Respond quickly and accurately to stimuli.",
+      "executive": "Plan, switch tasks, and resolve conflicts.",
+      "relaxation": "Regulate stress and settle the mind."
+    }
   },
   "auth": {
     "signIn": {
@@ -272,6 +359,7 @@
     "savePreferences": "Save Preferences",
     "strictlyNecessary": "Strictly Necessary",
     "strictlyNecessaryDescription": "These cookies are essential for the website to function.",
+    "alwaysActive": "Always Active",
     "performanceAnalytics": "Performance & Analytics",
     "performanceAnalyticsDescription": "These cookies help us understand how visitors interact with the website.",
     "targetingAds": "Targeting & Advertising",
@@ -289,6 +377,8 @@
     "network": "Network error. Please check your connection.",
     "notFound": "Page not found",
     "unauthorized": "You are not authorized to view this page.",
+    "tryAgain": "Try Again",
+    "backToHome": "Back to Home",
     "validation": {
       "required": "This field is required",
       "invalidEmail": "Please enter a valid email address",
@@ -313,10 +403,184 @@
     "results": {
       "title": "Game Results",
       "finalScore": "Final Score",
+      "rank": "Rank",
       "accuracy": "Accuracy",
       "avgReaction": "Average Reaction",
       "bestStreak": "Best Streak",
-      "newRecord": "New Record!"
+      "best": "Best",
+      "newRecord": "New Record!",
+      "playAgain": "Play Again",
+      "tier": {
+        "novice": "Novice",
+        "apprentice": "Apprentice",
+        "adept": "Adept",
+        "expert": "Expert",
+        "master": "Master",
+        "luminary": "Luminary"
+      }
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Manage your account and preferences",
+    "demoBadge": "Demo account",
+    "userInfoTitle": "User information",
+    "guestName": "Guest User",
+    "memberSinceLabel": "Member since",
+    "memberSinceValue": "2026",
+    "levelLabel": "Level",
+    "levelValue": "Apprentice",
+    "signInButton": "Sign In",
+    "preferencesTitle": "Preferences",
+    "preferencesSubtitle": "Your training and display settings.",
+    "languageLabel": "Language",
+    "difficultyLabel": "Difficulty",
+    "difficultyValue": "Medium",
+    "dailyGoalLabel": "Daily goal",
+    "dailyGoalValue": "15 minutes",
+    "notificationsLabel": "Notifications",
+    "notificationsValue": "Enabled",
+    "achievementsTitle": "Achievements preview",
+    "achievementsSubtitle": "A glimpse of your latest milestones.",
+    "achievementsViewAll": "View all achievements",
+    "unlocked": "Unlocked",
+    "locked": "Locked",
+    "accountActionsTitle": "Account",
+    "accountActionsDesc": "Sign in to sync your progress or create a new account.",
+    "signInCta": "Sign In",
+    "signUpCta": "Sign Up",
+    "previewAchievements": {
+      "first-game": {
+        "title": "First Game",
+        "description": "Complete your first training game."
+      },
+      "3-day-streak": {
+        "title": "3-Day Streak",
+        "description": "Train three days in a row."
+      },
+      "memory-novice": {
+        "title": "Memory Novice",
+        "description": "Score 60+ in any memory game."
+      }
+    }
+  },
+  "achievements": {
+    "title": "Achievements",
+    "subtitle": "Track your milestones and unlock rewards",
+    "demoBadge": "Demo data",
+    "statsTitle": "Overview",
+    "statTotalLabel": "Total Achievements",
+    "statUnlockedLabel": "Unlocked",
+    "statProgressLabel": "Progress",
+    "gameCategoryTitle": "Game Achievements",
+    "gameCategorySubtitle": "Milestones earned through gameplay.",
+    "streakCategoryTitle": "Streak Achievements",
+    "streakCategorySubtitle": "Rewards for consistent daily training.",
+    "dimensionCategoryTitle": "Dimension Mastery",
+    "dimensionCategorySubtitle": "Proficiency across the five cognitive dimensions.",
+    "unlockedLabel": "Unlocked",
+    "lockedLabel": "Locked",
+    "progressLabel": "Progress",
+    "ctaTitle": "Keep unlocking",
+    "ctaSubtitle": "Play more games to unlock remaining achievements.",
+    "ctaButton": "Start training",
+    "items": {
+      "first-game": {
+        "title": "First Game",
+        "description": "Complete your first training game."
+      },
+      "perfect-score": {
+        "title": "Perfect Score",
+        "description": "Achieve a perfect score in any game."
+      },
+      "speed-demon": {
+        "title": "Speed Demon",
+        "description": "Finish a game in record time."
+      },
+      "marathon-player": {
+        "title": "Marathon Player",
+        "description": "Play 50 training games."
+      },
+      "dimension-master": {
+        "title": "Dimension Master",
+        "description": "Play games in all five dimensions."
+      },
+      "century-club": {
+        "title": "Century Club",
+        "description": "Score 100 or more in any game."
+      },
+      "flawless-victory": {
+        "title": "Flawless Victory",
+        "description": "Win a game without a single mistake."
+      },
+      "comeback-king": {
+        "title": "Comeback King",
+        "description": "Win after a losing streak."
+      },
+      "streak-3": {
+        "title": "3-Day Streak",
+        "description": "Train three days in a row."
+      },
+      "streak-7": {
+        "title": "7-Day Streak",
+        "description": "Train seven days in a row."
+      },
+      "streak-30": {
+        "title": "30-Day Streak",
+        "description": "Train thirty days in a row."
+      },
+      "streak-100": {
+        "title": "100-Day Streak",
+        "description": "Train one hundred days in a row."
+      },
+      "year-excellence": {
+        "title": "Year of Excellence",
+        "description": "Train every day for a year."
+      },
+      "unbreakable": {
+        "title": "Unbreakable",
+        "description": "Maintain a streak for 365 days."
+      },
+      "memory-novice": {
+        "title": "Memory Novice",
+        "description": "Score 60+ in any memory game."
+      },
+      "memory-expert": {
+        "title": "Memory Expert",
+        "description": "Score 90+ in any memory game."
+      },
+      "attention-adept": {
+        "title": "Attention Adept",
+        "description": "Score 60+ in any attention game."
+      },
+      "attention-master": {
+        "title": "Attention Master",
+        "description": "Score 90+ in any attention game."
+      },
+      "reaction-rookie": {
+        "title": "Reaction Rookie",
+        "description": "Score 60+ in any reaction game."
+      },
+      "reaction-pro": {
+        "title": "Reaction Pro",
+        "description": "Score 90+ in any reaction game."
+      },
+      "executive-apprentice": {
+        "title": "Executive Apprentice",
+        "description": "Score 60+ in any executive game."
+      },
+      "executive-expert": {
+        "title": "Executive Expert",
+        "description": "Score 90+ in any executive game."
+      },
+      "relaxation-seeker": {
+        "title": "Relaxation Seeker",
+        "description": "Score 60+ in any relaxation game."
+      },
+      "relaxation-sage": {
+        "title": "Relaxation Sage",
+        "description": "Score 90+ in any relaxation game."
+      }
     }
   }
 }

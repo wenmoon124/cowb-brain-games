@@ -31,7 +31,7 @@ export function Footer({ locale }: FooterProps) {
   const socials = [
     { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
     { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Mail, href: 'mailto:hello@cowb.cc', label: 'Email' },
+    { icon: Mail, href: 'mailto:wenmoon124@gmail.com', label: 'Email' },
   ]
 
   return (

@@ -27,7 +27,8 @@ AGENTS.md
 *.txt
 # ads.txt 例外 (AdSense 需要，必须部署)
 !apps/web/public/ads.txt
-*.cjs
+# *.cjs 通用排除已移除,允许 apps/web/scripts/fix-html-lang.cjs 进入仓库
+# 以下特定模式的 .cjs 仍排除
 analyze-*.cjs
 analyze-*.ts
 check-*.cjs
@@ -36,6 +37,7 @@ check-*.js
 debug-*.js
 fix-*.ps1
 fix-*.cjs
+!apps/web/scripts/fix-html-lang.cjs
 run-*.cjs
 verify-*.cjs
 verify-*.txt

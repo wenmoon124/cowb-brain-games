@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { GameTimer } from '@/components/games/GameTimer'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 import { GameRules } from '@/components/games/GameRules'
 import { Shuffle, Play } from 'lucide-react'
 
@@ -13,7 +15,6 @@ type Task = 'shape' | 'color'
 type Shape = 'circle' | 'square'
 type StimColor = 'orange' | 'pink'
 type Side = 'left' | 'right'
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -145,7 +146,7 @@ interface Stimulus {
   color: StimColor
 }
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -161,10 +162,11 @@ function correctSide(task: Task, s: Stimulus): Side {
 }
 
 export interface ChangeFlexGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function ChangeFlexGame({ locale }: ChangeFlexGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -333,6 +335,7 @@ export function ChangeFlexGame({ locale }: ChangeFlexGameProps) {
   if (status === 'idle') {
     return (
       <GameRules
+        t={tt}
         title={t.title}
         dimension="executive"
         dimensionLabel={t.dimensionLabel}
@@ -351,6 +354,7 @@ export function ChangeFlexGame({ locale }: ChangeFlexGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={score}
         accuracy={accuracy}
         dimension="executive"

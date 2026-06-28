@@ -7,11 +7,11 @@ import { Progress } from '@/components/ui/progress'
 import { Shuffle, Play, Heart } from 'lucide-react'
 import { GameTimer } from '@/components/games/GameTimer'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 type Phase = 'showing' | 'feedback'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 type ColorKey = 'red' | 'orange' | 'yellow' | 'pink' | 'coral'
 
@@ -116,7 +116,7 @@ const COLOR_KEYS: readonly ColorKey[] = [
   'coral',
 ]
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -174,10 +174,11 @@ function buildQuestion(): Question {
 }
 
 export interface StroopChallengeGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
+  const { t: tt } = useTranslation(locale)
   const loc = getLocale(locale)
   const t = TEXTS[loc]
   const colors = COLOR_MAP[loc]
@@ -354,6 +355,7 @@ export function StroopChallengeGame({ locale }: StroopChallengeGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         accuracy={accuracy}
         dimension="executive"

@@ -91,7 +91,7 @@ export function Navbar({ locale }: NavbarProps) {
             type="button"
             className="md:hidden p-sm text-text-secondary"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+            aria-label={t('common.toggleMenu')}
             aria-expanded={mobileOpen}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { BookOpen, Award, Lightbulb } from 'lucide-react'
 import type { GameDimension } from '@/lib/games'
+import type { Translator } from '@/i18n/translations'
 
 interface GameRulesProps {
   /** Game title */
@@ -18,6 +19,8 @@ interface GameRulesProps {
   scoring: string[]
   /** Tips for better performance */
   tips?: string[]
+  /** Translator function for i18n labels */
+  t: Translator
   /** Start button (rendered by parent) */
   children?: React.ReactNode
 }
@@ -39,6 +42,7 @@ export function GameRules({
   rules,
   scoring,
   tips,
+  t,
   children,
 }: GameRulesProps) {
   return (
@@ -54,7 +58,7 @@ export function GameRules({
         <section className="flex flex-col gap-sm">
           <h3 className="flex items-center gap-xs text-lg font-semibold text-text-primary">
             <BookOpen className="h-5 w-5 text-primary" />
-            How to Play
+            {t('games.rules.howToPlay')}
           </h3>
           <ul className="flex flex-col gap-xs pl-xl">
             {rules.map((rule, i) => (
@@ -72,7 +76,7 @@ export function GameRules({
         <section className="flex flex-col gap-sm">
           <h3 className="flex items-center gap-xs text-lg font-semibold text-text-primary">
             <Award className="h-5 w-5 text-secondary" />
-            Scoring
+            {t('games.rules.scoring')}
           </h3>
           <ul className="flex flex-col gap-xs pl-xl">
             {scoring.map((item, i) => (
@@ -91,7 +95,7 @@ export function GameRules({
           <section className="flex flex-col gap-sm">
             <h3 className="flex items-center gap-xs text-lg font-semibold text-text-primary">
               <Lightbulb className="h-5 w-5 text-accent" />
-              Tips
+              {t('games.rules.tips')}
             </h3>
             <ul className="flex flex-col gap-xs pl-xl">
               {tips.map((tip, i) => (

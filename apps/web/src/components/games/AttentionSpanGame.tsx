@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Play, Timer } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -91,7 +91,7 @@ const MAX_LIVES = 3
 const TARGET_VALUE = 7
 const NON_TARGET_VALUES = [0, 1, 2, 3, 4, 5, 6, 8, 9] as const
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -140,10 +140,11 @@ function buildItems(): ItemData[] {
 }
 
 export interface AttentionSpanGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function AttentionSpanGame({ locale }: AttentionSpanGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -331,6 +332,7 @@ export function AttentionSpanGame({ locale }: AttentionSpanGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         accuracy={accuracy}
         dimension="attention"

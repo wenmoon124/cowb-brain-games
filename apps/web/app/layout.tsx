@@ -101,13 +101,14 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-        {/* Cloudflare Web Analytics beacon — replace YOUR_TOKEN with real token from Cloudflare Dashboard */}
+        {/* TODO(wenmoon124): Cloudflare Web Analytics — get token from Cloudflare Dashboard, then uncomment:
         <Script
           defer
           src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon='{"token": "YOUR_CLOUDFLARE_ANALYTICS_TOKEN"}'
+          data-cf-beacon='{"token": "REAL_TOKEN_HERE"}'
           strategy="afterInteractive"
         />
+        */}
       </body>
     </html>
   )

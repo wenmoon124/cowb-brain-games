@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { GameTimer } from '@/components/games/GameTimer'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 import { GameRules } from '@/components/games/GameRules'
 import { Route, Play } from 'lucide-react'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Cell {
   r: number
@@ -126,7 +127,7 @@ function gridSizeForLevel(level: number): number {
   return level + 4
 }
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -209,10 +210,11 @@ function bfs(
 }
 
 export interface PathFinderGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function PathFinderGame({ locale }: PathFinderGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -346,6 +348,7 @@ export function PathFinderGame({ locale }: PathFinderGameProps) {
   if (status === 'idle') {
     return (
       <GameRules
+        t={tt}
         title={t.title}
         dimension="executive"
         dimensionLabel={t.dimensionLabel}
@@ -364,6 +367,7 @@ export function PathFinderGame({ locale }: PathFinderGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={score}
         dimension="executive"
         onRetry={startGame}

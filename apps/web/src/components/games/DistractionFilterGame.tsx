@@ -6,10 +6,10 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Play, Filter } from 'lucide-react'
 import { GameTimer } from '@/components/games/GameTimer'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -88,7 +88,7 @@ const TOTAL_ROUNDS = 25
 const ROUND_LIMIT_MS = 2500
 const MAX_LIVES = 3
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -143,10 +143,11 @@ function buildRound(round: number): RoundData {
 }
 
 export interface DistractionFilterGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function DistractionFilterGame({ locale }: DistractionFilterGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -331,6 +332,7 @@ export function DistractionFilterGame({ locale }: DistractionFilterGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         accuracy={accuracy}
         dimension="attention"

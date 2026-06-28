@@ -126,10 +126,15 @@ export function ArticleJsonLd({ article }: { article: ArticleData }) {
         headline: article.title,
         description: article.description,
         url: article.url,
+        image: ['https://cowb.cc/og-image.svg'],
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': article.url,
+        },
         datePublished: article.datePublished,
         dateModified: article.dateModified ?? article.datePublished,
         author: {
-          '@type': 'Organization',
+          '@type': article.author.includes('Team') ? 'Organization' : 'Person',
           name: article.author,
         },
         publisher: {
@@ -140,6 +145,30 @@ export function ArticleJsonLd({ article }: { article: ArticleData }) {
             url: 'https://cowb.cc/og-image.svg',
           },
         },
+      }}
+    />
+  )
+}
+
+/** FAQPage schema — 用于文章详情页的 FAQ 部分 */
+export interface FaqPageJsonLdProps {
+  faqs: ReadonlyArray<{ question: string; answer: string }>
+}
+
+export function FaqPageJsonLd({ faqs }: FaqPageJsonLdProps) {
+  return (
+    <JsonLd
+      data={{
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })),
       }}
     />
   )

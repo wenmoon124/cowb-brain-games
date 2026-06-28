@@ -10,12 +10,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Brain, LogIn, AlertCircle, Loader2 } from 'lucide-react'
+import { API_BASE_URL } from '@/lib/config'
 
 interface SigninPageProps {
   params: { locale: string }
 }
-
-const API_BASE = 'https://cowb-brain-games-api.wenmoon124.workers.dev'
 
 export default function SigninPage({ params }: SigninPageProps) {
   const locale: Locale = isValidLocale(params.locale) ? params.locale : 'en'
@@ -38,7 +37,7 @@ export default function SigninPage({ params }: SigninPageProps) {
 
     setIsSubmitting(true)
     try {
-      const response = await fetch(`${API_BASE}/api/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

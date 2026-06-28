@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { GameTimer } from '@/components/games/GameTimer'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 import { GameRules } from '@/components/games/GameRules'
 import { Target, Play } from 'lucide-react'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -133,15 +134,16 @@ function randomPos(): { x: number; y: number } {
   }
 }
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
 export interface ClickHorizonGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function ClickHorizonGame({ locale }: ClickHorizonGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -273,6 +275,7 @@ export function ClickHorizonGame({ locale }: ClickHorizonGameProps) {
   if (status === 'idle') {
     return (
       <GameRules
+        t={tt}
         title={t.title}
         dimension="reaction"
         dimensionLabel={t.dimensionLabel}
@@ -291,6 +294,7 @@ export function ClickHorizonGame({ locale }: ClickHorizonGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={score}
         accuracy={accuracy}
         dimension="reaction"

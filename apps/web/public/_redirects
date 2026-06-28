@@ -1,4 +1,19 @@
-# Cloudflare Pages redirects — only routes that resolve to generated pages
+# Cloudflare Pages redirects — locale-agnostic fallbacks
 # Root → default locale (en)
 / /en 302
-# Locale-agnostic redirects for the landing page only (other routes not yet generated)
+# Routes without locale prefix redirect to /en/ equivalent
+/games /en/games 302
+/about /en/about 302
+/articles /en/articles 302
+/brain-age /en/brain-age 302
+/contact /en/contact 302
+/privacy /en/privacy 302
+/terms /en/terms 302
+/signin /en/signin 302
+/signup /en/signup 302
+/dashboard /en/dashboard 302
+/profile /en/profile 302
+/achievements /en/achievements 302
+# Dynamic deep links without locale prefix redirect to /en/ equivalent
+/games/:slug /en/games/:slug 302
+/articles/:slug /en/articles/:slug 302

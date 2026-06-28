@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { isValidLocale, type Locale } from '@/i18n/config'
 import { getTranslations } from '@/i18n/translations'
 import { gameHref, type GameDimension } from '@/lib/games'
+import { formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -17,113 +18,34 @@ import {
   Calendar,
 } from 'lucide-react'
 
-type DashboardTexts = {
-  title: string
-  subtitle: string
-  statsSectionTitle: string
-  dimensionsSectionTitle: string
-  dimensionsSectionSubtitle: string
-  recentActivityTitle: string
-  recentActivitySubtitle: string
-  scoreLabel: string
-  loginPromptTitle: string
-  loginPromptDesc: string
-  signInButton: string
-  demoBadge: string
-}
-
-const DASHBOARD_TEXTS: Record<Locale, DashboardTexts> = {
-  en: {
-    title: 'Your Dashboard',
-    subtitle:
-      'A snapshot of your training progress, dimension scores, and recent activity.',
-    statsSectionTitle: 'Overview',
-    dimensionsSectionTitle: 'Dimension progress',
-    dimensionsSectionSubtitle:
-      'Your normalized score (0–100) for each cognitive dimension.',
-    recentActivityTitle: 'Recent activity',
-    recentActivitySubtitle: 'Your latest training sessions.',
-    scoreLabel: 'Score',
-    loginPromptTitle: 'Sign in to sync your progress',
-    loginPromptDesc:
-      'Create an account or sign in to keep your brain age, streaks, and history across devices.',
-    signInButton: 'Sign In',
-    demoBadge: 'Demo data',
-  },
-  zh: {
-    title: '你的仪表盘',
-    subtitle: '查看你的训练进度、各维度分数与近期活动概览。',
-    statsSectionTitle: '总览',
-    dimensionsSectionTitle: '各维度进度',
-    dimensionsSectionSubtitle: '每个认知维度的归一化分数（0–100）。',
-    recentActivityTitle: '近期活动',
-    recentActivitySubtitle: '你最近的训练记录。',
-    scoreLabel: '分数',
-    loginPromptTitle: '登录以同步你的进度',
-    loginPromptDesc:
-      '创建账户或登录，即可在多设备间同步你的大脑年龄、连续打卡与历史记录。',
-    signInButton: '登录',
-    demoBadge: '示例数据',
-  },
-  ja: {
-    title: 'ダッシュボード',
-    subtitle: 'トレーニングの進捗、次元別スコア、最近のアクティビティの概要。',
-    statsSectionTitle: '概要',
-    dimensionsSectionTitle: '次元別の進捗',
-    dimensionsSectionSubtitle: '各認知次元の正規化スコア（0〜100）。',
-    recentActivityTitle: '最近のアクティビティ',
-    recentActivitySubtitle: '直近のトレーニング履歴。',
-    scoreLabel: 'スコア',
-    loginPromptTitle: 'サインインして進捗を同期',
-    loginPromptDesc:
-      'アカウントを作成またはサインインすると、脳年齢・連続日数・履歴を端末間で同期できます。',
-    signInButton: 'サインイン',
-    demoBadge: 'デモデータ',
-  },
-}
+type StatKey = 'gamesPlayed' | 'bestScore' | 'currentStreak' | 'brainAge'
 
 type StatEntry = {
   icon: LucideIcon
   accent: string
-  texts: Record<Locale, { value: string; label: string }>
+  statKey: StatKey
 }
 
 const STATS: ReadonlyArray<StatEntry> = [
   {
     icon: Gamepad2,
     accent: 'bg-primary-light',
-    texts: {
-      en: { value: '47', label: 'Games Played' },
-      zh: { value: '47', label: '已玩游戏' },
-      ja: { value: '47', label: 'プレイ数' },
-    },
+    statKey: 'gamesPlayed',
   },
   {
     icon: Trophy,
     accent: 'bg-accent-light',
-    texts: {
-      en: { value: '3,250', label: 'Best Score' },
-      zh: { value: '3,250', label: '最高分' },
-      ja: { value: '3,250', label: '最高スコア' },
-    },
+    statKey: 'bestScore',
   },
   {
     icon: Flame,
     accent: 'bg-secondary-light',
-    texts: {
-      en: { value: '12 days', label: 'Current Streak' },
-      zh: { value: '12 天', label: '连续打卡' },
-      ja: { value: '12 日', label: '連続日数' },
-    },
+    statKey: 'currentStreak',
   },
   {
     icon: Brain,
     accent: 'bg-primary-light',
-    texts: {
-      en: { value: '28', label: 'Brain Age' },
-      zh: { value: '28', label: '大脑年龄' },
-      ja: { value: '28', label: '脳年齢' },
-    },
+    statKey: 'brainAge',
   },
 ]
 
@@ -208,27 +130,18 @@ const RECENT_ACTIVITY: ReadonlyArray<ActivityEntry> = [
   },
 ]
 
-function formatDate(iso: string, locale: Locale): string {
-  const formatter = new Intl.DateTimeFormat(locale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-  return formatter.format(new Date(`${iso}T00:00:00`))
-}
-
 export async function generateMetadata({
   params,
 }: {
   params: { locale: string }
 }): Promise<Metadata> {
   const locale = isValidLocale(params.locale) ? params.locale : 'en'
-  const texts = DASHBOARD_TEXTS[locale]
+  const t = await getTranslations(locale as Locale)
   const pathPrefix = `/${locale}/dashboard`
 
   return {
-    title: texts.title,
-    description: texts.subtitle,
+    title: t('dashboard.title'),
+    description: t('dashboard.subtitle'),
     alternates: {
       canonical: pathPrefix,
       languages: {
@@ -239,8 +152,8 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: texts.title,
-      description: texts.subtitle,
+      title: t('dashboard.title'),
+      description: t('dashboard.subtitle'),
       url: `https://cowb.cc${pathPrefix}`,
     },
   }
@@ -253,7 +166,6 @@ export default async function DashboardPage({
 }) {
   const locale = isValidLocale(params.locale) ? params.locale : 'en'
   const t = await getTranslations(locale as Locale)
-  const texts = DASHBOARD_TEXTS[locale]
 
   return (
     <div className="flex flex-col">
@@ -261,13 +173,13 @@ export default async function DashboardPage({
       <section className="bg-gradient-hero px-md py-3xl md:py-4xl">
         <div className="mx-auto max-w-5xl">
           <Badge variant="info" className="mb-md w-fit">
-            {texts.demoBadge}
+            {t('dashboard.demoBadge')}
           </Badge>
           <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-md">
-            {texts.title}
+            {t('dashboard.title')}
           </h1>
           <p className="text-md text-text-secondary max-w-2xl">
-            {texts.subtitle}
+            {t('dashboard.subtitle')}
           </p>
         </div>
       </section>
@@ -276,14 +188,15 @@ export default async function DashboardPage({
       <section className="px-md py-3xl">
         <div className="mx-auto max-w-5xl">
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-xl">
-            {texts.statsSectionTitle}
+            {t('dashboard.statsSectionTitle')}
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-lg">
             {STATS.map((stat) => {
               const Icon = stat.icon
-              const statText = stat.texts[locale]
+              const label = t(`dashboard.statsLabels.${stat.statKey}`)
+              const value = t(`dashboard.statsValues.${stat.statKey}`)
               return (
-                <Card key={statText.label} className="border-primary-light">
+                <Card key={stat.statKey} className="border-primary-light">
                   <CardContent className="flex items-center gap-md p-lg">
                     <div
                       className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md ${stat.accent}`}
@@ -292,10 +205,10 @@ export default async function DashboardPage({
                     </div>
                     <div className="flex flex-col">
                       <span className="text-2xl md:text-3xl font-bold text-text-primary leading-tight">
-                        {statText.value}
+                        {value}
                       </span>
                       <span className="text-sm text-text-secondary">
-                        {statText.label}
+                        {label}
                       </span>
                     </div>
                   </CardContent>
@@ -311,10 +224,10 @@ export default async function DashboardPage({
         <div className="mx-auto max-w-5xl">
           <div className="mb-xl">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-xs">
-              {texts.dimensionsSectionTitle}
+              {t('dashboard.dimensionsSectionTitle')}
             </h2>
             <p className="text-sm text-text-secondary max-w-2xl">
-              {texts.dimensionsSectionSubtitle}
+              {t('dashboard.dimensionsSectionSubtitle')}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-lg">
@@ -360,10 +273,10 @@ export default async function DashboardPage({
         <div className="mx-auto max-w-5xl">
           <div className="mb-xl">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-xs">
-              {texts.recentActivityTitle}
+              {t('dashboard.recentActivityTitle')}
             </h2>
             <p className="text-sm text-text-secondary max-w-2xl">
-              {texts.recentActivitySubtitle}
+              {t('dashboard.recentActivitySubtitle')}
             </p>
           </div>
           <Card className="border-primary-light">
@@ -397,7 +310,7 @@ export default async function DashboardPage({
                     </div>
                     <div className="flex shrink-0 items-center gap-sm">
                       <span className="text-xs text-text-muted">
-                        {texts.scoreLabel}
+                        {t('dashboard.scoreLabel')}
                       </span>
                       <span className={`text-md font-bold ${styles.text}`}>
                         {entry.score.toLocaleString(locale)}
@@ -421,15 +334,15 @@ export default async function DashboardPage({
               </div>
               <div className="flex flex-col gap-sm">
                 <h2 className="text-xl md:text-2xl font-bold text-text-primary">
-                  {texts.loginPromptTitle}
+                  {t('dashboard.loginPromptTitle')}
                 </h2>
                 <p className="text-md text-text-secondary max-w-md">
-                  {texts.loginPromptDesc}
+                  {t('dashboard.loginPromptDesc')}
                 </p>
               </div>
               <Button variant="primary" size="lg" asChild>
                 <Link href={`/${locale}/signin`}>
-                  {texts.signInButton}
+                  {t('dashboard.signInButton')}
                   <ArrowRight className="ml-xs h-4 w-4" />
                 </Link>
               </Button>

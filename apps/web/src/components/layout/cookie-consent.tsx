@@ -152,7 +152,7 @@ export function CookieConsent({ locale }: CookieConsentProps) {
                   type="button"
                   onClick={() => setPrefsOpen(false)}
                   className="flex h-8 w-8 items-center justify-center rounded-full bg-background-secondary text-text-muted transition-colors hover:bg-border"
-                  aria-label="Close"
+                  aria-label={t('common.close')}
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -168,7 +168,7 @@ export function CookieConsent({ locale }: CookieConsentProps) {
                     {t('cookie.strictlyNecessaryDescription')}
                   </p>
                   <span className="mt-xs inline-flex items-center rounded-full bg-primary-light px-xs py-0.5 text-xs font-semibold text-primary">
-                    Always Active
+                    {t('cookie.alwaysActive')}
                   </span>
                 </div>
                 <Toggle

@@ -6,10 +6,10 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Play, Target } from 'lucide-react'
 import { GameTimer } from '@/components/games/GameTimer'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -72,7 +72,7 @@ const ROUND_LIMIT_MS = 3000
 const TARGET_SYMBOL = '★'
 const DISTRACTORS = ['●', '▲', '■', '◆', '✦', '◯', '△', '▢', '♦'] as const
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -121,10 +121,11 @@ function buildRound(round: number): RoundData {
 }
 
 export interface VisualSearchGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function VisualSearchGame({ locale }: VisualSearchGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -285,6 +286,7 @@ export function VisualSearchGame({ locale }: VisualSearchGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         accuracy={accuracy}
         dimension="attention"

@@ -6,11 +6,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Wind, Play, Square } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 type Phase = 'inhale' | 'hold' | 'exhale' | 'pause'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 interface BreathingMode {
   key: 'box' | 'resonant' | '478'
@@ -131,7 +131,7 @@ const TEXTS: Record<Locale, Texts> = {
 
 const DURATIONS = [3, 5, 10] as const
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -205,10 +205,11 @@ function generateKeyframes(mode: BreathingMode): string {
 }
 
 export interface BreathingFlowGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function BreathingFlowGame({ locale }: BreathingFlowGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -351,6 +352,7 @@ export function BreathingFlowGame({ locale }: BreathingFlowGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         dimension="relaxation"
         onRetry={() => setStatus('idle')}

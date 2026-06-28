@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Play, Columns2 } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 type Shape = 'circle' | 'square' | 'triangle' | 'diamond' | 'star'
 
@@ -111,7 +111,7 @@ const NON_CIRCLE_SHAPES: readonly Shape[] = [
 const EVEN_NUMBERS: readonly number[] = [0, 2, 4, 6, 8]
 const ODD_NUMBERS: readonly number[] = [1, 3, 5, 7, 9]
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -170,10 +170,11 @@ function buildRightStimuli(): RightStimulus[] {
 }
 
 export interface SplitFocusGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function SplitFocusGame({ locale }: SplitFocusGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -433,6 +434,7 @@ export function SplitFocusGame({ locale }: SplitFocusGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         accuracy={accuracy}
         dimension="attention"

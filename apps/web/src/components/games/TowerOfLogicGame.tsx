@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 import { GameRules } from '@/components/games/GameRules'
 import { Play } from 'lucide-react'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -139,7 +140,7 @@ function disksForLevel(level: number): number {
 function optimalMoves(disks: number): number {
   return Math.pow(2, disks) - 1
 }
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -150,10 +151,11 @@ function initialPegs(disks: number): number[][] {
 }
 
 export interface TowerOfLogicGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function TowerOfLogicGame({ locale }: TowerOfLogicGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -307,6 +309,7 @@ export function TowerOfLogicGame({ locale }: TowerOfLogicGameProps) {
   if (status === 'idle') {
     return (
       <GameRules
+        t={tt}
         title={t.title}
         dimension="executive"
         dimensionLabel={t.dimensionLabel}
@@ -325,6 +328,7 @@ export function TowerOfLogicGame({ locale }: TowerOfLogicGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={score}
         dimension="executive"
         onRetry={startGame}

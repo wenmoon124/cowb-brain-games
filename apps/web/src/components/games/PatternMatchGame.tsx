@@ -18,11 +18,11 @@ import {
   X,
 } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 type Phase = 'showing' | 'comparison' | 'feedback'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -107,7 +107,7 @@ type SymbolIcon = ComponentType<{ className?: string | undefined }>
 
 const SYMBOLS: SymbolIcon[] = [Circle, Square, Triangle, Star, Heart, Diamond]
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -173,10 +173,11 @@ function generateComparison(
 }
 
 export interface PatternMatchGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function PatternMatchGame({ locale }: PatternMatchGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -309,6 +310,7 @@ export function PatternMatchGame({ locale }: PatternMatchGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         dimension="memory"
         onRetry={startGame}

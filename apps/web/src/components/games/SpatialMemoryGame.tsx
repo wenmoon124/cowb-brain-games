@@ -6,11 +6,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Grid3x3, Play } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 type Phase = 'showing' | 'input' | 'feedback'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -80,7 +80,7 @@ const TEXTS: Record<Locale, Texts> = {
 const MAX_FAILS = 3
 const SHOW_MS = 2000
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -114,10 +114,11 @@ function buildHighlighted(total: number, count: number): number[] {
 }
 
 export interface SpatialMemoryGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -252,6 +253,7 @@ export function SpatialMemoryGame({ locale }: SpatialMemoryGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         dimension="memory"
         onRetry={startGame}

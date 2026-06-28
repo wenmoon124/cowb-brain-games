@@ -2,6 +2,8 @@
   "common": {
     "appName": "BrainVerse",
     "tagline": "训练大脑，降低脑龄",
+    "languageSwitcher": "切换语言",
+    "loading": "加载中...",
     "buttons": {
       "start": "开始",
       "continue": "继续",
@@ -13,7 +15,9 @@
       "save": "保存",
       "delete": "删除",
       "confirm": "确认"
-    }
+    },
+    "toggleMenu": "切换菜单",
+    "close": "关闭"
   },
   "nav": {
     "home": "首页",
@@ -54,11 +58,17 @@
     "playNow": "立即开始",
     "viewResults": "查看结果",
     "dimensions": {
-      "memory": "记忆力",
+      "all": "全部",
+      "memory": "记忆",
       "attention": "注意力",
-      "reaction": "反应力",
+      "reaction": "反应",
       "executive": "执行功能",
       "relaxation": "放松"
+    },
+    "rules": {
+      "howToPlay": "玩法说明",
+      "scoring": "计分规则",
+      "tips": "技巧提示"
     },
     "difficulty": {
       "easy": "简单",
@@ -149,7 +159,6 @@
       "title": "减压沙盒",
       "description": "触觉互动释放压力"
     },
-    "comingSoon": "即将推出",
     "backToGames": "返回游戏"
   },
   "pages": {
@@ -233,7 +242,85 @@
     "streak": "连续打卡",
     "achievements": "最近成就",
     "recentGames": "最近游戏",
-    "noData": "还没有数据，开始你的第一局游戏吧！"
+    "noData": "还没有数据，开始你的第一局游戏吧！",
+    "title": "你的仪表盘",
+    "subtitle": "查看你的训练进度、各维度分数与近期活动概览。",
+    "statsSectionTitle": "总览",
+    "dimensionsSectionTitle": "各维度进度",
+    "dimensionsSectionSubtitle": "每个认知维度的归一化分数（0–100）。",
+    "recentActivityTitle": "近期活动",
+    "recentActivitySubtitle": "你最近的训练记录。",
+    "scoreLabel": "分数",
+    "loginPromptTitle": "登录以同步你的进度",
+    "loginPromptDesc": "创建账户或登录，即可在多设备间同步你的大脑年龄、连续打卡与历史记录。",
+    "signInButton": "登录",
+    "demoBadge": "示例数据",
+    "statsLabels": {
+      "gamesPlayed": "已玩游戏",
+      "bestScore": "最高分",
+      "currentStreak": "连续打卡",
+      "brainAge": "大脑年龄"
+    },
+    "statsValues": {
+      "gamesPlayed": "47",
+      "bestScore": "3,250",
+      "currentStreak": "12 天",
+      "brainAge": "28"
+    }
+  },
+  "articles": {
+    "categoryLabels": {
+      "brain-age": "大脑年龄",
+      "memory": "记忆",
+      "attention": "注意力",
+      "reaction": "反应",
+      "executive": "执行功能",
+      "focus": "专注",
+      "relaxation": "放松"
+    },
+    "pageText": {
+      "title": "文章",
+      "subtitle": "基于科学的脑训练见解",
+      "backToArticles": "返回文章列表",
+      "readingTime": "分钟阅读",
+      "relatedArticles": "相关文章",
+      "tryGames": "尝试相关游戏",
+      "faqTitle": "常见问题",
+      "publishedOn": "发布于",
+      "allCategories": "全部分类",
+      "articlesCount": "{count} 篇文章"
+    }
+  },
+  "brainAge": {
+    "heroBadge": "基于科学的评估",
+    "title": "大脑年龄评估",
+    "subtitle": "从五大核心维度衡量你的认知健康，并得出你的大脑年龄——一个反映你当下思维敏捷程度的综合数字。",
+    "heroCta": "探索各维度",
+    "dimensionsSectionTitle": "五大认知维度",
+    "dimensionsSectionSubtitle": "你的大脑年龄由以下五大维度的表现综合计算得出，每个维度都有专属游戏进行训练。",
+    "gamesLabel": "{count} 个游戏",
+    "exploreLabel": "探索游戏",
+    "processTitle": "评估流程",
+    "processSubtitle": "从游戏到洞察，只需三步。",
+    "step1Title": "玩游戏",
+    "step1Desc": "在五大维度中进行训练，每一次练习都会纳入评估。",
+    "step2Title": "收集分数",
+    "step2Desc": "你在每个维度的表现会被归一化为 0–100 的分数。",
+    "step3Title": "查看大脑年龄",
+    "step3Desc": "各维度分数将综合为大脑年龄，并按同龄群体进行校准。",
+    "scienceTitle": "大脑年龄背后的科学",
+    "scienceBody": "大脑年龄是相对于人群基线的认知表现综合估计值。它基于数十年研究：流体智力、处理速度与工作记忆会随年龄变化，并且可以通过训练得到改善。我们将你归一化后的各维度分数整合为一个易于追踪的数字。",
+    "scienceCitation": "综合自认知老化研究（Salthouse, 2009；Park 等, 2002）。",
+    "finalCtaTitle": "开始你的评估",
+    "finalCtaSubtitle": "在每个维度各玩几局游戏，即可解锁你的首个大脑年龄。",
+    "startButton": "开始训练",
+    "dimensionDescriptions": {
+      "memory": "在短时间与长时间间隔内回忆并保留信息。",
+      "attention": "保持专注并过滤干扰。",
+      "reaction": "对刺激做出快速且准确的反应。",
+      "executive": "规划、切换任务并解决冲突。",
+      "relaxation": "调节压力、安定心神。"
+    }
   },
   "auth": {
     "signIn": {
@@ -272,6 +359,7 @@
     "savePreferences": "保存偏好",
     "strictlyNecessary": "严格必要",
     "strictlyNecessaryDescription": "这些 Cookie 是网站正常运行所必需的。",
+    "alwaysActive": "始终启用",
     "performanceAnalytics": "性能与分析",
     "performanceAnalyticsDescription": "这些 Cookie 帮助我们了解访客如何与网站互动。",
     "targetingAds": "定向与广告",
@@ -289,6 +377,8 @@
     "network": "网络错误，请检查你的连接。",
     "notFound": "页面未找到",
     "unauthorized": "你没有权限查看此页面。",
+    "tryAgain": "重试",
+    "backToHome": "返回首页",
     "validation": {
       "required": "此字段为必填项",
       "invalidEmail": "请输入有效的邮箱地址",
@@ -313,10 +403,184 @@
     "results": {
       "title": "游戏结果",
       "finalScore": "最终得分",
+      "rank": "等级",
       "accuracy": "准确率",
       "avgReaction": "平均反应时间",
       "bestStreak": "最佳连击",
-      "newRecord": "新纪录！"
+      "best": "最佳",
+      "newRecord": "新纪录！",
+      "playAgain": "再玩一次",
+      "tier": {
+        "novice": "新手",
+        "apprentice": "学徒",
+        "adept": "熟练",
+        "expert": "专家",
+        "master": "大师",
+        "luminary": "宗师"
+      }
+    }
+  },
+  "profile": {
+    "title": "个人资料",
+    "subtitle": "管理你的账户与偏好设置",
+    "demoBadge": "示例账户",
+    "userInfoTitle": "用户信息",
+    "guestName": "访客用户",
+    "memberSinceLabel": "加入时间",
+    "memberSinceValue": "2026",
+    "levelLabel": "等级",
+    "levelValue": "学徒",
+    "signInButton": "登录",
+    "preferencesTitle": "偏好设置",
+    "preferencesSubtitle": "你的训练与显示设置。",
+    "languageLabel": "语言",
+    "difficultyLabel": "难度",
+    "difficultyValue": "中等",
+    "dailyGoalLabel": "每日目标",
+    "dailyGoalValue": "15 分钟",
+    "notificationsLabel": "通知",
+    "notificationsValue": "已开启",
+    "achievementsTitle": "成就预览",
+    "achievementsSubtitle": "你最新里程碑的一览。",
+    "achievementsViewAll": "查看全部成就",
+    "unlocked": "已解锁",
+    "locked": "未解锁",
+    "accountActionsTitle": "账户",
+    "accountActionsDesc": "登录以同步进度，或创建新账户。",
+    "signInCta": "登录",
+    "signUpCta": "注册",
+    "previewAchievements": {
+      "first-game": {
+        "title": "首局游戏",
+        "description": "完成你的第一局训练游戏。"
+      },
+      "3-day-streak": {
+        "title": "连续 3 天",
+        "description": "连续三天进行训练。"
+      },
+      "memory-novice": {
+        "title": "记忆新手",
+        "description": "在任意记忆游戏中获得 60 分以上。"
+      }
+    }
+  },
+  "achievements": {
+    "title": "成就",
+    "subtitle": "追踪你的里程碑并解锁奖励",
+    "demoBadge": "示例数据",
+    "statsTitle": "总览",
+    "statTotalLabel": "成就总数",
+    "statUnlockedLabel": "已解锁",
+    "statProgressLabel": "完成进度",
+    "gameCategoryTitle": "游戏成就",
+    "gameCategorySubtitle": "通过游戏获得的里程碑。",
+    "streakCategoryTitle": "连续打卡成就",
+    "streakCategorySubtitle": "坚持每日训练的奖励。",
+    "dimensionCategoryTitle": "维度精通",
+    "dimensionCategorySubtitle": "在五大认知维度上的熟练程度。",
+    "unlockedLabel": "已解锁",
+    "lockedLabel": "未解锁",
+    "progressLabel": "进度",
+    "ctaTitle": "继续解锁",
+    "ctaSubtitle": "玩更多游戏来解锁剩余成就。",
+    "ctaButton": "开始训练",
+    "items": {
+      "first-game": {
+        "title": "首局游戏",
+        "description": "完成你的第一局训练游戏。"
+      },
+      "perfect-score": {
+        "title": "满分通关",
+        "description": "在任意游戏中获得满分。"
+      },
+      "speed-demon": {
+        "title": "速度恶魔",
+        "description": "以破纪录的时间完成游戏。"
+      },
+      "marathon-player": {
+        "title": "马拉松选手",
+        "description": "完成 50 局训练游戏。"
+      },
+      "dimension-master": {
+        "title": "维度大师",
+        "description": "在全部五个维度中各玩一局。"
+      },
+      "century-club": {
+        "title": "百分俱乐部",
+        "description": "在任意游戏中获得 100 分以上。"
+      },
+      "flawless-victory": {
+        "title": "完美胜利",
+        "description": "无误完成一局游戏。"
+      },
+      "comeback-king": {
+        "title": "逆转之王",
+        "description": "在连败后获胜。"
+      },
+      "streak-3": {
+        "title": "连续 3 天",
+        "description": "连续三天进行训练。"
+      },
+      "streak-7": {
+        "title": "连续 7 天",
+        "description": "连续七天进行训练。"
+      },
+      "streak-30": {
+        "title": "连续 30 天",
+        "description": "连续三十天进行训练。"
+      },
+      "streak-100": {
+        "title": "连续 100 天",
+        "description": "连续一百天进行训练。"
+      },
+      "year-excellence": {
+        "title": "卓越之年",
+        "description": "全年每天都进行训练。"
+      },
+      "unbreakable": {
+        "title": "不可破坏",
+        "description": "保持 365 天连续打卡。"
+      },
+      "memory-novice": {
+        "title": "记忆新手",
+        "description": "在任意记忆游戏中获得 60 分以上。"
+      },
+      "memory-expert": {
+        "title": "记忆专家",
+        "description": "在任意记忆游戏中获得 90 分以上。"
+      },
+      "attention-adept": {
+        "title": "注意能手",
+        "description": "在任意注意力游戏中获得 60 分以上。"
+      },
+      "attention-master": {
+        "title": "注意大师",
+        "description": "在任意注意力游戏中获得 90 分以上。"
+      },
+      "reaction-rookie": {
+        "title": "反应新手",
+        "description": "在任意反应游戏中获得 60 分以上。"
+      },
+      "reaction-pro": {
+        "title": "反应专家",
+        "description": "在任意反应游戏中获得 90 分以上。"
+      },
+      "executive-apprentice": {
+        "title": "执行学徒",
+        "description": "在任意执行功能游戏中获得 60 分以上。"
+      },
+      "executive-expert": {
+        "title": "执行专家",
+        "description": "在任意执行功能游戏中获得 90 分以上。"
+      },
+      "relaxation-seeker": {
+        "title": "放松探索者",
+        "description": "在任意放松游戏中获得 60 分以上。"
+      },
+      "relaxation-sage": {
+        "title": "放松智者",
+        "description": "在任意放松游戏中获得 90 分以上。"
+      }
     }
   }
 }

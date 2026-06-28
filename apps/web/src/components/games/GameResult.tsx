@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { RotateCcw, Trophy } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { GameDimension } from '@/lib/games'
+import type { Translator } from '@/i18n/translations'
 
 /** Brain Identity Tier — 6 levels per PROJECT.md Formula 3 */
 export type IdentityTier =
@@ -33,6 +34,8 @@ interface GameResultProps {
   onRetry?: () => void
   /** Best score (if available) */
   bestScore?: number
+  /** Translator function for i18n labels */
+  t: Translator
   className?: string
 }
 
@@ -69,9 +72,9 @@ export function GameResult({
   score,
   accuracy,
   stats = [],
-  dimension,
   onRetry,
   bestScore,
+  t,
   className,
 }: GameResultProps) {
   const tier = scoreToTier(score)
@@ -88,7 +91,7 @@ export function GameResult({
         {/* Final Score */}
         <div className="flex flex-col items-center gap-xs">
           <span className="text-sm font-medium uppercase tracking-wider text-text-muted">
-            Final Score
+            {t('games_runtime.results.finalScore')}
           </span>
           <span className="text-5xl font-bold tabular-nums text-text-primary">
             {score.toLocaleString()}
@@ -98,17 +101,17 @@ export function GameResult({
         {/* Identity Tier */}
         <div className="flex flex-col items-center gap-xs">
           <span className="text-xs font-medium uppercase tracking-wider text-text-muted">
-            Rank
+            {t('games_runtime.results.rank')}
           </span>
           <span className={cn('text-xl font-bold', TIER_COLORS[tier])}>
-            {tier}
+            {t(`games_runtime.results.tier.${tier.toLowerCase()}`)}
           </span>
         </div>
 
         {/* New Best Badge */}
         {isNewBest && (
           <span className="rounded-full bg-accent/20 px-md py-xs text-sm font-semibold text-accent">
-            ★ New Best!
+            ★ {t('games_runtime.results.newRecord')}
           </span>
         )}
 
@@ -117,7 +120,7 @@ export function GameResult({
           <div className="grid w-full grid-cols-2 gap-md sm:grid-cols-3">
             {accuracy !== undefined && (
               <div className="flex flex-col items-center rounded-md bg-background-secondary p-md">
-                <span className="text-xs text-text-muted">Accuracy</span>
+                <span className="text-xs text-text-muted">{t('games_runtime.results.accuracy')}</span>
                 <span className="text-lg font-bold text-text-primary">
                   {accuracy}%
                 </span>
@@ -140,7 +143,7 @@ export function GameResult({
         {/* Best Score */}
         {bestScore !== undefined && (
           <p className="text-sm text-text-secondary">
-            Best: <span className="font-semibold">{bestScore.toLocaleString()}</span>
+            {t('games_runtime.results.best')}: <span className="font-semibold">{bestScore.toLocaleString()}</span>
           </p>
         )}
 
@@ -148,7 +151,7 @@ export function GameResult({
         {onRetry && (
           <Button variant="primary" size="lg" onClick={onRetry} className="mt-sm">
             <RotateCcw className="mr-xs h-4 w-4" />
-            Play Again
+            {t('games_runtime.results.playAgain')}
           </Button>
         )}
       </CardContent>

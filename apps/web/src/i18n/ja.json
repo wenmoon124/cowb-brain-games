@@ -2,6 +2,8 @@
   "common": {
     "appName": "BrainVerse",
     "tagline": "脳を鍛え、脳年齢を下げよう",
+    "languageSwitcher": "言語を切り替え",
+    "loading": "読み込み中...",
     "buttons": {
       "start": "開始",
       "continue": "続ける",
@@ -13,7 +15,9 @@
       "save": "保存",
       "delete": "削除",
       "confirm": "確認"
-    }
+    },
+    "toggleMenu": "メニューを切り替え",
+    "close": "閉じる"
   },
   "nav": {
     "home": "ホーム",
@@ -54,11 +58,17 @@
     "playNow": "今すぐプレイ",
     "viewResults": "結果を見る",
     "dimensions": {
-      "memory": "記憶力",
+      "all": "すべて",
+      "memory": "記憶",
       "attention": "注意力",
-      "reaction": "反応力",
+      "reaction": "反応",
       "executive": "実行機能",
       "relaxation": "リラクゼーション"
+    },
+    "rules": {
+      "howToPlay": "遊び方",
+      "scoring": "スコアリング",
+      "tips": "ヒント"
     },
     "difficulty": {
       "easy": "簡単",
@@ -149,7 +159,6 @@
       "title": "ストレスサンドボックス",
       "description": "触覚プレイでストレス解放"
     },
-    "comingSoon": "近日公開",
     "backToGames": "ゲーム一覧へ戻る"
   },
   "pages": {
@@ -233,7 +242,85 @@
     "streak": "連続日数",
     "achievements": "最近の実績",
     "recentGames": "最近のゲーム",
-    "noData": "まだデータがありません。最初のゲームを始めましょう！"
+    "noData": "まだデータがありません。最初のゲームを始めましょう！",
+    "title": "ダッシュボード",
+    "subtitle": "トレーニングの進捗、次元別スコア、最近のアクティビティの概要。",
+    "statsSectionTitle": "概要",
+    "dimensionsSectionTitle": "次元別の進捗",
+    "dimensionsSectionSubtitle": "各認知次元の正規化スコア（0〜100）。",
+    "recentActivityTitle": "最近のアクティビティ",
+    "recentActivitySubtitle": "直近のトレーニング履歴。",
+    "scoreLabel": "スコア",
+    "loginPromptTitle": "サインインして進捗を同期",
+    "loginPromptDesc": "アカウントを作成またはサインインすると、脳年齢・連続日数・履歴を端末間で同期できます。",
+    "signInButton": "サインイン",
+    "demoBadge": "デモデータ",
+    "statsLabels": {
+      "gamesPlayed": "プレイ数",
+      "bestScore": "最高スコア",
+      "currentStreak": "連続日数",
+      "brainAge": "脳年齢"
+    },
+    "statsValues": {
+      "gamesPlayed": "47",
+      "bestScore": "3,250",
+      "currentStreak": "12 日",
+      "brainAge": "28"
+    }
+  },
+  "articles": {
+    "categoryLabels": {
+      "brain-age": "脳年齢",
+      "memory": "記憶",
+      "attention": "注意力",
+      "reaction": "反応",
+      "executive": "実行機能",
+      "focus": "フォーカス",
+      "relaxation": "リラクゼーション"
+    },
+    "pageText": {
+      "title": "記事",
+      "subtitle": "科学的な脳トレーニングの洞察",
+      "backToArticles": "記事一覧に戻る",
+      "readingTime": "分で読了",
+      "relatedArticles": "関連記事",
+      "tryGames": "関連ゲームを試す",
+      "faqTitle": "よくある質問",
+      "publishedOn": "公開日",
+      "allCategories": "すべてのカテゴリー",
+      "articlesCount": "{count} 記事"
+    }
+  },
+  "brainAge": {
+    "heroBadge": "科学に基づく評価",
+    "title": "脳年齢アセスメント",
+    "subtitle": "5つのコア次元で認知の健康度を測り、あなたの脳年齢——今の心の切れ味を示す一つの数字——を導き出します。",
+    "heroCta": "次元を見る",
+    "dimensionsSectionTitle": "5つの認知次元",
+    "dimensionsSectionSubtitle": "脳年齢は以下の5つの次元のパフォーマンスから計算されます。各次元には専用のゲームがあります。",
+    "gamesLabel": "{count} 個のゲーム",
+    "exploreLabel": "ゲームを見る",
+    "processTitle": "アセスメントの流れ",
+    "processSubtitle": "プレイから洞察まで、3つのステップ。",
+    "step1Title": "ゲームを遊ぶ",
+    "step1Desc": "5つの次元で練習します。各セッションが評価に反映されます。",
+    "step2Title": "スコアを集める",
+    "step2Desc": "各次元のパフォーマンスは 0〜100 のスコアに正規化されます。",
+    "step3Title": "脳年齢を確認",
+    "step3Desc": "スコアを統合し、同年齢層で較正した脳年齢を算出します。",
+    "scienceTitle": "脳年齢の背後にある科学",
+    "scienceBody": "脳年齢は、集団ベースラインに対する認知パフォーマンスの複合推定値です。流動性知性・処理速度・ワーキングメモリが加齢とともに変化し、訓練によって向上するという長年の研究に基づいています。正規化した次元スコアを追跡しやすい一つの数字にまとめます。",
+    "scienceCitation": "認知加齢研究より総合（Salthouse, 2009; Park et al., 2002）。",
+    "finalCtaTitle": "アセスメントを始める",
+    "finalCtaSubtitle": "各次元でいくつかゲームを遊んで、最初の脳年齢を解放しましょう。",
+    "startButton": "トレーニング開始",
+    "dimensionDescriptions": {
+      "memory": "短期・長期の間隔で情報を記憶し保持する。",
+      "attention": "集中力を維持し気を散らす要素を除外する。",
+      "reaction": "刺激に素早く正確に反応する。",
+      "executive": "計画し、タスクを切り替え、競合を解決する。",
+      "relaxation": "ストレスを調整し心を落ち着かせる。"
+    }
   },
   "auth": {
     "signIn": {
@@ -272,6 +359,7 @@
     "savePreferences": "設定を保存",
     "strictlyNecessary": "必須 Cookie",
     "strictlyNecessaryDescription": "これらの Cookie はウェブサイトの機能に不可欠です。",
+    "alwaysActive": "常に有効",
     "performanceAnalytics": "パフォーマンスと分析",
     "performanceAnalyticsDescription": "これらの Cookie は訪問者のサイト利用状況を理解するのに役立ちます。",
     "targetingAds": "ターゲティングと広告",
@@ -289,6 +377,8 @@
     "network": "ネットワークエラーです。接続を確認してください。",
     "notFound": "ページが見つかりません",
     "unauthorized": "このページを表示する権限がありません。",
+    "tryAgain": "再試行",
+    "backToHome": "ホームに戻る",
     "validation": {
       "required": "この項目は必須です",
       "invalidEmail": "有効なメールアドレスを入力してください",
@@ -313,10 +403,184 @@
     "results": {
       "title": "ゲーム結果",
       "finalScore": "最終スコア",
+      "rank": "ランク",
       "accuracy": "正答率",
       "avgReaction": "平均反応時間",
       "bestStreak": "最高連続記録",
-      "newRecord": "新記録！"
+      "best": "ベスト",
+      "newRecord": "新記録！",
+      "playAgain": "もう一度プレイ",
+      "tier": {
+        "novice": "初心者",
+        "apprentice": "見習い",
+        "adept": "熟練",
+        "expert": "エキスパート",
+        "master": "マスター",
+        "luminary": "達人"
+      }
+    }
+  },
+  "profile": {
+    "title": "プロフィール",
+    "subtitle": "アカウントと設定を管理",
+    "demoBadge": "デモアカウント",
+    "userInfoTitle": "ユーザー情報",
+    "guestName": "ゲストユーザー",
+    "memberSinceLabel": "登録年",
+    "memberSinceValue": "2026",
+    "levelLabel": "レベル",
+    "levelValue": "見習い",
+    "signInButton": "サインイン",
+    "preferencesTitle": "設定",
+    "preferencesSubtitle": "トレーニングと表示の設定。",
+    "languageLabel": "言語",
+    "difficultyLabel": "難易度",
+    "difficultyValue": "中級",
+    "dailyGoalLabel": "1日の目標",
+    "dailyGoalValue": "15 分",
+    "notificationsLabel": "通知",
+    "notificationsValue": "オン",
+    "achievementsTitle": "実績プレビュー",
+    "achievementsSubtitle": "最近のマイルストーンの一覧。",
+    "achievementsViewAll": "すべての実績を見る",
+    "unlocked": "解放済み",
+    "locked": "未解放",
+    "accountActionsTitle": "アカウント",
+    "accountActionsDesc": "サインインして進捗を同期するか、新規アカウントを作成します。",
+    "signInCta": "サインイン",
+    "signUpCta": "サインアップ",
+    "previewAchievements": {
+      "first-game": {
+        "title": "初回プレイ",
+        "description": "最初のトレーニングゲームを完了する。"
+      },
+      "3-day-streak": {
+        "title": "3日連続",
+        "description": "3日連続でトレーニングする。"
+      },
+      "memory-novice": {
+        "title": "メモリー初心者",
+        "description": "任意のメモリーゲームで60点以上を獲得する。"
+      }
+    }
+  },
+  "achievements": {
+    "title": "実績",
+    "subtitle": "マイルストーンを追跡し、報酬を解除",
+    "demoBadge": "デモデータ",
+    "statsTitle": "概要",
+    "statTotalLabel": "実績総数",
+    "statUnlockedLabel": "解放済み",
+    "statProgressLabel": "進捗",
+    "gameCategoryTitle": "ゲーム実績",
+    "gameCategorySubtitle": "ゲームプレイで獲得するマイルストーン。",
+    "streakCategoryTitle": "連続日数実績",
+    "streakCategorySubtitle": "毎日のトレーニングで得られる報酬。",
+    "dimensionCategoryTitle": "次元マスター",
+    "dimensionCategorySubtitle": "5つの認知次元の熟練度。",
+    "unlockedLabel": "解放済み",
+    "lockedLabel": "未解放",
+    "progressLabel": "進捗",
+    "ctaTitle": "解除を続ける",
+    "ctaSubtitle": "より多くのゲームをプレイして残りの実績を解放しましょう。",
+    "ctaButton": "トレーニング開始",
+    "items": {
+      "first-game": {
+        "title": "初回プレイ",
+        "description": "最初のトレーニングゲームを完了する。"
+      },
+      "perfect-score": {
+        "title": "パーフェクトスコア",
+        "description": "任意のゲームでパーフェクトスコアを達成する。"
+      },
+      "speed-demon": {
+        "title": "スピードデーモン",
+        "description": "記録的な速さでゲームを完了する。"
+      },
+      "marathon-player": {
+        "title": "マラソンプレイヤー",
+        "description": "50回のトレーニングゲームをプレイする。"
+      },
+      "dimension-master": {
+        "title": "次元マスター",
+        "description": "5つの次元すべてでゲームをプレイする。"
+      },
+      "century-club": {
+        "title": "センチュリークラブ",
+        "description": "任意のゲームで100点以上を獲得する。"
+      },
+      "flawless-victory": {
+        "title": "完璧な勝利",
+        "description": "ミスなしでゲームに勝利する。"
+      },
+      "comeback-king": {
+        "title": "カムバックキング",
+        "description": "連敗後に勝利する。"
+      },
+      "streak-3": {
+        "title": "3日連続",
+        "description": "3日連続でトレーニングする。"
+      },
+      "streak-7": {
+        "title": "7日連続",
+        "description": "7日連続でトレーニングする。"
+      },
+      "streak-30": {
+        "title": "30日連続",
+        "description": "30日連続でトレーニングする。"
+      },
+      "streak-100": {
+        "title": "100日連続",
+        "description": "100日連続でトレーニングする。"
+      },
+      "year-excellence": {
+        "title": "エクセレントの年",
+        "description": "1年間毎日トレーニングする。"
+      },
+      "unbreakable": {
+        "title": "アンブレイカブル",
+        "description": "365日間の連続日数を維持する。"
+      },
+      "memory-novice": {
+        "title": "メモリー初心者",
+        "description": "任意のメモリーゲームで60点以上を獲得する。"
+      },
+      "memory-expert": {
+        "title": "メモリーエキスパート",
+        "description": "任意のメモリーゲームで90点以上を獲得する。"
+      },
+      "attention-adept": {
+        "title": "アテンション熟練",
+        "description": "任意のアテンションゲームで60点以上を獲得する。"
+      },
+      "attention-master": {
+        "title": "アテンションマスター",
+        "description": "任意のアテンションゲームで90点以上を獲得する。"
+      },
+      "reaction-rookie": {
+        "title": "リアクション初心者",
+        "description": "任意のリアクションゲームで60点以上を獲得する。"
+      },
+      "reaction-pro": {
+        "title": "リアクションプロ",
+        "description": "任意のリアクションゲームで90点以上を獲得する。"
+      },
+      "executive-apprentice": {
+        "title": "エグゼクティブ見習い",
+        "description": "任意のエグゼクティブゲームで60点以上を獲得する。"
+      },
+      "executive-expert": {
+        "title": "エグゼクティブエキスパート",
+        "description": "任意のエグゼクティブゲームで90点以上を獲得する。"
+      },
+      "relaxation-seeker": {
+        "title": "リラクゼーション探索者",
+        "description": "任意のリラクゼーションゲームで60点以上を獲得する。"
+      },
+      "relaxation-sage": {
+        "title": "リラクゼーション賢者",
+        "description": "任意のリラクゼーションゲームで90点以上を獲得する。"
+      }
     }
   }
 }

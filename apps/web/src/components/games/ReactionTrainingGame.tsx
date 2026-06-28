@@ -6,11 +6,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Zap, Play } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 type Phase = 'waiting' | 'ready' | 'result'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -90,7 +90,7 @@ const WAIT_MIN_MS = 1000
 const WAIT_MAX_MS = 4000
 const READY_TIMEOUT_MS = 3000
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -110,10 +110,11 @@ function roundScore(rt: number, round: number): number {
 }
 
 export interface ReactionTrainingGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function ReactionTrainingGame({ locale }: ReactionTrainingGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -279,6 +280,7 @@ export function ReactionTrainingGame({ locale }: ReactionTrainingGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         dimension="reaction"
         onRetry={startGame}

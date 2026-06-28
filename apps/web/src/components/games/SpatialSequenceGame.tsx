@@ -6,11 +6,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { ListOrdered, Play } from 'lucide-react'
 import { GameResult } from '@/components/games/GameResult'
+import { useTranslation } from '@/i18n/client'
+import type { Locale } from '@/i18n/config'
 
 type GameStatus = 'idle' | 'playing' | 'finished'
 type Phase = 'showing' | 'input' | 'feedback'
-
-type Locale = 'en' | 'zh' | 'ja'
 
 interface Texts {
   title: string
@@ -81,7 +81,7 @@ const MAX_FAILS = 3
 const STEP_SHOW_MS = 600
 const STEP_GAP_MS = 200
 
-function getLocale(locale: string): Locale {
+function getLocale(locale: Locale): Locale {
   return locale === 'zh' || locale === 'ja' ? locale : 'en'
 }
 
@@ -112,10 +112,11 @@ function buildSequence(total: number, length: number): number[] {
 }
 
 export interface SpatialSequenceGameProps {
-  locale: string
+  locale: Locale
 }
 
 export function SpatialSequenceGame({ locale }: SpatialSequenceGameProps) {
+  const { t: tt } = useTranslation(locale)
   const t = TEXTS[getLocale(locale)]
 
   const [status, setStatus] = useState<GameStatus>('idle')
@@ -259,6 +260,7 @@ export function SpatialSequenceGame({ locale }: SpatialSequenceGameProps) {
   if (status === 'finished') {
     return (
       <GameResult
+        t={tt}
         score={finalScore}
         dimension="memory"
         onRetry={startGame}

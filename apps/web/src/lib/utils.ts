@@ -12,13 +12,17 @@ export function cn(...inputs: ClassValue[]): string {
 
 /**
  * Format a date according to the given locale using Intl.DateTimeFormat.
+ * Uses month: 'short' for compact display. Appends T00:00:00 to date-only
+ * strings (YYYY-MM-DD) to avoid timezone shifts.
  */
 export function formatDate(date: Date | string, locale: Locale | string): string {
-  const d = typeof date === 'string' ? new Date(date) : date
+  const d = typeof date === 'string'
+    ? new Date(date.length === 10 ? `${date}T00:00:00` : date)
+    : date
   const localeTag = isValidLocale(locale) ? LOCALE_HTML_LANG[locale] : locale
   return new Intl.DateTimeFormat(localeTag, {
     year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: 'numeric',
   }).format(d)
 }
