@@ -52,7 +52,7 @@ export function FeaturedArticles({ locale, articles }: FeaturedArticlesProps) {
                   <CardHeader>
                     <div className="flex items-center gap-sm mb-sm">
                       <Badge variant={article.category}>
-                        {t(`articles.categories.${article.category}`)}
+                        {t(`articles.categoryLabels.${article.category}`)}
                       </Badge>
                       <span className="text-xs text-text-muted">
                         {article.readingTime} {t('articles.readingTime')}

@@ -50,11 +50,11 @@ export function DailyRecommendation({ locale }: DailyRecommendationProps) {
               </div>
 
               <h3 className="text-2xl font-bold text-text-primary mb-md">
-                {t(`games.${dailyGame.slug}.title`)}
+                {t(dailyGame.titleKey)}
               </h3>
 
               <p className="text-text-secondary mb-lg leading-relaxed">
-                {t(`games.${dailyGame.slug}.description`)}
+                {t(dailyGame.descriptionKey)}
               </p>
 
               <div className="flex items-center gap-xs text-sm text-text-muted mb-lg">

@@ -18,21 +18,21 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    name: 'testimonials.testimonial1.name',
-    role: 'testimonials.testimonial1.role',
-    content: 'testimonials.testimonial1.content',
+    name: 'home.testimonials.testimonial1.name',
+    role: 'home.testimonials.testimonial1.role',
+    content: 'home.testimonials.testimonial1.content',
     rating: 5,
   },
   {
-    name: 'testimonials.testimonial2.name',
-    role: 'testimonials.testimonial2.role',
-    content: 'testimonials.testimonial2.content',
+    name: 'home.testimonials.testimonial2.name',
+    role: 'home.testimonials.testimonial2.role',
+    content: 'home.testimonials.testimonial2.content',
     rating: 5,
   },
   {
-    name: 'testimonials.testimonial3.name',
-    role: 'testimonials.testimonial3.role',
-    content: 'testimonials.testimonial3.content',
+    name: 'home.testimonials.testimonial3.name',
+    role: 'home.testimonials.testimonial3.role',
+    content: 'home.testimonials.testimonial3.content',
     rating: 5,
   },
 ]
